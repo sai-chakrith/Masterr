@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "numbers",
+  "title": "Numbers",
+  "audience": ["placement preparation", "college-level aptitude learners"],
+  "status": "draft",
+  "scope_note": "Proposed original curriculum. The supplied college material shows a Numbers chapter on page 7; chapter content has not been provided or reviewed.",
+  "skills": [
+    {"id": "integer-properties", "title": "Integers, parity and number properties", "prerequisites": [], "objective": "Classify integers and reason about odd and even numbers.", "lesson": "An integer is even when it is divisible by 2, including zero and negative multiples of 2. Other integers are odd. Test a claim with examples, then explain it using 2k or 2k+1."},
+    {"id": "divisibility", "title": "Divisibility rules", "prerequisites": ["integer-properties"], "objective": "Apply divisibility rules and combine conditions.", "lesson": "A number is divisible by 3 or 9 when its digit sum is divisible by 3 or 9. Divisibility by 6 requires divisibility by both 2 and 3. Applying only one necessary condition is insufficient."},
+    {"id": "primes-factors", "title": "Primes, composites and factors", "prerequisites": ["divisibility"], "objective": "Recognize prime numbers and enumerate positive factors.", "lesson": "A prime is an integer greater than 1 with exactly two positive factors. One is neither prime nor composite. Pair factors around the square root; count the square root only once for perfect squares."},
+    {"id": "hcf-lcm", "title": "HCF and LCM", "prerequisites": ["primes-factors"], "objective": "Distinguish common factors from common multiples and apply each in context.", "lesson": "HCF is the greatest positive common factor; LCM is the least positive common multiple. Equal groups without leftovers typically use HCF; simultaneous repeating events typically use LCM. For positive integers a and b, HCF(a,b) times LCM(a,b) equals a times b."},
+    {"id": "remainders", "title": "Remainders", "prerequisites": ["divisibility"], "objective": "Use quotient-remainder form and simplify powers modulo a positive divisor.", "lesson": "For an integer n and positive divisor d, write n = dq+r with 0 <= r < d. Reduce factors before multiplying. A remainder is constrained by the divisor and is not the decimal part of division."},
+    {"id": "digits-cyclicity", "title": "Place value and units-digit cycles", "prerequisites": ["remainders"], "objective": "Use place value and repeated units-digit patterns.", "lesson": "The units digit is the remainder modulo 10. Powers of 2 end in 2,4,8,6 and repeat. An exponent divisible by the cycle length uses the last position of the cycle, not the first."}
+  ]
+}

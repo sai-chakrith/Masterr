@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "publication_note": "Original drafts created for Mastrr. Arithmetic validation does not constitute human review. These are not extracted from the supplied college material.",
+  "questions": [
+    {
+      "id": "num-001", "skill_id": "integer-properties", "family_id": "inclusive-even-interval", "purpose": "diagnostic", "difficulty": "introductory",
+      "prompt": "How many even integers are there from -3 to 5, including both endpoints?",
+      "answer": 4, "validator": {"kind": "even_count", "low": -3, "high": 5},
+      "solution": "The even integers are -2, 0, 2 and 4. There are 4. Zero and negative multiples of 2 are even.",
+      "hints": ["An even integer is divisible by 2 without a remainder.", "Check zero and the negative integers too."],
+      "reasoning_rubric": ["Includes zero", "Recognizes negative even integers", "Respects both interval endpoints"],
+      "possible_misconception": "May exclude zero or negative integers from even numbers; confirm with a follow-up.",
+      "follow_up": "Is zero divisible by 2 without a remainder? Explain.",
+      "review_status": "draft", "provenance": "original_mastrr_draft"
+    },
+    {
+      "id": "num-002", "skill_id": "integer-properties", "family_id": "inclusive-even-interval", "purpose": "practice", "difficulty": "introductory",
+      "prompt": "How many even integers are there from 11 to 31, including both endpoints?",
+      "answer": 10, "validator": {"kind": "even_count", "low": 11, "high": 31},
+      "solution": "The even integers run from 12 to 30 in steps of 2. Their count is (30-12)/2+1 = 10.",
+      "hints": ["Find the first and last even integers in the interval.", "Counting inclusive terms requires adding 1 after dividing the gap by 2."],
+      "reasoning_rubric": ["Identifies endpoints 12 and 30", "Counts terms rather than gaps"],
+      "possible_misconception": "May count gaps rather than terms.", "follow_up": "How many numbers are in the list 12, 14, 16? How many gaps?",
+      "review_status": "draft", "provenance": "original_mastrr_draft"
+    },
+    {
+      "id": "num-003", "skill_id": "divisibility", "family_id": "missing-digit-by-nine", "purpose": "diagnostic", "difficulty": "introductory",
+      "prompt": "Find the digit x such that the three-digit integer 4x2 is divisible by 9.",
+      "answer": 3, "validator": {"kind": "missing_digit", "pattern": "4?2", "divisor": 9},
+      "solution": "The digit sum is 4+x+2 = 6+x. With x from 0 to 9, the only multiple of 9 available is 9, so x=3.",
+      "hints": ["Use the digit-sum rule for divisibility by 9.", "The missing value is a single digit from 0 through 9."],
+      "reasoning_rubric": ["Uses digit sum", "Restricts x to a digit", "Checks uniqueness"],
+      "possible_misconception": "May confuse divisibility by 3 with divisibility by 9.", "follow_up": "Would a digit sum of 12 establish divisibility by 9?",
+      "review_status": "draft", "provenance": "original_mastrr_draft"
+    },
+    {
+      "id": "num-004", "skill_id": "divisibility", "family_id": "missing-digit-by-six", "purpose": "practice", "difficulty": "developing",
+      "prompt": "Find the digit x such that the three-digit integer 53x is divisible by 6.",
+      "answer": 4, "validator": {"kind": "missing_digit", "pattern": "53?", "divisor": 6},
+      "solution": "The last digit must be even and 8+x must be divisible by 3. Among 0,2,4,6,8, only 4 satisfies the digit-sum condition. The number is 534.",
+      "hints": ["Divisibility by 6 needs divisibility by both 2 and 3.", "Test even digits against the digit sum 8+x."],
+      "reasoning_rubric": ["Checks both conditions", "Finds the unique allowed digit"],
+      "possible_misconception": "May check only one condition for divisibility by 6.", "follow_up": "Is every even integer divisible by 6? Give a counterexample.",
+      "review_status": "draft", "provenance": "original_mastrr_draft"
+    },
+    {
+      "id": "num-005", "skill_id": "primes-factors", "family_id": "classify-prime-list", "purpose": "diagnostic", "difficulty": "introductory",
+      "prompt": "How many of these integers are prime: 1, 2, 9, 17, 21?",
+      "answer": 2, "validator": {"kind": "prime_count", "values": [1, 2, 9, 17, 21]},
+      "solution": "Only 2 and 17 are prime. One is neither prime nor composite; 9=3x3 and 21=3x7.",
+      "hints": ["A prime has exactly two positive factors.", "Check 1 and 2 carefully."],
+      "reasoning_rubric": ["Excludes 1", "Includes 2", "Checks odd composites"],
+      "possible_misconception": "May classify 1 as prime or assume all odd integers are prime.", "follow_up": "List the positive factors of 1 and of 2.",
+      "review_status": "draft", "provenance": "original_mastrr_draft"
+    },
+    {
+      "id": "num-006", "skill_id": "primes-factors", "family_id": "count-positive-factors", "purpose": "practice", "difficulty": "developing",
+      "prompt": "How many distinct positive factors does 36 have?",
+      "answer": 9, "validator": {"kind": "factor_count", "number": 36},
+      "solution": "The factors are 1,2,3,4,6,9,12,18,36: nine distinct factors. The pair 6x6 contributes just one distinct factor.",
+      "hints": ["List factor pairs starting with 1x36.", "Do not count the square root twice."],
+      "reasoning_rubric": ["Enumerates all positive factors", "Counts the square root once"],
+      "possible_misconception": "May double-count the square root of a perfect square.", "follow_up": "Does the pair 6x6 contain one or two distinct values?",
+      "review_status": "draft", "provenance": "original_mastrr_draft"
+    },
+    {
+      "id": "num-007", "skill_id": "hcf-lcm", "family_id": "equal-packets-hcf", "purpose": "diagnostic", "difficulty": "developing",
+      "prompt": "You have 24 pencils and 36 erasers. All items must be distributed into identical packets, with the same number of pencils in each packet and the same number of erasers in each packet. What is the greatest possible number of packets?",
+      "answer": 12, "validator": {"kind": "gcd", "a": 24, "b": 36},
+      "solution": "The packet count must divide both 24 and 36. Their greatest common factor is 12, giving 2 pencils and 3 erasers per packet.",
+      "hints": ["The number of packets must divide both item counts.", "You need the greatest common factor, not a common multiple."],
+      "reasoning_rubric": ["Models packet count as a common divisor", "Maximizes the count", "Checks the contents of a packet"],
+      "possible_misconception": "May interchange HCF and LCM.", "follow_up": "Could 72 nonempty identical packets be made from these quantities? Why?",
+      "review_status": "draft", "provenance": "original_mastrr_draft"
+    },
+    {
+      "id": "num-008", "skill_id": "hcf-lcm", "family_id": "repeating-events-lcm", "purpose": "practice", "difficulty": "developing",
+      "prompt": "Two bells ring together now. One rings every 12 minutes and the other every 18 minutes. After how many minutes will they next ring together?",
+      "answer": 36, "validator": {"kind": "lcm", "a": 12, "b": 18},
+      "solution": "The elapsed time must be a positive multiple of both intervals. The least such time is LCM(12,18)=36 minutes.",
+      "hints": ["List the first few positive multiples of each interval.", "Select the smallest common positive time."],
+      "reasoning_rubric": ["Uses common multiples", "Excludes the initial time zero", "Finds the earliest repetition"],
+      "possible_misconception": "May use a common factor for repeating events.", "follow_up": "At 6 minutes, has either bell completed a full interval?",
+      "review_status": "draft", "provenance": "original_mastrr_draft"
+    },
+    {
+      "id": "num-009", "skill_id": "remainders", "family_id": "integer-division-remainder", "purpose": "diagnostic", "difficulty": "introductory",
+      "prompt": "What is the remainder when 137 is divided by 8?",
+      "answer": 1, "validator": {"kind": "remainder", "number": 137, "divisor": 8},
+      "solution": "137=8x17+1, so the remainder is 1. It must lie from 0 through 7.",
+      "hints": ["Find the greatest multiple of 8 not exceeding 137.", "Subtract 136 from 137."],
+      "reasoning_rubric": ["Writes quotient-remainder form", "Checks the allowed remainder range"],
+      "possible_misconception": "May confuse the quotient or decimal fraction with the remainder.", "follow_up": "In 137=8x17+1, which value is the quotient?",
+      "review_status": "draft", "provenance": "original_mastrr_draft"
+    },
+    {
+      "id": "num-010", "skill_id": "remainders", "family_id": "power-modulo", "purpose": "practice", "difficulty": "developing",
+      "prompt": "What is the remainder when 7 raised to the power 4 is divided by 5?",
+      "answer": 1, "validator": {"kind": "power_remainder", "base": 7, "exponent": 4, "divisor": 5},
+      "solution": "7 has remainder 2 modulo 5. Therefore 7^4 has the same remainder as 2^4=16, which leaves remainder 1.",
+      "hints": ["Reduce the base modulo 5 first.", "Compute the remainder of 2^4."],
+      "reasoning_rubric": ["Preserves the exponent when reducing the base", "Reduces the resulting value again"],
+      "possible_misconception": "May return the base remainder without applying the exponent.", "follow_up": "Do 2 and 2^4 have the same remainder modulo 5?",
+      "review_status": "draft", "provenance": "original_mastrr_draft"
+    },
+    {
+      "id": "num-011", "skill_id": "digits-cyclicity", "family_id": "units-digit-of-power", "purpose": "diagnostic", "difficulty": "developing",
+      "prompt": "What is the units digit of 2 raised to the power 12?",
+      "answer": 6, "validator": {"kind": "power_remainder", "base": 2, "exponent": 12, "divisor": 10},
+      "solution": "The units digits repeat 2,4,8,6 with cycle length 4. Since 12 is divisible by 4, use the fourth entry, 6.",
+      "hints": ["Write the units digits of 2^1 through 2^4.", "A zero remainder for the exponent selects the final cycle entry."],
+      "reasoning_rubric": ["Identifies the cycle", "Handles the zero-remainder cycle position"],
+      "possible_misconception": "May treat exponent remainder zero as the first position.", "follow_up": "What is the units digit of 2^4? How does that locate 2^12 in the cycle?",
+      "review_status": "draft", "provenance": "original_mastrr_draft"
+    },
+    {
+      "id": "num-012", "skill_id": "digits-cyclicity", "family_id": "units-digit-of-power", "purpose": "practice", "difficulty": "developing",
+      "prompt": "What is the units digit of 3 raised to the power 7?",
+      "answer": 7, "validator": {"kind": "power_remainder", "base": 3, "exponent": 7, "divisor": 10},
+      "solution": "The units digits repeat 3,9,7,1. The remainder of 7 divided by 4 is 3, so choose the third entry, 7.",
+      "hints": ["Find the repeating units-digit pattern for powers of 3.", "Locate exponent 7 within a cycle of length 4."],
+      "reasoning_rubric": ["Finds the correct cycle", "Uses the exponent to select its position"],
+      "possible_misconception": "May confuse the base with its cycle position.", "follow_up": "List the units digits for exponents 1, 2, 3 and 4 before choosing a position.",
+      "review_status": "draft", "provenance": "original_mastrr_draft"
+    }
+  ]
+}

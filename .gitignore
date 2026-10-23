@@ -1,0 +1,19 @@
+# Local project discussion and decision record
+/codex.md
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.env.*
+!.env.example
+.pytest_cache/
+# Local source pages and generated OCR artifacts
+/data/sources/
+/data/ocr/
+
+# Local runtime state
+/.tool-cache/
+/.test-tmp/
+/data/*.db
+/data/*.db-*
+/data/local-api-token
