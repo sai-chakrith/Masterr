@@ -26,6 +26,15 @@ def import_questions(db, questions):
             if current.checksum != digest:
                 raise ValueError(f"{qid} changed: create a new version")
             continue
+        level = question.get("difficulty_level")
+        if level is not None and (type(level) is not int or not 1 <= level <= 5):
+            raise ValueError("Difficulty level must be an integer from 1 to 5")
+        hidden = question.get("hidden", False)
+        if type(hidden) is not bool:
+            raise ValueError("Hidden must be a boolean")
+        sub_topic = question.get("sub_topic")
+        if sub_topic is not None and (not isinstance(sub_topic, str) or len(sub_topic) > 128):
+            raise ValueError("Subtopic must be text of at most 128 characters")
         facet = question.get("facet", "unclassified")
         if facet not in (*FACETS, "unclassified"):
             raise ValueError("Unknown coverage facet")
@@ -38,6 +47,7 @@ def import_questions(db, questions):
             skill_id=question["skill_id"], family_id=question["family_id"],
             purpose=question["purpose"], facet=facet,
             status=question["review_status"], checksum=digest, snapshot=question,
+            difficulty_level=level, hidden=hidden, sub_topic=sub_topic,
         ))
         imported += 1
     db.flush()

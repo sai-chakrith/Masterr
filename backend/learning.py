@@ -9,10 +9,11 @@ from sqlalchemy import select
 
 from backend.content import FACETS, available_questions
 from backend.db import transaction
-from backend.models import Assignment, Attempt, Evidence, Exposure, Learner, LearningSession, Question, Review
+from backend.models import Assignment, Attempt, Evidence, Exposure, GapState, Learner, LearningSession, Question, Review
 from backend.numbers.bank import compute_answer, load_curriculum
 
 POLICY = "divisibility-check-v1"
+RETEST_POLICY = "topic-retest-v1"
 SKILLS = {s["id"] for s in load_curriculum()["skills"]}
 
 
@@ -98,10 +99,10 @@ class LearningService:
             seen.add(item.family_id)
         return selected
 
-    def create_session(self, learner, skill="divisibility", mode="practice", review_id=None):
+    def create_session(self, learner, skill="divisibility", mode="practice", review_id=None, *, retest=False):
         if skill not in SKILLS or mode not in ("diagnostic", "practice", "verification", "review"):
             raise LearningError("invalid_session", "Unknown skill or activity.", 422)
-        if mode in ("verification", "review") and skill != "divisibility":
+        if not retest and mode in ("verification", "review") and skill != "divisibility":
             raise LearningError("unsupported_policy", "Independent checks currently cover divisibility only.", 422)
         with transaction(self.engine) as db:
             self.lock_learner(db, learner)
@@ -118,11 +119,30 @@ class LearningService:
                     raise LearningError("review_not_due", "This review is not due.")
             elif review_id:
                 raise LearningError("invalid_session", "Review ID is valid only for a review.", 422)
-            questions = self.select_fresh(db, learner, skill,
-                "review" if mode == "review" else mode,
-                FACETS if mode in ("verification", "review") else None)
+            if retest:
+                if mode != "verification" or review_id:
+                    raise LearningError("invalid_session", "Retests use independent verification.", 422)
+                seen = set(db.scalars(select(Exposure.family_id).where(Exposure.learner_id == learner)))
+                candidates = [q for q in available_questions(db, skill, "verification")
+                              if q.difficulty_level is not None]
+                # Prefer levels 3-4, then nearest tagged levels. Never use hidden or draft items.
+                candidates.sort(key=lambda q: (min(abs(q.difficulty_level - 3), abs(q.difficulty_level - 4)), q.id))
+                questions = []
+                for q in candidates:
+                    if q.family_id not in seen:
+                        questions.append(q)
+                        seen.add(q.family_id)
+                    if len(questions) == 10:
+                        break
+                if len(questions) != 10:
+                    raise LearningError("insufficient_coverage", "Retest needs ten fresh reviewed question families with difficulty tags.")
+            else:
+                questions = self.select_fresh(db, learner, skill,
+                    "review" if mode == "review" else mode,
+                    FACETS if mode in ("verification", "review") else None)
+            policy = RETEST_POLICY if retest else POLICY
             session = LearningSession(id=uid(), learner_id=learner, skill_id=skill,
-                mode=mode, policy_version=POLICY, status="active",
+                mode=mode, policy_version=policy, status="active",
                 created_at=self.now(), review_id=review_id)
             db.add(session)
             db.flush()
@@ -136,7 +156,7 @@ class LearningService:
             if review:
                 review.status = "in_progress"
             return {"session_id": session.id, "mode": mode, "status": "active",
-                    "policy_version": POLICY, "question_count": len(questions)}
+                    "policy_version": policy, "question_count": len(questions)}
 
     def get_session(self, learner, session_id):
         with transaction(self.engine) as db:
@@ -169,14 +189,16 @@ class LearningService:
                     "status": session.status, "policy_version": session.policy_version,
                     "question_count": len(assignments), "question": question_view, "attempts": history}
 
-    def submit(self, learner, assignment_id, answer, working, key, duration_ms=None):
+    def submit(self, learner, assignment_id, answer, working, key, duration_ms=None, dont_know=False):
         if duration_ms is not None and (type(duration_ms) is not int or not 0 <= duration_ms <= 86400000):
             raise LearningError("invalid_duration", "Duration must be milliseconds between 0 and 86400000.", 422)
         if not key or len(key) > 128 or len(working) > 2000:
             raise LearningError("invalid_submission", "Invalid request key or working length.", 422)
-        value = normalized_integer(answer)
+        if type(dont_know) is not bool or (dont_know and answer != ""):
+            raise LearningError("invalid_answer", "Use an empty answer when selecting I don't know.", 422)
+        value = 0 if dont_know else normalized_integer(answer)
         request_hash = hashlib.sha256(json.dumps(
-            [assignment_id, answer, working] + ([] if duration_ms is None else [duration_ms]), ensure_ascii=False).encode()).hexdigest()
+            [assignment_id, answer, working] + ([] if duration_ms is None else [duration_ms]) + (["dont_know"] if dont_know else []), ensure_ascii=False).encode()).hexdigest()
         with transaction(self.engine) as db:
             self.lock_learner(db, learner)
             previous = db.scalar(select(Attempt).where(
@@ -196,11 +218,11 @@ class LearningService:
             question = db.get(Question, assignment.question_id)
             if question.status != "approved":
                 raise LearningError("content_unavailable", "Question is no longer published.")
-            correct = value == compute_answer(question.snapshot["validator"])
+            correct = not dont_know and value == compute_answer(question.snapshot["validator"])
             assistance = "solution_exposed" if assignment.solution_seen else (
                 "hinted" if assignment.hint_count or session.status == "assisted" else "independent")
             attempt = Attempt(id=uid(), learner_id=learner, assignment_id=assignment.id,
-                idempotency_key=key, request_hash=request_hash, raw_answer=answer,
+                idempotency_key=key, request_hash=request_hash, raw_answer="I don't know" if dont_know else answer,
                 normalized_answer=value, working=working, correct=correct, assistance=assistance,
                 duration_ms=duration_ms, scoring_version="current",
                 created_at=self.now(), response={})
@@ -221,6 +243,10 @@ class LearningService:
             Assignment.session_id == session.id).order_by(Assignment.position)))
         if session.status == "assisted":
             result = "assisted_practice"
+        elif session.policy_version == RETEST_POLICY:
+            passed = len(attempts) == 10 and all(a.assistance == "independent" for a in attempts) and sum(a.correct for a in attempts) >= 7
+            result = "retest_passed" if passed else "retest_practice_needed"
+            self.set_gap(db, session, "resolved" if passed else "gap")
         elif session.mode in ("verification", "review"):
             passed = len(attempts) == len(FACETS) and all(
                 a.correct and a.assistance == "independent" for a in attempts)
@@ -228,6 +254,10 @@ class LearningService:
                       "later_check_passed") if passed else "practice_needed"
         else:
             result = "practice_completed" if session.mode == "practice" else "diagnostic_completed"
+        if session.policy_version != RETEST_POLICY and session.mode in ("verification", "review") and session.status != "assisted":
+            existing_gap = db.get(GapState, (session.learner_id, session.skill_id))
+            if existing_gap:
+                self.set_gap(db, session, "resolved" if result in ("independent_check_passed", "later_check_passed") else "gap")
         session.status = "completed"
         evidence = Evidence(id=uid(), learner_id=session.learner_id, session_id=session.id,
                             kind=result, policy_version=session.policy_version, created_at=self.now())
@@ -312,3 +342,52 @@ class LearningService:
                     "completed_at": r.completed_at} for r in reviews],
                 "evidence": [{"id": e.id, "session_id": e.session_id, "kind": e.kind,
                     "policy_version": e.policy_version, "created_at": e.created_at} for e in evidence]}
+
+
+    def set_gap(self, db, session, status):
+        """Track 1 hook: call within its diagnostic-finalization transaction.
+
+        The caller supplies a classification backed by that completed diagnostic;
+        no classification thresholds or Elo updates are invented in Track 2.
+        """
+        if status not in ("mastered", "borderline", "gap", "resolved"):
+            raise ValueError("Unknown gap status")
+        record = db.get(GapState, (session.learner_id, session.skill_id))
+        if record is None:
+            record = GapState(learner_id=session.learner_id, skill_id=session.skill_id)
+            db.add(record)
+        record.status = status
+        record.source_session_id = session.id
+        record.updated_at = self.now()
+
+    def gaps(self, learner):
+        curriculum = load_curriculum()["skills"]
+        with transaction(self.engine) as db:
+            self.lock_learner(db, learner)
+            records = {g.skill_id: g for g in db.scalars(select(GapState).where(GapState.learner_id == learner))}
+            return [{"skill_id": skill["id"], "prerequisites": skill["prerequisites"],
+                     "status": records[skill["id"]].status if skill["id"] in records else "unassessed",
+                     "source_session_id": records[skill["id"]].source_session_id if skill["id"] in records else None}
+                    for skill in curriculum]
+
+    def borderline_review(self, learner, session_id):
+        with transaction(self.engine) as db:
+            self.lock_learner(db, learner)
+            session = self.owned_session(db, learner, session_id)
+            gap = db.get(GapState, (learner, session.skill_id))
+            if (session.mode != "diagnostic" or session.status != "completed" or not gap
+                    or gap.status != "borderline" or gap.source_session_id != session.id):
+                raise LearningError("invalid_state", "A completed Borderline diagnostic is required.")
+            items = []
+            for assignment in self.assignments(db, session.id):
+                attempt = db.scalar(select(Attempt).where(Attempt.assignment_id == assignment.id))
+                if attempt and not attempt.correct:
+                    question = db.get(Question, assignment.question_id)
+                    if question.status != "approved":
+                        continue
+                    items.append({"assignment_id": assignment.id, "prompt": question.snapshot["prompt"],
+                                  "answer": attempt.raw_answer, "solution": question.snapshot["solution"]})
+                    if not assignment.solution_seen:
+                        assignment.solution_seen = True
+                        self.record_exposure(db, learner, assignment, question, "solution")
+            return {"session_id": session.id, "items": items, "next_action": "retest", "skill_id": session.skill_id}

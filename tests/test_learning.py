@@ -284,3 +284,122 @@ def test_hidden_questions_are_excluded_from_normal_selection(setup):
         questions[0].hidden = True
     with transaction(engine) as db:
         assert hidden_id not in {q.id for q in available_questions(db, "divisibility", "practice")}
+
+
+@pytest.fixture
+def retest_setup(setup):
+    service, instant, engine = setup
+    seed = next(q for q in load_questions() if q["id"] == "num-003")
+    questions = []
+    for i in range(25):
+        q = copy.deepcopy(seed)
+        q.update(id=f"retest-{i:02}", family_id=f"retest-{i:02}", purpose="verification",
+                 facet="basic", review_status="approved",
+                 review={"reviewer": "test-only", "date": "test-only"})
+        questions.append(q)
+    with transaction(engine) as db:
+        import_questions(db, questions)
+        for q in db.scalars(select(Question).where(Question.item_id.like("retest-%"))):
+            q.difficulty_level = 3 if int(q.item_id[-2:]) < 20 else 2
+    return setup
+
+
+@pytest.mark.parametrize("right,expected", [(6, "gap"), (7, "resolved"), (10, "resolved"), (0, "gap")])
+def test_retest_boundary_skip_and_persistent_gap(retest_setup, right, expected):
+    from backend.models import MasteryEstimate
+    service, _, engine = retest_setup
+    created = service.create_session("alice", mode="verification", retest=True)
+    assert created["question_count"] == 10
+    for i in range(10):
+        item = service.get_session("alice", created["session_id"])["question"]
+        result = service.submit("alice", item["assignment_id"], "3" if i < right else "", "",
+                                item["assignment_id"], dont_know=i >= right)
+        if i < 9:
+            assert "correct" not in result and "outcomes" not in result
+    assert result["result"] == ("retest_passed" if right >= 7 else "retest_practice_needed")
+    for _ in range(2):
+        gap = next(g for g in service.gaps("alice") if g["skill_id"] == "divisibility")
+        assert gap["status"] == expected
+    assert all(g["status"] == "unassessed" for g in service.gaps("bob"))
+    with transaction(engine) as db:
+        assert db.get(MasteryEstimate, ("alice", "divisibility")) is None
+
+
+def test_retest_freshness_and_atomic_exhaustion(retest_setup):
+    service, _, engine = retest_setup
+    first = service.create_session("alice", mode="verification", retest=True)
+    service.abandon("alice", first["session_id"])
+    second = service.create_session("alice", mode="verification", retest=True)
+    with transaction(engine) as db:
+        a = {q.question_id for q in service.assignments(db, first["session_id"])}
+        b = {q.question_id for q in service.assignments(db, second["session_id"])}
+        assert len(a) == len(b) == 10 and a.isdisjoint(b)
+    service.abandon("alice", second["session_id"])
+    with pytest.raises(LearningError, match="ten fresh"):
+        service.create_session("alice", mode="verification", retest=True)
+    assert service.today("alice")["active_session_id"] is None
+
+
+def test_retest_help_cannot_resolve_gap(retest_setup):
+    service, _, _ = retest_setup
+    created = service.create_session("alice", mode="verification", retest=True)
+    item = service.get_session("alice", created["session_id"])["question"]
+    assert service.help("alice", item["assignment_id"], "hint")["assessment_ended"]
+    result = service.submit("alice", item["assignment_id"], "3", "", "helped")
+    assert result["result"] == "assisted_practice"
+    assert next(g for g in service.gaps("alice") if g["skill_id"] == "divisibility")["status"] == "unassessed"
+
+
+def test_borderline_review_is_owned_and_reuses_only_missed_items(setup):
+    from backend.models import LearningSession
+    service, _, engine = setup
+    created = service.create_session("alice", mode="diagnostic")
+    item = service.get_session("alice", created["session_id"])["question"]
+    service.submit("alice", item["assignment_id"], "", "", "skip", dont_know=True)
+    with transaction(engine) as db:
+        service.set_gap(db, db.get(LearningSession, created["session_id"]), "borderline")
+    result = service.borderline_review("alice", created["session_id"])
+    assert len(result["items"]) == 1 and result["items"][0]["solution"]
+    assert result["next_action"] == "retest"
+    with pytest.raises(LearningError) as error:
+        service.borderline_review("bob", created["session_id"])
+    assert error.value.status == 404
+
+
+def test_resolved_gap_reopens_only_after_new_independent_check(retest_setup):
+    from backend.models import LearningSession
+    service, _, engine = retest_setup
+    # A prior decision remains stable across reads and ordinary practice.
+    diagnostic = service.create_session("alice", mode="diagnostic")
+    item = service.get_session("alice", diagnostic["session_id"])["question"]
+    service.submit("alice", item["assignment_id"], "3", "", "diag")
+    with transaction(engine) as db:
+        service.set_gap(db, db.get(LearningSession, diagnostic["session_id"]), "resolved")
+    form(service, mode="practice", answers=["0"])
+    assert next(g for g in service.gaps("alice") if g["skill_id"] == "divisibility")["status"] == "resolved"
+    form(service, answers=["0", "0", "0"])
+    assert next(g for g in service.gaps("alice") if g["skill_id"] == "divisibility")["status"] == "gap"
+
+
+def test_retest_uses_fallback_only_after_middle_levels_and_ignores_hidden(retest_setup):
+    service, _, engine = retest_setup
+    with transaction(engine) as db:
+        for q in db.scalars(select(Question).where(Question.item_id.like("retest-%"))):
+            if int(q.item_id[-2:]) < 15:
+                q.hidden = True
+    created = service.create_session("alice", mode="verification", retest=True)
+    with transaction(engine) as db:
+        questions = [db.get(Question, a.question_id) for a in service.assignments(db, created["session_id"])]
+        assert [q.difficulty_level for q in questions] == [3] * 5 + [2] * 5
+        assert not any(q.hidden for q in questions)
+
+
+def test_import_preserves_explicit_question_metadata(setup):
+    _, _, engine = setup
+    q = copy.deepcopy(fixtures()[0])
+    q.update(id="metadata-fixture", family_id="metadata-fixture", difficulty_level=4,
+             hidden=True, sub_topic="combined-rules")
+    with transaction(engine) as db:
+        import_questions(db, [q])
+        saved = db.get(Question, "metadata-fixture@1")
+        assert saved.difficulty_level == 4 and saved.hidden and saved.sub_topic == "combined-rules"

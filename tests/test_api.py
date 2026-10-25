@@ -76,3 +76,26 @@ def test_supabase_jwt_checks_signature_claims_and_expiry(monkeypatch):
         with pytest.raises(HTTPException) as error:
             identify(token({**claims, **patch}))
         assert error.value.status_code == 401
+
+
+def test_track2_routes_require_identity_and_report_bank_exhaustion(client):
+    assert client.get("/v1/me/gaps").status_code == 401
+    assert client.post("/v1/topics/divisibility/retest").status_code == 401
+    gaps = client.get("/v1/me/gaps", headers=auth())
+    assert gaps.status_code == 200
+    assert all(g["status"] == "unassessed" for g in gaps.json())
+    response = client.post("/v1/topics/divisibility/retest", headers=auth())
+    assert response.status_code == 409
+    assert response.json()["error"]["code"] == "insufficient_coverage"
+    assert client.post("/v1/topics/unknown/retest", headers=auth()).status_code == 422
+
+
+def test_skip_api_validation_and_storage(client):
+    created = client.post("/v1/sessions", headers=auth(), json={}).json()
+    item = client.get("/v1/sessions/" + created["session_id"], headers=auth()).json()["question"]
+    path = "/v1/assignments/" + item["assignment_id"] + "/submit"
+    headers = {**auth(), "Idempotency-Key": "skip"}
+    assert client.post(path, headers=headers, json={"answer": "4", "dont_know": True}).status_code == 422
+    response = client.post(path, headers=headers, json={"dont_know": True})
+    assert response.status_code == 200 and response.json()["correct"] is False
+    assert client.post(path, headers=headers, json={"dont_know": True}).json() == response.json()

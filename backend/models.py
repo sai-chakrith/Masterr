@@ -140,3 +140,14 @@ class MasteryEstimate(Base):
     answer_count: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
     recent_changes: Mapped[list] = mapped_column(JSON, default=list)
     __table_args__ = (CheckConstraint("answer_count >= 0"),)
+
+
+class GapState(Base):
+    """Latest decision, changed only by new assessment evidence."""
+    __tablename__ = "gap_states"
+    learner_id: Mapped[str] = mapped_column(ForeignKey("learners.id"), primary_key=True)
+    skill_id: Mapped[str] = mapped_column(String(128), primary_key=True)
+    status: Mapped[str] = mapped_column(String(32))
+    source_session_id: Mapped[str] = mapped_column(ForeignKey("learning_sessions.id"))
+    updated_at: Mapped[str] = mapped_column(String(40))
+    __table_args__ = (CheckConstraint("status IN ('mastered','borderline','gap','resolved')"),)
