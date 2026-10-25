@@ -47,5 +47,5 @@ def import_questions(db, questions):
 def available_questions(db, skill_id, purpose):
     return list(db.scalars(select(Question).where(
         Question.skill_id == skill_id, Question.purpose == purpose,
-        Question.status == "approved",
+        Question.status == "approved", Question.hidden.is_(False),
     ).order_by(Question.item_id, Question.version.desc())))

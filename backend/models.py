@@ -1,5 +1,5 @@
 """Persistent records for the first deterministic learning loop."""
-from sqlalchemy import JSON, Boolean, CheckConstraint, ForeignKey, Index, Integer, String, Text, UniqueConstraint
+from sqlalchemy import JSON, Boolean, CheckConstraint, ForeignKey, Float, Index, Integer, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
 from backend.db import Base
@@ -21,10 +21,14 @@ class Question(Base):
     facet: Mapped[str] = mapped_column(String(128))
     status: Mapped[str] = mapped_column(String(32))
     checksum: Mapped[str] = mapped_column(String(64))
+    difficulty_level: Mapped[int | None] = mapped_column(Integer)
+    hidden: Mapped[bool] = mapped_column(Boolean, default=False, server_default="0")
+    sub_topic: Mapped[str | None] = mapped_column(String(128))
     # Private snapshot: never serialize this object into student responses.
     snapshot: Mapped[dict] = mapped_column(JSON)
     __table_args__ = (
         UniqueConstraint("item_id", "version"),
+        CheckConstraint("difficulty_level BETWEEN 1 AND 5"),
         CheckConstraint("status IN ('draft','approved','withdrawn')"),
         CheckConstraint("purpose IN ('diagnostic','practice','verification','review')"),
     )
@@ -74,6 +78,9 @@ class Attempt(Base):
     assignment_id: Mapped[str] = mapped_column(ForeignKey("assignments.id"), unique=True)
     idempotency_key: Mapped[str] = mapped_column(String(128))
     request_hash: Mapped[str] = mapped_column(String(64))
+    duration_ms: Mapped[int | None] = mapped_column(Integer)
+    predicted_probability: Mapped[float | None] = mapped_column(Float)
+    scoring_version: Mapped[str] = mapped_column(String(32), default="current", server_default="current")
     raw_answer: Mapped[str] = mapped_column(Text)
     normalized_answer: Mapped[int] = mapped_column(Integer)
     working: Mapped[str] = mapped_column(Text)
@@ -81,7 +88,12 @@ class Attempt(Base):
     assistance: Mapped[str] = mapped_column(String(32))
     created_at: Mapped[str] = mapped_column(String(40))
     response: Mapped[dict] = mapped_column(JSON)
-    __table_args__ = (UniqueConstraint("learner_id", "idempotency_key"),)
+    __table_args__ = (
+        UniqueConstraint("learner_id", "idempotency_key"),
+        CheckConstraint("duration_ms >= 0"),
+        CheckConstraint("predicted_probability BETWEEN 0 AND 1"),
+        CheckConstraint("scoring_version IN ('current','new')"),
+    )
 
 
 class Evidence(Base):
@@ -108,3 +120,23 @@ class Review(Base):
         UniqueConstraint("evidence_id", "occasion"),
         Index("ix_review_due", "learner_id", "status", "due_at"),
     )
+
+
+class TopicScoringConfig(Base):
+    """Per-learner/topic assignment; defaults preserve the current learning policy."""
+    __tablename__ = "topic_scoring_configs"
+    learner_id: Mapped[str] = mapped_column(ForeignKey("learners.id"), primary_key=True)
+    skill_id: Mapped[str] = mapped_column(String(128), primary_key=True)
+    scoring_version: Mapped[str] = mapped_column(String(32), default="current", server_default="current")
+    __table_args__ = (CheckConstraint("scoring_version IN ('current','new')"),)
+
+
+class MasteryEstimate(Base):
+    """Track 1 owns rating updates; no historical ratings are fabricated."""
+    __tablename__ = "mastery_estimates"
+    learner_id: Mapped[str] = mapped_column(ForeignKey("learners.id"), primary_key=True)
+    skill_id: Mapped[str] = mapped_column(String(128), primary_key=True)
+    rating: Mapped[float] = mapped_column(Float, default=0.0, server_default="0")
+    answer_count: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+    recent_changes: Mapped[list] = mapped_column(JSON, default=list)
+    __table_args__ = (CheckConstraint("answer_count >= 0"),)

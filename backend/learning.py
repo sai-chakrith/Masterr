@@ -169,12 +169,14 @@ class LearningService:
                     "status": session.status, "policy_version": session.policy_version,
                     "question_count": len(assignments), "question": question_view, "attempts": history}
 
-    def submit(self, learner, assignment_id, answer, working, key):
+    def submit(self, learner, assignment_id, answer, working, key, duration_ms=None):
+        if duration_ms is not None and (type(duration_ms) is not int or not 0 <= duration_ms <= 86400000):
+            raise LearningError("invalid_duration", "Duration must be milliseconds between 0 and 86400000.", 422)
         if not key or len(key) > 128 or len(working) > 2000:
             raise LearningError("invalid_submission", "Invalid request key or working length.", 422)
         value = normalized_integer(answer)
         request_hash = hashlib.sha256(json.dumps(
-            [assignment_id, answer, working], ensure_ascii=False).encode()).hexdigest()
+            [assignment_id, answer, working] + ([] if duration_ms is None else [duration_ms]), ensure_ascii=False).encode()).hexdigest()
         with transaction(self.engine) as db:
             self.lock_learner(db, learner)
             previous = db.scalar(select(Attempt).where(
@@ -200,6 +202,7 @@ class LearningService:
             attempt = Attempt(id=uid(), learner_id=learner, assignment_id=assignment.id,
                 idempotency_key=key, request_hash=request_hash, raw_answer=answer,
                 normalized_answer=value, working=working, correct=correct, assistance=assistance,
+                duration_ms=duration_ms, scoring_version="current",
                 created_at=self.now(), response={})
             db.add(attempt)
             assignment.status = "submitted"

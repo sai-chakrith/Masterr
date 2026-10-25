@@ -254,3 +254,33 @@ def test_completed_session_exposes_own_attempt_evidence_only(setup):
     assert len(completed["attempts"]) == 3
     assert all(a["correct"] and a["assistance"] == "independent" for a in completed["attempts"])
     assert all("solution" not in a and "validator" not in a for a in completed["attempts"])
+
+
+def test_timing_is_saved_and_retry_does_not_duplicate(setup):
+    service, _, engine = setup
+    created = service.create_session("alice", mode="practice")
+    item = service.get_session("alice", created["session_id"])["question"]
+    args = ("alice", item["assignment_id"], "3", "", "timed-answer")
+    result = service.submit(*args, duration_ms=1234)
+    assert service.submit(*args, duration_ms=1234) == result
+    with transaction(engine) as db:
+        attempts = list(db.scalars(select(Attempt)))
+        assert len(attempts) == 1
+        assert attempts[0].duration_ms == 1234
+        assert attempts[0].scoring_version == "current"
+    with pytest.raises(LearningError, match="different content"):
+        service.submit(*args, duration_ms=1235)
+    with pytest.raises(LearningError, match="Duration"):
+        service.submit(*args, duration_ms=-1)
+
+
+def test_hidden_questions_are_excluded_from_normal_selection(setup):
+    from backend.content import available_questions
+    service, _, engine = setup
+    with transaction(engine) as db:
+        questions = available_questions(db, "divisibility", "practice")
+        assert questions
+        hidden_id = questions[0].id
+        questions[0].hidden = True
+    with transaction(engine) as db:
+        assert hidden_id not in {q.id for q in available_questions(db, "divisibility", "practice")}

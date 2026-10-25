@@ -23,6 +23,7 @@ class SessionBody(StrictBody):
 class Submission(StrictBody):
     answer: str = Field(max_length=32)
     working: str = Field(default="", max_length=2000)
+    duration_ms: int | None = Field(default=None, ge=0, le=86400000, strict=True)
 
 
 class HelpBody(StrictBody):
@@ -69,7 +70,7 @@ def create_app(engine=None, settings=None):
     @app.post("/v1/assignments/{assignment_id}/submit")
     def submit(assignment_id: str, body: Submission, owner: Annotated[str, Depends(learner)],
                idempotency_key: Annotated[str, Header(min_length=1, max_length=128)]):
-        return service.submit(owner, assignment_id, body.answer, body.working, idempotency_key)
+        return service.submit(owner, assignment_id, body.answer, body.working, idempotency_key, body.duration_ms)
 
     @app.post("/v1/assignments/{assignment_id}/help")
     def help(assignment_id: str, body: HelpBody, owner: Annotated[str, Depends(learner)]):
