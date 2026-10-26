@@ -28,8 +28,9 @@ To review content locally, set `MASTRR_ADMIN_SUBJECTS=local-developer` in the AP
 terminal before starting it. This is an explicit local-only reviewer grant, not
 a production default. The software has no built-in administrator password.
 
-The Python API does not automatically load `.env` files. Export backend variables
-into the process environment. Next.js reads its own `frontend/.env.local`; copy
+When local mode is enabled, the API loads plain entries from the private root
+`.env`, preserving existing process settings. Hosted deployments use process
+secrets instead. Next.js reads its own `frontend/.env.local`; copy
 from `frontend/.env.example` for local development. Do not commit local env files.
 
 ## Create the hosted services

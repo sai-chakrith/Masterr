@@ -32,6 +32,18 @@ select the legacy policy explicitly. Local reviewer access requires setting
 
 ## Content and launch status
 
+For a recording-ready local demonstration, use the separate sample database:
+
+```text
+python -m scripts.demo serve --sample-content --topic divisibility --seed-mistakes
+```
+
+This starts the API on 8880 and frontend on 3001 with a visible demonstration
+banner. It leaves the normal database and source draft approvals unchanged.
+Add `--live` only after saving a replacement Groq key privately in the root
+`.env`. See [the recording guide](docs/recording-demo.md) for sign-in, stop and
+live verification commands. Default demo mode makes no paid provider calls.
+
 **This is not a published learner service yet.** The source bank contains 1,272
 unapproved drafts, including 135 retention-review items. Curriculum, notes,
 misconceptions and exam mappings need genuine content review. The app intentionally

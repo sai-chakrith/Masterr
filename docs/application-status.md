@@ -32,7 +32,7 @@ launch. The original report's 35-topic scope is not claimed as delivered.
 
 ## Verified locally
 
-- Full real-pytest suite: **206 passed**, with one existing Starlette/httpx
+- Full real-pytest suite: **211 passed**, with one existing Starlette/httpx
   deprecation warning.
 - Clean locked frontend installation using npm 10: passed.
 - TypeScript and Next.js production build: passed for all application routes.
@@ -52,6 +52,14 @@ launch. The original report's 35-topic scope is not claimed as delivered.
 
 The browser fixture uses a new isolated synthetic database, fake test identities and no paid
 provider calls. Its approvals and scores are never real learner evidence.
+
+The recording launcher also creates an isolated, visibly labelled sample database,
+without changing the normal database or approving source drafts. Its browser check
+passed for sign-in, the demo banner, both fallback tutoring panels and continuing
+into practice. Five additional tests cover environment loading, database isolation
+and sanitised provider errors. See [recording instructions](recording-demo.md).
+Live Groq verification remains pending a replacement private key; the exposed key
+was not saved or used.
 
 ## Owner and reviewer actions still required
 
