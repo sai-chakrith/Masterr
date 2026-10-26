@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "status": "draft",
+  "scope_note": "Original arithmetic pilot profile. This is not an official exam syllabus mapping. Review target skills and thresholds before importing through the reviewer console.",
+  "profiles": [
+    {
+      "id": "arithmetic-foundations-pilot",
+      "name": "Arithmetic foundations — placement pilot",
+      "target_skill_ids": ["percentages", "profit-loss", "simple-interest", "compound-interest", "ratio-proportion", "averages", "mixtures-alligations", "partnership", "time-work"],
+      "default_mastery_bar": 0.75,
+      "topic_bars": {}
+    }
+  ]
+}

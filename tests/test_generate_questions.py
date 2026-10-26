@@ -1,6 +1,18 @@
 from backend.numbers.bank import load_questions, validate_bank
 from backend.numbers.coverage import audit
 from scripts.generate_questions import generate_assessment_questions, generate_questions
+from scripts.generate_questions import generate_review_questions
+
+
+def test_retention_drafts_cover_three_reviews_without_reusing_prompts():
+    source = [q for q in load_questions() if q.get("purpose") != "review"]
+    result = generate_review_questions("divisibility", 9, 20261027, source)
+    assert len(result) == 9
+    assert all(q["review_status"] == "draft" and q["purpose"] == "review" for q in result)
+    assert {q["facet"]: sum(x["facet"] == q["facet"] for x in result) for q in result} == {"basic": 3, "combined": 3, "constraints": 3}
+    assert not ({q["prompt"] for q in result} & {q["prompt"] for q in source})
+    assert validate_bank(result) == []
+    assert generate_review_questions("divisibility", 9, 20261027, source + result) == []
 
 
 def test_generator_produces_valid_unpublished_practice_for_current_skills():

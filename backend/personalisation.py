@@ -31,6 +31,7 @@ from backend.recommender import Action, TopicState, next_actions
 from backend.teaching import teaching_plan
 from backend.publication import load_document
 from backend.content import available_questions
+from backend.mock_state import active_test
 
 
 class PersonalisationError(ValueError):
@@ -149,16 +150,15 @@ class PersonalisationService:
             return bool(session and session.status == "completed")
         else:
             purposes = ("diagnostic", "verification") if status == "unassessed" else ("practice",)
-        seen = set(db.scalars(select(Exposure.family_id).where(Exposure.learner_id == learner)))
+        seen = self.learning.seen_families(db, learner)
         candidates = [q for purpose in purposes for q in available_questions(db, skill_id, purpose)]
         fresh = {q.family_id for q in candidates
                  if q.family_id not in seen and q.difficulty_level is not None}
         needed = 8 if status == "unassessed" else 1
         return len(fresh) >= needed
 
-    @staticmethod
-    def _retest_available(db, learner, skill_id):
-        seen = set(db.scalars(select(Exposure.family_id).where(Exposure.learner_id == learner)))
+    def _retest_available(self, db, learner, skill_id):
+        seen = self.learning.seen_families(db, learner)
         candidates = [q for purpose in ("diagnostic", "verification") for q in available_questions(db, skill_id, purpose)]
         return len({q.family_id for q in candidates if q.family_id not in seen and q.difficulty_level is not None}) >= 10
 
@@ -188,17 +188,24 @@ class PersonalisationService:
             estimate = estimates.get(skill_id)
             score = shown_score(estimate.rating) if estimate and estimate.answer_count else None
             status = assessment.status if assessment else "unassessed"
+            stale = bool(assessment and self.learning.assessment_stale(db, assessment.source_session_id))
+            if stale:
+                status, score = "unassessed", None
             states[skill_id] = TopicState(
                 status=status,
                 phase=state.phase if state else ("tutoring" if status == "gap" else "none"),
                 score=score,
-                available=self._availability(db, learner, skill_id, status),
+                available=not stale and self._availability(db, learner, skill_id, status),
+                evidence_stale=stale,
             )
         active = self.learning.active_session(db, learner)
+        timed = active_test(db, learner)
         if active:
             title = index.get(active.skill_id, {}).get("title", active.skill_id)
             unfinished = Action("resume", active.skill_id, "unfinished_activity",
                                 f"Resume your {active.mode} in {title}.")
+        elif timed:
+            unfinished = Action("resume_timed_test", None, "unfinished_timed_practice", "Resume your timed mixed-topic practice.")
         else:
             unfinished = None
         due = db.scalar(select(Review).where(
@@ -207,12 +214,12 @@ class PersonalisationService:
             Review.due_at <= self.learning.now(),
         ).order_by(Review.due_at))
         due_action = None
-        if due:
+        if due and not states.get(due.skill_id, TopicState()).evidence_stale:
             title = index.get(due.skill_id, {}).get("title", due.skill_id)
             due_action = Action("review", due.skill_id, "due_review",
                                 f"A quick review of {title} is ready.")
         ready = tuple(skill_id for skill_id in route
-                      if progress.get(skill_id) and progress[skill_id].phase == "ready_for_retest"
+                      if ((progress.get(skill_id) and progress[skill_id].phase == "ready_for_retest") or states[skill_id].evidence_stale)
                       and self._retest_available(db, learner, skill_id))
         stuck = tuple(skill_id for skill_id in route
                       if progress.get(skill_id) and progress[skill_id].stuck and states[skill_id].available)
@@ -229,9 +236,10 @@ class PersonalisationService:
             "targets": route_targets,
             "exam_profile_id": goal.exam_profile_id,
             "exam_profile_version": goal.exam_profile_version,
-            "states": {sid: (state.status, state.phase, state.score, state.available)
+            "states": {sid: (state.status, state.phase, state.score, state.available, state.evidence_stale)
                        for sid, state in states.items()},
             "active": active.id if active else None,
+            "active_timed_test": timed.id if timed else None,
             "due_review": due.id if due else None,
         })
         return curriculum, goal, route, states, actions, fingerprint
@@ -265,6 +273,7 @@ class PersonalisationService:
                     "title": index[skill_id]["title"],
                     "prerequisites": index[skill_id]["prerequisites"],
                     "status": state.status,
+                    "evidence_stale": state.evidence_stale,
                     "phase": state.phase,
                     "score": state.score,
                     "mastery_bar": mastery_bar(skill_id, goal.exam_profile_snapshot),

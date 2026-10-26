@@ -9,13 +9,13 @@ function finish() {
     const client = authClient();
     if (!client) throw new Error("Account sign-in is not configured.");
     const params = new URLSearchParams(window.location.search);
+    window.history.replaceState({}, "", "/auth/callback");
     const code = params.get("code"), hash = params.get("token_hash"), type = params.get("type");
     const next = params.get("next") === "/account/password" || type === "recovery" ? "/account/password" : "/";
     if (params.get("error")) throw new Error("This email link is expired or invalid. Request a new link.");
     const result = code ? await client.auth.exchangeCodeForSession(code)
       : hash && (type === "recovery" || type === "signup" || type === "email")
         ? await client.auth.verifyOtp({ token_hash: hash, type }) : await client.auth.getSession();
-    window.history.replaceState({}, "", "/auth/callback");
     if (result.error) throw result.error;
     if (!result.data.session) throw new Error("No sign-in session was returned. Request a new link.");
     return next;

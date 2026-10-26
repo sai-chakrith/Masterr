@@ -1,9 +1,9 @@
 """Shared-database quotas, private exports, deletion and learner content reports."""
 import hashlib
-import json
 import os
 from datetime import datetime, timezone
 from urllib.request import Request, urlopen
+from urllib.error import HTTPError
 from uuid import uuid4
 
 from sqlalchemy import delete, select
@@ -12,7 +12,7 @@ from sqlalchemy.orm import Session
 from backend.app_models import ContentReport, DeletedIdentity, UsageBucket
 from backend.db import Base, transaction
 from backend.learning import LearningError
-from backend.models import Assignment, Learner, LearningSession, Question
+from backend.models import Assignment, Learner, LearningSession
 
 
 def utcnow():
@@ -76,8 +76,12 @@ def delete_hosted_identity(settings, subject):
     from urllib.parse import quote
     request = Request(settings.supabase_url + "/auth/v1/admin/users/" + quote(subject, safe=""),
                       method="DELETE", headers={"Authorization": "Bearer " + key, "apikey": key})
-    with urlopen(request, timeout=20) as response:
-        response.read()
+    try:
+        with urlopen(request, timeout=20) as response:
+            response.read()
+    except HTTPError as error:
+        if error.code != 404:
+            raise
 
 
 class AccountService:
@@ -86,6 +90,10 @@ class AccountService:
 
     def export(self, owner):
         with transaction(self.engine) as db:
+            db.scalar(select(Learner).where(Learner.id == owner).with_for_update())
+            from backend.mock_state import active_test
+            if active_test(db, owner):
+                raise LearningError("active_session", "Finish your timed practice before exporting data.")
             sessions = list(db.scalars(select(LearningSession).where(LearningSession.learner_id == owner)))
             if any(s.status in {"active", "assisted"} for s in sessions):
                 raise LearningError("active_session", "Finish or abandon your current activity before exporting data.")

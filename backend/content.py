@@ -78,14 +78,29 @@ def import_questions(db, questions, misconceptions=None):
 
 def available_questions(db, skill_id, purpose):
     latest = select(Question.item_id, func.max(Question.version).label("version")).group_by(Question.item_id).subquery()
-    return list(db.scalars(select(Question).where(
+    candidates = list(db.scalars(select(Question).where(
         Question.skill_id == skill_id, Question.purpose == purpose,
         Question.status == "approved", Question.hidden.is_(False),
     ).join(latest, (Question.item_id == latest.c.item_id) & (Question.version == latest.c.version))
        .order_by(Question.item_id)))
+    return [q for q in candidates if concepts_available(db, q)]
+
+
+def concepts_available(db, question):
+    tags = {o.get("misconception_id") for o in question.snapshot.get("options", []) if o.get("misconception_id")}
+    if not tags:
+        return True
+    from backend.publication import document_row
+    row = document_row(db, "misconceptions", published=True)
+    if row is None:
+        return True  # import-time validation already checked the file-based review record
+    if row.status != "approved":
+        return False
+    approved = {c["id"] for c in row.payload.get("misconceptions", []) if c.get("review_status") == "approved"}
+    return tags <= approved
 
 
 def is_current_question(db, question):
     latest = db.scalar(select(Question).where(Question.item_id == question.item_id)
                        .order_by(Question.version.desc()).limit(1))
-    return latest is not None and latest.id == question.id and latest.status == "approved"
+    return latest is not None and latest.id == question.id and latest.status == "approved" and concepts_available(db, question)

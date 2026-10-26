@@ -1,7 +1,6 @@
 """Application integration uses synthetic content and fake provider boundaries only."""
 import copy
 from concurrent.futures import ThreadPoolExecutor
-from types import SimpleNamespace
 
 import pytest
 from fastapi.testclient import TestClient
@@ -210,3 +209,38 @@ def test_tutor_completion_requires_ownership_and_changes_no_grade(app_setup):
     result = client.post("/v1/me/tutor/divisibility/complete", headers=AUTH, json={"tutoring_id": record["id"]})
     assert result.status_code == 200
     assert next(g for g in app.state.service.gaps("local-developer") if g["skill_id"] == "divisibility")["status"] == "unassessed"
+
+
+def test_changed_assessment_content_withholds_current_claim_without_rewriting_history(app_setup):
+    app, client, engine, qid = app_setup
+    from backend.models import GapState
+    published = publish_question(client, qid)
+    sid = client.post("/v1/sessions", headers=AUTH, json={}).json()["session_id"]
+    item = client.get("/v1/sessions/" + sid, headers=AUTH).json()["question"]
+    client.post("/v1/assignments/" + item["assignment_id"] + "/submit", headers={**AUTH, "Idempotency-Key": "stale-assessment"}, json={"answer": "4"})
+    with transaction(engine) as db:
+        db.add(GapState(learner_id="local-developer", skill_id="divisibility", status="mastered", source_session_id=sid, updated_at="2026-10-27T00:00:00+00:00"))
+    client.post("/v1/admin/questions/" + published["id"], headers=AUTH, json={"action": "withdraw", "expected_checksum": published["checksum"]})
+    row = next(g for g in app.state.service.gaps("local-developer") if g["skill_id"] == "divisibility")
+    assert row["evidence_stale"] and row["status"] == "unassessed" and row["previous_status"] == "mastered"
+    with transaction(engine) as db:
+        assert db.get(GapState, ("local-developer", "divisibility")).status == "mastered"
+
+
+def test_private_export_never_releases_validation_correctness(app_setup):
+    _, client, engine, _ = app_setup
+    from tests.test_scoring_flow import full_bank
+    with transaction(engine) as db:
+        import_questions(db, full_bank())
+    created = client.post("/v1/topics/divisibility/validation", headers=AUTH)
+    assert created.status_code == 201
+    sid = created.json()["session_id"]
+    while True:
+        view = client.get("/v1/sessions/" + sid, headers=AUTH).json()
+        if view["status"] == "completed":
+            break
+        assignment = view["question"]["assignment_id"]
+        result = client.post("/v1/assignments/" + assignment + "/submit", headers={**AUTH, "Idempotency-Key": assignment}, json={"answer": "3"})
+        assert result.status_code == 200 and "correct" not in result.json()
+    exported = client.get("/v1/me/export", headers=AUTH).json()["data"]["attempts"]
+    assert exported and all(row["source"] == "validation" and "correct" not in row and "response" not in row for row in exported)

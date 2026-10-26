@@ -5,7 +5,7 @@ import AccountNav from "@/components/AccountNav";
 
 export const metadata: Metadata = {
   title: "Mastrr",
-  description: "Aptitude practice with an honest mastery score.",
+  description: "Aptitude learning with transparent progress and independent checks.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -22,6 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </Link>
             <AccountNav />
           </nav>
+          <nav aria-label="Learning tools" className="mx-auto flex max-w-3xl gap-5 px-4 pb-3 text-sm"><Link href="/practice-test" className="hover:underline">Timed practice</Link><Link href="/history" className="hover:underline">History</Link></nav>
         </header>
         <main className="mx-auto max-w-3xl px-4 py-6">{children}</main>
       </body>

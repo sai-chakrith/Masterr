@@ -16,7 +16,7 @@ export default function AccountNav() {
   }, []);
   async function logout() {
     try { await signOut(); setSignedIn(false); router.replace("/login"); }
-    catch { setError("Could not sign out. Please try again."); }
+    catch { setSignedIn(false); router.replace("/login"); setError("Signed out on this device. Remote session revocation could not be confirmed."); }
   }
   return <div className="flex items-center gap-4 text-sm">
     <Link href={signedIn ? "/account" : "/login"} className="hover:underline">{signedIn ? "Account" : "Sign in"}</Link>

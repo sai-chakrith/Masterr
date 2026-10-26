@@ -149,6 +149,9 @@ class ReviewService:
                     problems += validate_bank([], document.get("misconceptions", []))
                 elif not isinstance(document.get("text"), str) or not document["text"].strip() or len(document["text"]) > 24000:
                     problems.append("Notes require nonempty text of at most 24,000 characters.")
+                elif action == "approve":
+                    document["text"] = document["text"].replace("Status: draft. Original material for human review.",
+                                                               "Status: approved for tutoring after review.")
                 if problems:
                     raise LearningError("invalid_content", "; ".join(problems), 422)
                 sha = checksum(document)

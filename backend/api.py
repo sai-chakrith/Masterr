@@ -1,5 +1,6 @@
 """First learning-loop API. Run on loopback only when using local development."""
 from typing import Annotated, Literal
+import os
 
 from fastapi import Depends, FastAPI, Header, Request, Query, HTTPException
 from fastapi.responses import JSONResponse
@@ -17,8 +18,9 @@ from backend.operations import AccountService, BudgetService
 from backend.review import ReviewService
 from backend.app_models import DeletedIdentity
 from backend.db import transaction
-from sqlalchemy import inspect, select, text
+from sqlalchemy import select, text
 from backend.http_safety import RequestSafetyMiddleware
+from backend.timed_practice import TimedPracticeService
 
 
 class StrictBody(BaseModel):
@@ -79,15 +81,29 @@ class ResolutionBody(StrictBody):
     resolution: str = Field(min_length=10, max_length=2000)
 
 
+class TimedTestBody(StrictBody):
+    skill_ids: list[str] = Field(min_length=1, max_length=15)
+    question_count: int = Field(default=10, ge=3, le=30, strict=True)
+    minutes: int = Field(default=15, ge=1, le=120, strict=True)
+
+
+class TimedAnswerBody(StrictBody):
+    question_id: str = Field(min_length=1, max_length=128)
+    answer: str = Field(default="", max_length=32)
+    option_id: str | None = Field(default=None, max_length=128)
+    dont_know: bool = Field(default=False, strict=True)
+
+
 def create_app(engine=None, settings=None):
     settings = settings or Settings.from_env()
-    if __import__("os").environ.get("MASTRR_ENV") == "production" and settings.local_development:
+    if os.environ.get("MASTRR_ENV") == "production" and settings.local_development:
         raise ValueError("Production cannot use local developer authentication.")
     engine = engine or make_engine(settings.database_url)
     service = LearningService(engine)
     tutor_service = TutorService(engine)
     personalisation = PersonalisationService(engine, service)
     accounts, budget, reviews = AccountService(engine, settings), BudgetService(engine), ReviewService(engine)
+    timed_practice = TimedPracticeService(engine, service)
     app = FastAPI(title="Mastrr learning API", version="0.1.0")
     app.add_middleware(RequestSafetyMiddleware)
     app.state.service = service
@@ -231,7 +247,7 @@ def create_app(engine=None, settings=None):
             with engine.connect() as db:
                 db.execute(text("SELECT 1"))
                 versions = set(db.scalars(text("SELECT version_num FROM alembic_version")))
-                if versions != {"a2b8c60d741e"}:
+                if versions != {"b3c509d12e8f"}:
                     return JSONResponse(status_code=503, content={"status": "not_ready", "reason": "migrations_required"})
             return {"status": "ready"}
         except Exception:
@@ -275,7 +291,10 @@ def create_app(engine=None, settings=None):
     @app.post("/v1/admin/questions/{qid}")
     def decide_question(qid: str, body: ReviewBody, owner: Annotated[str, Depends(reviewer)]):
         explicit_review(body)
-        return reviews.review_question(qid, owner, body.action, body.expected_checksum, body.document, body.note)
+        try:
+            return reviews.review_question(qid, owner, body.action, body.expected_checksum, body.document, body.note)
+        except (ValueError, TypeError, KeyError, AttributeError):
+            raise LearningError("invalid_content", "The question structure is invalid; fix it before saving.", 422) from None
 
     @app.get("/v1/admin/documents/{key}")
     def review_document(key: str, owner: Annotated[str, Depends(reviewer)]):
@@ -303,6 +322,35 @@ def create_app(engine=None, settings=None):
             pending = list(db.scalars(select(DeletedIdentity.subject).where(DeletedIdentity.identity_deleted.is_(False)).limit(10)))
         results = [accounts.finish_identity_deletion(subject) for subject in pending]
         return {"attempted": len(results), "completed": sum(r["identity_deleted"] for r in results)}
+
+    @app.post("/v1/me/timed-tests", status_code=201)
+    def start_timed_test(body: TimedTestBody, owner: Annotated[str, Depends(learner)]):
+        return timed_practice.start(owner, body.skill_ids, body.question_count, body.minutes)
+
+    @app.get("/v1/me/timed-tests")
+    def timed_test_history(owner: Annotated[str, Depends(learner)]):
+        return timed_practice.history(owner)
+
+    @app.get("/v1/me/timed-tests/{run_id}")
+    def get_timed_test(run_id: str, owner: Annotated[str, Depends(learner)]):
+        return timed_practice.get(owner, run_id)
+
+    @app.post("/v1/me/timed-tests/{run_id}/answers")
+    def timed_answer(run_id: str, body: TimedAnswerBody, owner: Annotated[str, Depends(learner)]):
+        return timed_practice.answer(owner, run_id, body.question_id, body.answer, body.option_id, body.dont_know)
+
+    @app.post("/v1/me/timed-tests/{run_id}/finish")
+    def finish_timed_test(run_id: str, owner: Annotated[str, Depends(learner)]):
+        return timed_practice.finish(owner, run_id)
+
+    @app.get("/v1/me/history")
+    def learning_history(owner: Annotated[str, Depends(learner)]):
+        from backend.models import LearningSession
+        with transaction(engine) as db:
+            return [{"id": s.id, "skill_id": s.skill_id, "mode": s.mode, "status": s.status,
+                     "created_at": s.created_at, "policy_version": s.policy_version}
+                    for s in db.scalars(select(LearningSession).where(LearningSession.learner_id == owner)
+                                        .order_by(LearningSession.created_at.desc()).limit(100))]
 
     @app.get("/v1/me/today")
     def today(owner: Annotated[str, Depends(learner)]):

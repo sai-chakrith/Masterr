@@ -27,6 +27,9 @@ def load_document(engine, key, fallback):
             if row.status == "withdrawn":
                 content = deepcopy(row.payload)
                 content["status"] = "draft"
+                if key == "misconceptions":
+                    for concept in content.get("misconceptions", []):
+                        concept["review_status"] = "draft"
                 return content
             return deepcopy(row.payload)
     return fallback()
@@ -40,7 +43,7 @@ def topic_notes(engine, topic):
         if row:
             return row.payload.get("text", "") if row.status == "approved" and row.checksum == checksum(row.payload) else ""
     # Reviewed file-based notes remain supported.
-    text = get_topic_notes(topic)
+    text = get_topic_notes(topic, include_curriculum=False)
     if text:
         return text
     curriculum = load_document(engine, "curriculum", load_curriculum)

@@ -98,7 +98,7 @@ export default function SkillRouteGraph({ nodes }: { nodes: RouteNode[] }) {
               style={{ left: position.x, top: position.y, width: NODE_WIDTH, height: NODE_HEIGHT, borderColor: color.stroke, color: "inherit" }}
             >
               <span className="block truncate text-sm font-semibold">{node.title}</span>
-              <span className="mt-1 block text-xs font-medium" style={{ color: color.text }}>{statusLabel(node.status)}</span>
+              <span className="mt-1 block text-xs font-medium" style={{ color: color.text }}>{node.evidence_stale ? "Needs a fresh check" : statusLabel(node.status)}</span>
               <span className="mt-1 block truncate text-[11px] text-slate-600 dark:text-slate-300">{details}</span>
               <span className="mt-1 block text-[11px] text-slate-500">Target {Math.round(node.mastery_bar * 100)}%{!node.available ? " · Content in review" : " · Open topic"}</span>
             </Link>

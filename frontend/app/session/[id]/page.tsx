@@ -78,8 +78,10 @@ export default function SessionPage() {
 
   async function abandon() {
     if (!view || !window.confirm("Leave this session? Its questions will not be offered again.")) return;
-    await api.abandon(view.session_id).catch(() => undefined);
-    router.push("/");
+    setBusy(true); setError(null);
+    try { await api.abandon(view.session_id); router.push("/"); }
+    catch (e) { setError(e instanceof Error ? e.message : "Could not leave the session. Try again."); }
+    finally { setBusy(false); }
   }
 
   async function requestHint() {

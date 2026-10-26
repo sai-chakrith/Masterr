@@ -13,6 +13,7 @@ export interface Topic {
   answer_count: number;
   mastery_bar: number;
   score_withheld: boolean;
+  evidence_stale?: boolean;
 }
 
 export interface QuestionView {
@@ -100,6 +101,7 @@ export interface Roadmap {
     answer_count: number;
     next_review_at: string | null;
     available: boolean;
+    evidence_stale?: boolean;
     source_session_id: string | null;
   }[];
   next_actions: LearningAction[];
@@ -129,7 +131,9 @@ export function setToken(token: string | null) {
 }
 
 export async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
-  const token = await accessToken();
+  let token: string | null;
+  try { token = await accessToken(); }
+  catch { throw new ApiError(401, "session_expired", "Your session expired. Please sign in again."); }
   const headers = new Headers(init.headers);
   if (token) headers.set("Authorization", `Bearer ${token}`);
   if (init.body) headers.set("Content-Type", "application/json");

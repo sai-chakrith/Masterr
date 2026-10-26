@@ -15,6 +15,7 @@ if (-not (Test-Path -LiteralPath $tokenPath)) {
     Set-Content -LiteralPath $tokenPath -Value $localToken -NoNewline
 }
 $env:LOCAL_DEVELOPMENT = '1'
+if (-not $env:MASTRR_DEFAULT_SCORING_VERSION) { $env:MASTRR_DEFAULT_SCORING_VERSION = 'new' }
 $env:LOCAL_API_TOKEN = (Get-Content -LiteralPath $tokenPath -Raw).Trim()
 if (-not $env:DATABASE_URL) { $env:DATABASE_URL = 'sqlite:///./data/local.db' }
 & $pythonPath -m alembic upgrade heads

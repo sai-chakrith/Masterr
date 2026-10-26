@@ -2,6 +2,7 @@
 import hashlib
 import json
 import re
+import os
 from datetime import date, datetime, time, timedelta, timezone
 from uuid import uuid4
 from zoneinfo import ZoneInfo
@@ -18,6 +19,8 @@ from backend.models import (Assignment, Attempt, Evidence, Exposure, GapState, L
                             LearningSession, MasteryEstimate, Misconception, Question, QuestionOption, Review, TopicPracticeConfig,
                             TopicScoringConfig)
 from backend.numbers.bank import compute_answer, load_curriculum
+from backend.app_models import TestExposure
+from backend.mock_state import active_test
 
 POLICY = "divisibility-check-v1"
 RETEST_POLICY = "topic-retest-v1"                  # new version (D6)
@@ -95,6 +98,9 @@ def attempt_source(session):
 class LearningService:
     def __init__(self, engine, clock=utcnow):
         self.engine, self.clock = engine, clock
+        self.default_scoring_version = os.environ.get("MASTRR_DEFAULT_SCORING_VERSION", "current")
+        if self.default_scoring_version not in VERSIONS:
+            raise ValueError("MASTRR_DEFAULT_SCORING_VERSION must be current or new")
 
     def now(self):
         value = self.clock()
@@ -160,7 +166,8 @@ class LearningService:
     # ----- question selection -------------------------------------------------------------
 
     def seen_families(self, db, learner):
-        return set(db.scalars(select(Exposure.family_id).where(Exposure.learner_id == learner)))
+        return (set(db.scalars(select(Exposure.family_id).where(Exposure.learner_id == learner)))
+                | set(db.scalars(select(TestExposure.family_id).where(TestExposure.learner_id == learner))))
 
     def tagged_pool(self, db, learner, skill, seen=None):
         """Approved, visible, tagged assessment questions from families the learner never saw."""
@@ -221,7 +228,7 @@ class LearningService:
 
     def version_for(self, db, learner, skill):
         config = db.get(TopicScoringConfig, (learner, skill))
-        return config.scoring_version if config else "current"
+        return config.scoring_version if config else self.default_scoring_version
 
     def practice_strategy(self, db, learner, skill):
         config = db.get(TopicPracticeConfig, (learner, skill))
@@ -260,7 +267,7 @@ class LearningService:
             raise LearningError("invalid_session", "Unknown skill or activity.", 422)
         with transaction(self.engine) as db:
             self.lock_learner(db, learner)
-            if self.active_session(db, learner):
+            if self.active_session(db, learner) or active_test(db, learner):
                 raise LearningError("active_session", "Resume or abandon your current session first.")
             review = None
             if mode == "review":
@@ -386,7 +393,7 @@ class LearningService:
             raise LearningError("invalid_session", "Unknown skill or activity.", 422)
         with transaction(self.engine) as db:
             self.lock_learner(db, learner)
-            if self.active_session(db, learner):
+            if self.active_session(db, learner) or active_test(db, learner):
                 raise LearningError("active_session", "Resume or abandon your current session first.")
             done = list(db.scalars(select(LearningSession).where(
                 LearningSession.learner_id == learner, LearningSession.skill_id == skill,
@@ -698,6 +705,10 @@ class LearningService:
         db.add(evidence)
         db.flush()
         if result in ("independent_check_passed", "retest_passed", "diagnostic_mastered"):
+            if result == "retest_passed":
+                for old_review in db.scalars(select(Review).where(Review.learner_id == session.learner_id,
+                        Review.skill_id == session.skill_id, Review.status == "pending")):
+                    old_review.status = "superseded"
             interval = review_days_after_pass(0)
             if interval is not None:
                 db.add(Review(id=uid(), learner_id=session.learner_id, evidence_id=evidence.id,
@@ -792,6 +803,11 @@ class LearningService:
 
     # ----- gaps (Track 2) and dashboard ------------------------------------------------------------
 
+    def assessment_stale(self, db, session_id):
+        questions = db.scalars(select(Question).join(Assignment, Assignment.question_id == Question.id)
+                               .where(Assignment.session_id == session_id))
+        return any(not is_current_question(db, question) for question in questions)
+
     def set_gap(self, db, session, status):
         """Record an assessment-backed decision inside the deciding session's transaction.
 
@@ -821,16 +837,18 @@ class LearningService:
             active = self.active_session(db, learner)
             result = []
             for skill in CURRICULUM:
-                sid, version = skill["id"], configs.get(skill["id"], "current")
+                sid, version = skill["id"], configs.get(skill["id"], self.default_scoring_version)
                 record, estimate = records.get(sid), estimates.get(sid)
+                stale = bool(record and self.assessment_stale(db, record.source_session_id))
                 # A moving score would reveal answers inside a form that withholds feedback.
-                withheld = bool(active and active.skill_id == sid and active.mode in ("verification", "review"))
+                withheld = stale or bool(active and active.skill_id == sid and active.mode in ("verification", "review"))
                 counted = estimate.answer_count if estimate and version == "new" else 0
                 score = None
                 if counted and not withheld:
                     score = round(mastery.shown_score(estimate.rating), 4)
                 result.append({"skill_id": sid, "title": skill["title"], "prerequisites": skill["prerequisites"],
-                               "status": record.status if record else "unassessed",
+                               "status": record.status if record and not stale else "unassessed",
+                               "previous_status": record.status if stale else None, "evidence_stale": stale,
                                "source_session_id": record.source_session_id if record else None,
                                "scoring_version": version, "score": score, "answer_count": counted,
                                "mastery_bar": mastery_bar(sid, profile), "score_withheld": withheld})

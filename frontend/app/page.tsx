@@ -77,6 +77,10 @@ export default function RoadmapPage() {
     setBusy(true); setError(null); setNotice(null);
     try {
       const logged = await api.logRecommendation(roadmap.state_fingerprint, index);
+      if (action.kind === "resume_timed_test") {
+        await api.followRecommendation(logged.recommendation_id);
+        router.push("/practice-test"); return;
+      }
       if (action.kind === "resume" && active) {
         await api.followRecommendation(logged.recommendation_id);
         router.push("/session/" + active); return;
@@ -168,6 +172,7 @@ export default function RoadmapPage() {
       )}
       {error && <p role="alert" className="rounded-lg bg-rose-50 p-3 text-sm text-rose-800 dark:bg-rose-950 dark:text-rose-200">{error}</p>}
       {notice && <p role="status" className="rounded-lg bg-amber-50 p-3 text-sm text-amber-900 dark:bg-amber-950 dark:text-amber-100">{notice}</p>}
+      {roadmap?.nodes.some((node) => node.evidence_stale) && <p role="status" className="rounded-lg border border-amber-300 p-3 text-sm">Some assessed content changed or was withdrawn. Previous results remain in your history; affected topics need a fresh independent check.</p>}
 
       <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <h2 className="text-lg font-semibold">Your goal</h2>

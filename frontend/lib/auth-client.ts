@@ -36,10 +36,13 @@ export async function accessToken(): Promise<string | null> {
 }
 export async function signOut() {
   const supabase = authClient();
-  if (supabase) {
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
+  try {
+    if (supabase) {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+    }
+  } finally {
+    window.localStorage.removeItem("mastrr-token");
+    window.localStorage.removeItem(SESSION_KEY);
   }
-  window.localStorage.removeItem("mastrr-token");
-  window.localStorage.removeItem(SESSION_KEY);
 }

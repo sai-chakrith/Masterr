@@ -4,12 +4,12 @@ import hashlib
 import re
 from pathlib import Path
 
-from backend.numbers.bank import load_curriculum
+from backend.curriculum import load_curriculum
 
 NOTES_DIR = Path(__file__).resolve().parents[1] / "knowledge" / "notes"
 
 
-def get_topic_notes(topic, notes_dir=NOTES_DIR):
+def get_topic_notes(topic, notes_dir=NOTES_DIR, *, include_curriculum=True):
     if not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,127}", topic):
         return ""
     # A sidecar is an explicit publication record, not an approval invented by code.
@@ -26,6 +26,8 @@ def get_topic_notes(topic, notes_dir=NOTES_DIR):
         except (OSError, ValueError, AttributeError):
             pass
     # Existing approved curriculum is the fallback knowledge base. No cross-topic search.
+    if not include_curriculum:
+        return ""
     curriculum = load_curriculum()
     if curriculum.get("status") == "approved":
         skill = next((s for s in curriculum["skills"] if s["id"] == topic), {})

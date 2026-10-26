@@ -285,6 +285,27 @@ def generate_assessment_questions(skill_id: str, seed: int, existing: list[dict]
     return generated
 
 
+def generate_review_questions(skill_id, count, seed, existing):
+    """Fresh draft retention pool with provisional coverage facets for human review."""
+    prior = [q for q in existing if q.get("skill_id") == skill_id and q.get("purpose") == "review"]
+    needed = max(0, count - len(prior))
+    if not needed:
+        return []
+    generated = generate_questions(skill_id, needed, seed, existing)
+    from backend.numbers.distractors import PILOT_SKILLS, make_options
+    for i, item in enumerate(generated, start=len(prior)):
+        item["id"] = f"gen-{skill_id}-review-{i + 1:04d}"
+        item["family_id"] = item["id"]
+        item["purpose"] = "review"
+        item["facet"] = ("basic", "combined", "constraints")[i % 3]
+        item["generation"]["generator_version"] = "review-drafts-v1"
+        item["generation"]["facets_provisional"] = True
+        item["provenance"] += " Retention draft: a reviewer must check facet labels, genuine family separation and method coverage."
+        if skill_id in PILOT_SKILLS:
+            item["options"] = make_options(item)
+    return generated
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--count", type=int, default=40, help="draft items to generate per supported skill")
@@ -292,7 +313,10 @@ def main():
     parser.add_argument("--skills", nargs="*", help="skill IDs; defaults to all supported arithmetic templates")
     parser.add_argument("--assessment", action="store_true",
                         help="generate a 35-item draft diagnostic, verification and hidden-form bank per selected skill")
+    parser.add_argument("--review", action="store_true", help="fill a separate retention-review draft pool; use --count 9 for three three-item reviews")
     args = parser.parse_args()
+    if args.assessment and args.review:
+        parser.error("Choose --assessment or --review, not both.")
     document = json.loads(QUESTIONS.read_text(encoding="utf-8"))
     skills = [skill["id"] for skill in load_curriculum()["skills"]]
     selected = args.skills or skills
@@ -304,6 +328,8 @@ def main():
         prior = document["questions"] + generated
         if args.assessment:
             generated.extend(generate_assessment_questions(skill_id, args.seed, prior))
+        elif args.review:
+            generated.extend(generate_review_questions(skill_id, args.count, args.seed, prior))
         else:
             generated.extend(generate_questions(skill_id, args.count, args.seed, prior))
     proposed = document["questions"] + generated
@@ -312,7 +338,7 @@ def main():
         parser.error("generated items did not validate: " + "; ".join(errors))
     QUESTIONS.write_text(json.dumps({**document, "questions": proposed}, indent=2, ensure_ascii=False) + "\n",
                          encoding="utf-8")
-    content_kind = "draft assessment questions" if args.assessment else "draft practice questions"
+    content_kind = "draft assessment questions" if args.assessment else "draft retention questions" if args.review else "draft practice questions"
     print(f"Added {len(generated)} {content_kind}; none were approved.")
     for skill_id in selected:
         print(f"  {skill_id}: {sum(item['skill_id'] == skill_id for item in generated)} drafts")

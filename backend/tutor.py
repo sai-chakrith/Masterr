@@ -20,6 +20,8 @@ from sqlalchemy.orm import Session
 from backend.db import transaction
 from backend.learning import LearningError
 from backend.content import is_current_question
+from backend.mock_state import active_test
+from backend.app_models import TimedTest
 from backend.models import Assignment, Attempt, Learner, LearningSession, Question
 from backend.numbers.bank import compute_answer, load_curriculum
 from backend.retrieval import get_topic_notes
@@ -177,7 +179,8 @@ class TutorService:
             active = db.scalar(select(LearningSession.id).where(
                 LearningSession.learner_id == learner, LearningSession.skill_id == skill_id,
                 LearningSession.status.in_(["active", "assisted"])))
-            if active:
+            timed = active_test(db, learner)
+            if active or (timed and skill_id in timed.skill_ids):
                 raise LearningError("active_session", "Finish or abandon this topic's session before tutoring.")
             rows = db.execute(select(Attempt, Question).join(Assignment, Attempt.assignment_id == Assignment.id)
                               .join(Question, Assignment.question_id == Question.id)
@@ -207,6 +210,23 @@ class TutorService:
                 items.append({"question_id": question.id, "question": snapshot["prompt"],
                               "learner_answer": IDK_ANSWER if attempt.dont_know else answer,
                               "correct_answer": correct, "level": question.difficulty_level})
+            for run in db.scalars(select(TimedTest).where(TimedTest.learner_id == learner,
+                    TimedTest.status == "completed").order_by(TimedTest.created_at.desc()).limit(50)):
+                for qid, outcome in run.answers.items():
+                    if outcome["correct"] or qid in seen:
+                        continue
+                    question = db.get(Question, qid)
+                    if question.skill_id != skill_id or question.hidden or not is_current_question(db, question):
+                        continue
+                    submitted = outcome["submitted"]
+                    answer = submitted["answer"]
+                    if submitted["option_id"]:
+                        answer = next((o["text"] for o in question.snapshot.get("options", [])
+                                       if o["id"] == submitted["option_id"]), "Recorded option")
+                    items.append({"question_id": qid, "question": question.snapshot["prompt"],
+                        "learner_answer": IDK_ANSWER if submitted["dont_know"] else answer,
+                        "correct_answer": str(compute_answer(question.snapshot["validator"])), "level": question.difficulty_level})
+                    seen.add(qid)
         return select_mistakes(items)
 
     def _cache_get(self, table, key):

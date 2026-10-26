@@ -53,3 +53,24 @@ class UsageBucket(Base):
     period: Mapped[str] = mapped_column(String(40), primary_key=True)
     calls: Mapped[int] = mapped_column(Integer, default=0)
     reserved_tokens: Mapped[int] = mapped_column(Integer, default=0)
+
+
+class TimedTest(Base):
+    __tablename__ = "timed_tests"
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    learner_id: Mapped[str] = mapped_column(ForeignKey("learners.id"), index=True)
+    skill_ids: Mapped[list] = mapped_column(JSON)
+    question_ids: Mapped[list] = mapped_column(JSON)
+    answers: Mapped[dict] = mapped_column(JSON, default=dict)
+    status: Mapped[str] = mapped_column(String(16))
+    created_at: Mapped[str] = mapped_column(String(40))
+    deadline: Mapped[str] = mapped_column(String(40))
+    finished_at: Mapped[str | None] = mapped_column(String(40))
+
+
+class TestExposure(Base):
+    __tablename__ = "test_exposures"
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    learner_id: Mapped[str] = mapped_column(ForeignKey("learners.id"), index=True)
+    test_id: Mapped[str] = mapped_column(ForeignKey("timed_tests.id"))
+    family_id: Mapped[str] = mapped_column(String(128))

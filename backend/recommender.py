@@ -15,6 +15,7 @@ class TopicState:
     phase: str = "none"
     score: float | None = None
     available: bool = True
+    evidence_stale: bool = False
 
 
 @dataclass(frozen=True)
