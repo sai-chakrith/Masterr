@@ -16,6 +16,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Link href="/" className="text-lg font-semibold tracking-tight">
               Mastrr
             </Link>
+            <Link href="/tutor" className="text-sm text-slate-600 hover:underline dark:text-slate-300">
+              Tutor
+            </Link>
             <Link href="/login" className="text-sm text-slate-600 hover:underline dark:text-slate-300">
               Sign in
             </Link>
