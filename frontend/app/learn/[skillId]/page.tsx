@@ -76,6 +76,7 @@ export default function LessonPage() {
     {plan.mode === "practice_first" && <p className="rounded-xl bg-sky-50 p-5 text-sm leading-6 dark:bg-sky-950">
       Start with a fresh question. If you miss it, Mastrr will show the reviewed explanation for that item.
     </p>}
+    <Link href={"/tutor?topic=" + encodeURIComponent(skillId)} className="block text-sm underline">Open a personal explanation of my mistakes</Link>
     <button onClick={() => void practise()} disabled={busy}
       className="rounded-lg bg-slate-900 px-4 py-2 font-medium text-white disabled:opacity-50 dark:bg-sky-300 dark:text-slate-950">
       {busy ? "Starting..." : "Start practice"}

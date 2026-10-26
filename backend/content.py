@@ -2,7 +2,7 @@
 import hashlib
 import json
 
-from sqlalchemy import select
+from sqlalchemy import select, func
 
 from backend.models import Misconception, Question, QuestionOption
 from backend.numbers.bank import load_misconceptions, validate_bank
@@ -77,7 +77,15 @@ def import_questions(db, questions, misconceptions=None):
 
 
 def available_questions(db, skill_id, purpose):
+    latest = select(Question.item_id, func.max(Question.version).label("version")).group_by(Question.item_id).subquery()
     return list(db.scalars(select(Question).where(
         Question.skill_id == skill_id, Question.purpose == purpose,
         Question.status == "approved", Question.hidden.is_(False),
-    ).order_by(Question.item_id, Question.version.desc())))
+    ).join(latest, (Question.item_id == latest.c.item_id) & (Question.version == latest.c.version))
+       .order_by(Question.item_id)))
+
+
+def is_current_question(db, question):
+    latest = db.scalar(select(Question).where(Question.item_id == question.item_id)
+                       .order_by(Question.version.desc()).limit(1))
+    return latest is not None and latest.id == question.id and latest.status == "approved"

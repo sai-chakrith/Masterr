@@ -9,7 +9,7 @@ from zoneinfo import ZoneInfo
 from sqlalchemy import func, select
 
 from backend import mastery
-from backend.content import FACETS, available_questions
+from backend.content import FACETS, available_questions, is_current_question
 from backend.db import transaction
 from backend.practice import (FIXED_PRACTICE_POLICY, PRACTICE_BLOCK_SIZE, PRACTICE_POLICY,
                               review_days_after_pass, select_adaptive_questions,
@@ -429,7 +429,7 @@ class LearningService:
             question_view = None
             if pending and session.status in ("active", "assisted"):
                 question = db.get(Question, pending.question_id)
-                if question.status != "approved":
+                if not is_current_question(db, question):
                     raise LearningError("content_unavailable", "This question is no longer published.")
                 issued = db.scalar(select(Exposure.id).where(
                     Exposure.assignment_id == pending.id, Exposure.kind == "prompt"))
@@ -491,7 +491,7 @@ class LearningService:
             if first.id != assignment.id or not issued:
                 raise LearningError("invalid_state", "Open the current question before submitting.")
             question = db.get(Question, assignment.question_id)
-            if question.status != "approved":
+            if not is_current_question(db, question):
                 raise LearningError("content_unavailable", "Question is no longer published.")
             if dont_know and session.policy_version in LEGACY_POLICIES:
                 raise LearningError("invalid_answer", "This version has no I don't know option.", 422)
@@ -729,7 +729,7 @@ class LearningService:
             self.lock_learner(db, learner)
             assignment, session = self.owned_assignment(db, learner, assignment_id)
             question = db.get(Question, assignment.question_id)
-            if question.status != "approved":
+            if not is_current_question(db, question):
                 raise LearningError("content_unavailable", "Question is no longer published.")
             issued = db.scalar(select(Exposure.id).where(
                 Exposure.assignment_id == assignment.id, Exposure.kind == "prompt"))
@@ -849,7 +849,7 @@ class LearningService:
                 attempt = db.scalar(select(Attempt).where(Attempt.assignment_id == assignment.id))
                 if attempt and not attempt.correct:
                     question = db.get(Question, assignment.question_id)
-                    if question.status != "approved":
+                    if not is_current_question(db, question):
                         continue
                     items.append({"assignment_id": assignment.id, "prompt": question.snapshot["prompt"],
                                   "answer": attempt.raw_answer, "dont_know": attempt.dont_know,

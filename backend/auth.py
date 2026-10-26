@@ -13,6 +13,7 @@ class Settings:
     supabase_url: str = ""
     local_token: str = ""
     local_development: bool = False
+    admin_subjects: tuple[str, ...] = ()
 
     @classmethod
     def from_env(cls):
@@ -21,6 +22,7 @@ class Settings:
             supabase_url=os.environ.get("SUPABASE_URL", "").rstrip("/"),
             local_token=os.environ.get("LOCAL_API_TOKEN", ""),
             local_development=os.environ.get("LOCAL_DEVELOPMENT") == "1",
+            admin_subjects=tuple(x.strip() for x in os.environ.get("MASTRR_ADMIN_SUBJECTS", "").split(",") if x.strip()),
         )
 
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
+import AccountNav from "@/components/AccountNav";
 
 export const metadata: Metadata = {
   title: "Mastrr",
@@ -19,9 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Link href="/tutor" className="text-sm text-slate-600 hover:underline dark:text-slate-300">
               Tutor
             </Link>
-            <Link href="/login" className="text-sm text-slate-600 hover:underline dark:text-slate-300">
-              Sign in
-            </Link>
+            <AccountNav />
           </nav>
         </header>
         <main className="mx-auto max-w-3xl px-4 py-6">{children}</main>

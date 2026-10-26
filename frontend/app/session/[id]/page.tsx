@@ -1,5 +1,7 @@
 "use client";
 
+import ReportQuestion from "@/components/ReportQuestion";
+
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -124,6 +126,7 @@ export default function SessionPage() {
           </Link>
         )}
         <div>
+          {view.policy_version !== "validation-form-v1" && <p className="mb-3"><Link href={"/tutor?topic=" + encodeURIComponent(view.skill_id)} className="underline">Understand my mistakes</Link></p>}
           <Link href="/" className="text-sky-700 underline dark:text-sky-300">
             Back to roadmap
           </Link>
@@ -149,6 +152,7 @@ export default function SessionPage() {
           Question {position} of {total}
         </span>
       </div>
+      {question && <ReportQuestion key={question.assignment_id} assignmentId={question.assignment_id} />}
       {view.question_count >= 10 && !isDiagnosticV2 && (
         <ol className="flex gap-1" aria-label="Retest progress">
           {Array.from({ length: view.question_count }, (_, i) => (

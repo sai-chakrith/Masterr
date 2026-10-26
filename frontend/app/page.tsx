@@ -87,7 +87,11 @@ export default function RoadmapPage() {
         await api.followRecommendation(logged.recommendation_id);
         router.push("/session/" + created.session_id); return;
       }
-      if ((action.kind === "prerequisite_check" || action.kind === "alternate_teaching" || action.kind === "tutoring") && action.skill_id) {
+      if (action.kind === "tutoring" && action.skill_id) {
+        await api.followRecommendation(logged.recommendation_id);
+        router.push("/tutor?topic=" + encodeURIComponent(action.skill_id)); return;
+      }
+      if ((action.kind === "prerequisite_check" || action.kind === "alternate_teaching") && action.skill_id) {
         await api.followRecommendation(logged.recommendation_id);
         router.push("/learn/" + action.skill_id); return;
       }

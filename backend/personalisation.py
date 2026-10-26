@@ -29,6 +29,8 @@ from backend.models import (
 )
 from backend.recommender import Action, TopicState, next_actions
 from backend.teaching import teaching_plan
+from backend.publication import load_document
+from backend.content import available_questions
 
 
 class PersonalisationError(ValueError):
@@ -42,10 +44,16 @@ class PersonalisationService:
         self.engine = engine
         self.learning = learning_service
 
+    def curriculum(self):
+        return load_document(self.engine, "curriculum", load_curriculum)
+
+    def profiles(self):
+        return load_document(self.engine, "exam-profiles", load_exam_profiles)
+
     def set_goal(self, learner, target_skill_ids, exam_date=None, timezone="Asia/Kolkata",
                  exam_profile_id=None):
-        curriculum = load_curriculum()
-        profile_document = load_exam_profiles()
+        curriculum = self.curriculum()
+        profile_document = self.profiles()
         profile = next((item for item in approved_profiles(profile_document)
                         if item["id"] == exam_profile_id), None) if exam_profile_id else None
         if exam_profile_id and profile is None:
@@ -107,7 +115,7 @@ class PersonalisationService:
             goal = db.get(LearnerGoal, learner)
             if goal is None:
                 return None
-            curriculum = load_curriculum()
+            curriculum = self.curriculum()
             profile = goal.exam_profile_snapshot or {}
             route_targets = list(dict.fromkeys([
                 *profile.get("target_skill_ids", []), *goal.target_skill_ids,
@@ -132,9 +140,8 @@ class PersonalisationService:
             payload, sort_keys=True, separators=(",", ":")
         ).encode("utf-8")).hexdigest()
 
-    @staticmethod
-    def _availability(db, learner, skill_id, status):
-        if status == "gap" and load_curriculum().get("status") != "approved":
+    def _availability(self, db, learner, skill_id, status):
+        if status == "gap" and self.curriculum().get("status") != "approved":
             return False
         if status == "borderline":
             source = db.get(GapState, (learner, skill_id))
@@ -143,12 +150,7 @@ class PersonalisationService:
         else:
             purposes = ("diagnostic", "verification") if status == "unassessed" else ("practice",)
         seen = set(db.scalars(select(Exposure.family_id).where(Exposure.learner_id == learner)))
-        candidates = list(db.scalars(select(Question).where(
-            Question.skill_id == skill_id,
-            Question.purpose.in_(purposes),
-            Question.status == "approved",
-            Question.hidden.is_(False),
-        )))
+        candidates = [q for purpose in purposes for q in available_questions(db, skill_id, purpose)]
         fresh = {q.family_id for q in candidates
                  if q.family_id not in seen and q.difficulty_level is not None}
         needed = 8 if status == "unassessed" else 1
@@ -157,17 +159,11 @@ class PersonalisationService:
     @staticmethod
     def _retest_available(db, learner, skill_id):
         seen = set(db.scalars(select(Exposure.family_id).where(Exposure.learner_id == learner)))
-        candidates = db.scalars(select(Question).where(
-            Question.skill_id == skill_id,
-            Question.purpose.in_(("diagnostic", "verification")),
-            Question.status == "approved",
-            Question.hidden.is_(False),
-            Question.difficulty_level.is_not(None),
-        ))
-        return len({q.family_id for q in candidates if q.family_id not in seen}) >= 10
+        candidates = [q for purpose in ("diagnostic", "verification") for q in available_questions(db, skill_id, purpose)]
+        return len({q.family_id for q in candidates if q.family_id not in seen and q.difficulty_level is not None}) >= 10
 
     def _snapshot(self, db, learner):
-        curriculum = load_curriculum()
+        curriculum = self.curriculum()
         goal = db.get(LearnerGoal, learner)
         if goal is None:
             raise PersonalisationError("goal_required", "Set a target to build your learning route.", 409)
@@ -304,7 +300,7 @@ class PersonalisationService:
             }
 
     def teaching(self, learner, skill_id):
-        curriculum = load_curriculum()
+        curriculum = self.curriculum()
         skill = next((item for item in curriculum["skills"] if item["id"] == skill_id), None)
         if skill is None:
             raise PersonalisationError("unknown_skill", "Choose a skill in the current curriculum.", 404)

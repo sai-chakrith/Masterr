@@ -7,6 +7,7 @@ import os
 import re
 import time
 import unicodedata
+from contextvars import ContextVar
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from fractions import Fraction
@@ -18,6 +19,7 @@ from sqlalchemy.orm import Session
 
 from backend.db import transaction
 from backend.learning import LearningError
+from backend.content import is_current_question
 from backend.models import Assignment, Attempt, Learner, LearningSession, Question
 from backend.numbers.bank import compute_answer, load_curriculum
 from backend.retrieval import get_topic_notes
@@ -121,12 +123,21 @@ class TutorService:
     def __init__(self, engine, settings=None, completion=groq_completion, notes=get_topic_notes):
         self.engine = engine
         self.settings = settings or TutorSettings.from_env()
-        self.completion, self.notes = completion, notes
+        from backend.publication import topic_notes
+        self.completion = completion
+        self.notes = (lambda topic: topic_notes(engine, topic)) if notes is get_topic_notes else notes
+        from backend.operations import BudgetService
+        self.budget = BudgetService(engine)
+        self._owner = ContextVar("tutor_owner", default=None)
 
     def _call_llm(self, system, data, part, usage):
         if not self.settings.api_key:
             return None
         for attempt in range(2):
+            owner = self._owner.get()
+            if owner is not None and not self.budget.reserve(owner, self.settings.max_completion_tokens):
+                usage.append({"part": part, "error": "quota_limit", "model": self.settings.model})
+                return None
             started = time.monotonic()
             try:
                 response = self.completion({
@@ -179,6 +190,8 @@ class TutorService:
                               ).order_by(Attempt.created_at.desc(), Attempt.id.desc())).all()
             seen, items = set(), []
             for attempt, question in rows:
+                if not is_current_question(db, question):
+                    continue
                 if question.id in seen:
                     continue
                 seen.add(question.id)
@@ -201,11 +214,14 @@ class TutorService:
             row = db.get(table, key)
             return {**row.payload, "cached": True} if row else None
 
-    def _cache_put(self, db, table, key, payload):
+    def _cache_put(self, db, table, key, payload, owner):
         from sqlalchemy.dialects.postgresql import insert as pg_insert
         from sqlalchemy.dialects.sqlite import insert as sqlite_insert
         insert = sqlite_insert if self.engine.dialect.name == "sqlite" else pg_insert
-        db.execute(insert(table).values(cache_key=key, payload=payload).on_conflict_do_nothing(index_elements=["cache_key"]))
+        values = {"cache_key": key, "payload": payload}
+        if table is PersonalExplanation:
+            values["learner_id"] = owner
+        db.execute(insert(table).values(**values).on_conflict_do_nothing(index_elements=["cache_key"]))
 
     def _personal(self, notes, items, usage):
         fallback = {"text": "From your answers\n" + "\n\n".join(
@@ -241,6 +257,13 @@ class TutorService:
         return fallback
 
     def tutor(self, learner, skill_id):
+        token = self._owner.set(learner)
+        try:
+            return self._tutor(learner, skill_id)
+        finally:
+            self._owner.reset(token)
+
+    def _tutor(self, learner, skill_id):
         items = self._context(learner, skill_id)
         notes = self.notes(skill_id)
         settings = {"model": self.settings.model, "effort": self.settings.reasoning_effort,
@@ -262,9 +285,11 @@ class TutorService:
         now = datetime.now(timezone.utc).isoformat()
         record_id = str(uuid4())
         with transaction(self.engine) as db:
+            if not db.scalar(select(Learner.id).where(Learner.id == learner).with_for_update()):
+                raise LearningError("account_unavailable", "This account is no longer available.", 403)
             for table, key, part in ((TopicLesson, lesson_key, lesson), (PersonalExplanation, personal_key, personal)):
                 if part["generated_by"] == "llm" and not part["cached"]:
-                    self._cache_put(db, table, key, part)
+                    self._cache_put(db, table, key, part, learner)
             db.add(TutoringRecord(id=record_id, learner_id=learner, skill_id=skill_id,
                                  model=self.settings.model, prompt_version=PROMPT_VERSION,
                                  notes_hash=digest(notes), created_at=now, content=content, parts=parts, usage=usage))

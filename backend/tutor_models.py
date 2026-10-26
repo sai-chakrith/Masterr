@@ -15,6 +15,7 @@ class PersonalExplanation(Base):
     __tablename__ = "personal_explanations"
     cache_key: Mapped[str] = mapped_column(String(64), primary_key=True)
     payload: Mapped[dict] = mapped_column(JSON)
+    learner_id: Mapped[str | None] = mapped_column(String(128), index=True)
 
 
 class TutoringRecord(Base):

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getToken } from "@/lib/api";
+import { api, getToken, request } from "@/lib/api";
 
 type Part = {
   text: string;
@@ -11,18 +11,10 @@ type Part = {
   cached: boolean;
   examples?: { question_id: string; answer_checked: boolean }[];
 };
-type Tutor = { skill_id: string; parts: { lesson: Part; personal: Part } };
+type Tutor = { id: string; skill_id: string; parts: { lesson: Part; personal: Part }; usage: { error?: string }[] };
 
 async function tutorRequest<T>(path: string, method = "GET"): Promise<T> {
-  const response = await fetch(`/api/v1/me/tutor/${path}`, {
-    method, headers: { Authorization: `Bearer ${getToken() ?? ""}` }, cache: "no-store",
-  });
-  const body = await response.json();
-  if (!response.ok) {
-    if (response.status === 401) throw new Error("Please sign in again.");
-    throw new Error(body.error?.message ?? "Tutoring could not be loaded. Try again.");
-  }
-  return body as T;
+  return request<T>(`/v1/me/tutor/${path}`, { method });
 }
 
 export default function TutorPage() {
@@ -37,7 +29,10 @@ export default function TutorPage() {
     if (!getToken()) { router.replace("/login"); return; }
     let current = true;
     void tutorRequest<{ id: string; title: string }[]>("topics").then((items) => {
-      if (current) { setTopics(items); setTopic(items[0]?.id ?? ""); }
+      if (current) {
+        const selected = new URLSearchParams(window.location.search).get("topic");
+        setTopics(items); setTopic(items.find((item) => item.id === selected)?.id ?? items[0]?.id ?? "");
+      }
     }).catch((e: Error) => { if (current) setError(e.message); });
     return () => { current = false; };
   }, [router]);
@@ -46,6 +41,17 @@ export default function TutorPage() {
     setBusy(true); setError(""); setResult(null);
     try { setResult(await tutorRequest<Tutor>(encodeURIComponent(topic), "POST")); }
     catch (e) { setError(e instanceof Error ? e.message : "Could not load tutoring."); }
+    finally { setBusy(false); }
+  }
+
+  async function practise() {
+    if (!result) return;
+    setBusy(true); setError("");
+    try {
+      await api.completeTutoring(topic, result.id);
+      const session = await api.startPractice(topic);
+      router.push("/session/" + session.session_id);
+    } catch (e) { setError(e instanceof Error ? e.message : "Could not start practice."); }
     finally { setBusy(false); }
   }
 
@@ -67,6 +73,7 @@ export default function TutorPage() {
       </button>
     </form>
     {error && <p role="alert" className="rounded-lg bg-rose-50 p-4 text-rose-800">{error}</p>}
+    {result?.usage.some((u) => u.error === "quota_limit") && <p role="status">Your AI allowance has been reached. Reviewed notes and recorded answers remain available.</p>}
     <div aria-live="polite" aria-busy={busy} className="space-y-5">
       {result && (["lesson", "personal"] as const).map((name) => {
         const part = result.parts[name];
@@ -81,7 +88,8 @@ export default function TutorPage() {
           <p className="whitespace-pre-wrap leading-7">{part.text}</p>
         </section>;
       })}
-      {result && <p className="text-sm text-slate-600 dark:text-slate-300">Next: practise a fresh question, then try an independent check.</p>}
+      {result && <div className="space-y-3"><p className="text-sm text-slate-600 dark:text-slate-300">Next: practise a fresh question, then try an independent check.</p>
+        <button disabled={busy} onClick={() => void practise()} className="rounded-lg bg-sky-800 px-4 py-3 font-medium text-white disabled:opacity-50">Continue to practice</button></div>}
     </div>
   </div>;
 }

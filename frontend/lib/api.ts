@@ -1,4 +1,5 @@
 // Thin client for the FastAPI backend. Learning rules live only on the server.
+import { accessToken, savedToken } from "./auth-client";
 export type GapStatus = "unassessed" | "mastered" | "borderline" | "gap" | "resolved";
 
 export interface Topic {
@@ -114,24 +115,21 @@ export class ApiError extends Error {
 const TOKEN_KEY = "mastrr-token";
 
 export function getToken(): string | null {
-  try {
-    return window.localStorage.getItem(TOKEN_KEY);
-  } catch {
-    return null;
-  }
+  return savedToken();
 }
 
 export function setToken(token: string | null) {
   try {
     if (token) window.localStorage.setItem(TOKEN_KEY, token);
     else window.localStorage.removeItem(TOKEN_KEY);
+    window.dispatchEvent(new Event("mastrr-auth"));
   } catch {
     /* storage unavailable: the user signs in again next visit */
   }
 }
 
-async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
-  const token = getToken();
+export async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
+  const token = await accessToken();
   const headers = new Headers(init.headers);
   if (token) headers.set("Authorization", `Bearer ${token}`);
   if (init.body) headers.set("Content-Type", "application/json");
@@ -146,6 +144,18 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
 }
 
 export const api = {
+  completeTutoring: (skill: string, id: string) => request<{ next: string }>(`/v1/me/tutor/${encodeURIComponent(skill)}/complete`, {
+    method: "POST", body: JSON.stringify({ tutoring_id: id }),
+  }),
+  account: () => request<{ subject: string; content_reviewer: boolean; local_development: boolean;
+    tutor_usage: { calls: number; daily_call_limit: number; period: string } }>("/v1/me/account"),
+  exportData: () => request<Record<string, unknown>>("/v1/me/export"),
+  deleteAccount: () => request<{ identity_deleted: boolean; message: string }>("/v1/me/account", {
+    method: "DELETE", body: JSON.stringify({ confirmation: "DELETE" }),
+  }),
+  reportQuestion: (id: string, message: string) => request<{ id: string }>(`/v1/assignments/${id}/report`, {
+    method: "POST", body: JSON.stringify({ message }),
+  }),
   curriculum: () => request<{
     id: string;
     version: string;
