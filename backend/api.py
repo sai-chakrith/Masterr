@@ -8,6 +8,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from backend.auth import Settings, make_identity
 from backend.db import make_engine
 from backend.learning import LearningError, LearningService
+from backend.tutor import TutorService
 
 
 class StrictBody(BaseModel):
@@ -35,8 +36,10 @@ def create_app(engine=None, settings=None):
     settings = settings or Settings.from_env()
     engine = engine or make_engine(settings.database_url)
     service = LearningService(engine)
+    tutor_service = TutorService(engine)
     app = FastAPI(title="Mastrr learning API", version="0.1.0")
     app.state.service = service
+    app.state.tutor = tutor_service
     authenticate = make_identity(settings)
 
     def learner(subject: Annotated[str, Depends(authenticate)]):
@@ -66,7 +69,16 @@ def create_app(engine=None, settings=None):
 
     @app.get("/health")
     def health():
-        return {"status": "ok", "version": "0.1.0", "ai_enabled": False}
+        return {"status": "ok", "version": "0.1.0", "ai_enabled": bool(tutor_service.settings.api_key)}
+
+    @app.post("/v1/me/tutor/{skill_id}")
+    def tutor(skill_id: str, owner: Annotated[str, Depends(learner)]):
+        return app.state.tutor.tutor(owner, skill_id)
+
+    @app.get("/v1/me/tutor/topics")
+    def tutor_topics(owner: Annotated[str, Depends(learner)]):
+        from backend.numbers.bank import load_curriculum as tutor_curriculum
+        return [{"id": s["id"], "title": s["title"]} for s in tutor_curriculum()["skills"]]
 
     @app.get("/v1/me/today")
     def today(owner: Annotated[str, Depends(learner)]):

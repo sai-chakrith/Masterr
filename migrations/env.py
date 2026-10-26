@@ -5,6 +5,7 @@ from sqlalchemy import engine_from_config, pool
 
 from backend.db import Base
 import backend.models
+import backend.tutor_models
 
 config = context.config
 target_metadata = Base.metadata

@@ -17,7 +17,7 @@ if (-not (Test-Path -LiteralPath $tokenPath)) {
 $env:LOCAL_DEVELOPMENT = '1'
 $env:LOCAL_API_TOKEN = (Get-Content -LiteralPath $tokenPath -Raw).Trim()
 if (-not $env:DATABASE_URL) { $env:DATABASE_URL = 'sqlite:///./data/local.db' }
-& $pythonPath -m alembic upgrade head
+& $pythonPath -m alembic upgrade heads
 if ($LASTEXITCODE -ne 0) { throw 'Database migration failed.' }
 & $pythonPath -m backend.seed
 if ($LASTEXITCODE -ne 0) { throw 'Content import failed.' }
