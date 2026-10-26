@@ -25,6 +25,18 @@ All supplied questions still await genuine human review. Student sessions
 currently return insufficient coverage. Approved fixtures exist only inside tests;
 they are not imported by startup and are not approved learning material.
 
+## Mastery scoring upgrade
+
+The scoring proposal is implemented behind a per-learner, per-topic version switch:
+an Elo running score with an "I don't know" option, an 8-12 question diagnostic
+re-scored into Mastered / Borderline / Gap, a 10-question retest passed at 7/10,
+Borderline review, pilot check-in forms, a Next.js roadmap, a simulation and
+pilot analysis scripts. The current rules stay alive as the comparison group.
+See [docs/mastery-scoring-progress.md](docs/mastery-scoring-progress.md).
+
+A 210-question draft assessment bank (35 per topic) is included. It is still
+draft: nothing is served until people review and approve it.
+
 ## Local setup
 
 Use Python 3.12 and uv. From the repository root:
@@ -38,6 +50,18 @@ uv pip sync --python .venv/Scripts/python.exe requirements.lock.txt
 The launcher migrates the local database, imports drafts without publishing them,
 creates a local API token if needed, and starts on http://127.0.0.1:8000.
 API documentation is at http://127.0.0.1:8000/docs.
+
+The student frontend lives in frontend/ (Node 22+). In a second terminal:
+
+~~~powershell
+cd frontend
+npm ci
+npm run build
+npm start
+~~~
+
+Open http://localhost:3000 and sign in with the local API token. The frontend
+forwards /api to the backend on 127.0.0.1:8000 (set MASTRR_API_ORIGIN to change it).
 
 The token lives in ignored data/local-api-token. Supply it through the
 Authorization header as Bearer followed by the token. Never publish local mode
@@ -61,6 +85,8 @@ No real Supabase project has been provisioned or verified yet.
 New-Item -ItemType Directory .test-tmp -Force | Out-Null
 .venv/Scripts/python.exe -m pytest -q --basetemp=.test-tmp/current
 .venv/Scripts/python.exe -m backend.numbers
+.venv/Scripts/python.exe -m scripts.question_bank audit
+.venv/Scripts/python.exe -m scripts.convergence_study
 ~~~
 
 The tests use synthetic fixtures to exercise the complete deterministic flow.
@@ -83,6 +109,10 @@ live PostgreSQL integration and concurrency are not verified on this machine.
 | POST | /v1/sessions/{id}/abandon | End session without reclaiming reserved families |
 | POST | /v1/assignments/{id}/submit | Submit using an Idempotency-Key header |
 | POST | /v1/assignments/{id}/help | Release reviewed hint or solution with exposure recorded |
+| GET | /v1/me/gaps | Roadmap: status, version, score and answer count per topic |
+| POST | /v1/topics/{skill}/retest | Start the retest for the learner's version |
+| GET | /v1/sessions/{id}/borderline-review | Missed diagnostic questions with solutions |
+| POST | /v1/topics/{skill}/validation | Start the next pilot check-in form (pre, post, delayed) |
 
 Independent checks currently cover divisibility only and require approved basic,
 combined, and constraints facets from distinct unseen families. Direct challenge
@@ -96,3 +126,6 @@ the next milestone connects these into the adaptive student journey.
 - [Current build status](docs/build-status.md)
 - [First learning-loop plan](docs/first-learning-loop-plan.md)
 - [Longer implementation plan](docs/implementation-plan.md)
+- [Mastery scoring upgrade status](docs/mastery-scoring-progress.md)
+- [Simulation results](docs/simulation-results.md)
+- [Pilot protocol](docs/pilot-protocol.md)

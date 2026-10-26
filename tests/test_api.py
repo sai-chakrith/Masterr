@@ -99,3 +99,16 @@ def test_skip_api_validation_and_storage(client):
     response = client.post(path, headers=headers, json={"dont_know": True})
     assert response.status_code == 200 and response.json()["correct"] is False
     assert client.post(path, headers=headers, json={"dont_know": True}).json() == response.json()
+
+
+def test_validation_route_requires_identity_and_reports_missing_forms(client):
+    assert client.post("/v1/topics/divisibility/validation").status_code == 401
+    response = client.post("/v1/topics/divisibility/validation", headers=auth())
+    assert response.status_code == 409
+    assert response.json()["error"]["code"] == "insufficient_coverage"
+    assert client.post("/v1/topics/unknown/validation", headers=auth()).status_code == 422
+
+
+def test_gaps_payload_carries_dashboard_fields(client):
+    row = client.get("/v1/me/gaps", headers=auth()).json()[0]
+    assert {"title", "scoring_version", "score", "answer_count", "mastery_bar", "score_withheld"} <= set(row)

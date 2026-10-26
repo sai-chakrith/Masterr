@@ -12,7 +12,7 @@
 
 ## Track 1 handoff
 
-LearningService.set_gap(db, session, status) is an internal transaction hook for the diagnostic classifier. It accepts mastered, borderline, gap, resolved. The caller must supply a legitimate assessment-backed decision. There is no public endpoint allowing students to set their own status. The current diagnostic remains unclassified until Track 1 calls this hook. Rating updates and predicted probabilities remain Track 1 work; Track 2 currently preserves existing score storage rather than implementing a second estimator.
+Update 26 October 2026: Track 1 now calls this hook from the diagnostic, and retest answers move the rating. See mastery-scoring-progress.md. Original note: LearningService.set_gap(db, session, status) is an internal transaction hook for the diagnostic classifier. It accepts mastered, borderline, gap, resolved. The caller must supply a legitimate assessment-backed decision. There is no public endpoint allowing students to set their own status. The current diagnostic remains unclassified until Track 1 calls this hook. Rating updates and predicted probabilities remain Track 1 work; Track 2 currently preserves existing score storage rather than implementing a second estimator.
 
 ## Limits and deferred work
 

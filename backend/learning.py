@@ -7,14 +7,30 @@ from uuid import uuid4
 
 from sqlalchemy import select
 
+from backend import mastery
 from backend.content import FACETS, available_questions
 from backend.db import transaction
-from backend.models import Assignment, Attempt, Evidence, Exposure, GapState, Learner, LearningSession, Question, Review
+from backend.models import (Assignment, Attempt, Evidence, Exposure, GapState, Learner, LearningSession,
+                            MasteryEstimate, Question, Review, TopicScoringConfig)
 from backend.numbers.bank import compute_answer, load_curriculum
 
 POLICY = "divisibility-check-v1"
-RETEST_POLICY = "topic-retest-v1"
-SKILLS = {s["id"] for s in load_curriculum()["skills"]}
+RETEST_POLICY = "topic-retest-v1"                  # new version (D6)
+DIAGNOSTIC_POLICY = "mastery-diagnostic-v2"        # new version (D4)
+LEGACY_DIAGNOSTIC_POLICY = "legacy-diagnostic-v0"  # current version: 6 questions, more than half right
+LEGACY_RETEST_POLICY = "legacy-retest-v0"          # current version: 3 easiest, 2 of 3
+VALIDATION_POLICY = "validation-form-v1"           # pilot Form A / Form B, never followed by feedback
+LEGACY_POLICIES = (LEGACY_DIAGNOSTIC_POLICY, LEGACY_RETEST_POLICY)
+DIAGNOSTIC_POLICIES = (DIAGNOSTIC_POLICY, LEGACY_DIAGNOSTIC_POLICY)
+LEGACY_DIAGNOSTIC_LEVELS = (1, 2, 3, 4, 5, 3)
+LEGACY_RETEST_SIZE, LEGACY_RETEST_PASS = 3, 2
+VALIDATION_STAGES = {"pre": "A", "post": "B", "delayed": "A"}
+VALIDATION_DELAY = timedelta(days=7)
+# The diagnostic and retest share one tagged pool, so the diagnostic uses up levels 3-4 (D7).
+ASSESSMENT_PURPOSES = ("diagnostic", "verification")
+VERSIONS = ("current", "new")
+CURRICULUM = load_curriculum()["skills"]
+SKILLS = {s["id"] for s in CURRICULUM}
 
 
 class LearningError(Exception):
@@ -38,6 +54,26 @@ def normalized_integer(raw):
     if not -(2**31) <= value < 2**31:
         raise LearningError("invalid_answer", "Answer is outside the supported integer range.", 422)
     return value
+
+
+def mastery_bar(skill_id):
+    """D3: one setting, adjustable per topic in curriculum.json (mastery_bar)."""
+    skill = next((s for s in CURRICULUM if s["id"] == skill_id), {})
+    return float(skill.get("mastery_bar", mastery.BAR))
+
+
+def answer_result(attempt):
+    if attempt.dont_know:
+        return mastery.DONT_KNOW
+    return mastery.RIGHT if attempt.correct else mastery.WRONG
+
+
+def attempt_source(session):
+    if session.policy_version in (RETEST_POLICY, LEGACY_RETEST_POLICY):
+        return "retest"
+    if session.policy_version == VALIDATION_POLICY:
+        return "validation"
+    return session.mode
 
 
 class LearningService:
@@ -85,8 +121,58 @@ class LearningService:
         db.add(Exposure(id=uid(), learner_id=learner, assignment_id=assignment.id,
                         family_id=question.family_id, kind=kind, created_at=self.now()))
 
+    def active_session(self, db, learner):
+        return db.scalar(select(LearningSession).where(
+            LearningSession.learner_id == learner, LearningSession.status.in_(["active", "assisted"])))
+
+    # ----- question selection -------------------------------------------------------------
+
+    def seen_families(self, db, learner):
+        return set(db.scalars(select(Exposure.family_id).where(Exposure.learner_id == learner)))
+
+    def tagged_pool(self, db, learner, skill, seen=None):
+        """Approved, visible, tagged assessment questions from families the learner never saw."""
+        seen = self.seen_families(db, learner) if seen is None else seen
+        pool = []
+        for purpose in ASSESSMENT_PURPOSES:
+            pool += [q for q in available_questions(db, skill, purpose)
+                     if q.difficulty_level is not None and q.family_id not in seen]
+        return sorted(pool, key=lambda q: q.id)
+
+    @staticmethod
+    def take_level(pool, target, seen):
+        """K4: the target level, else the nearest level with an unseen family left."""
+        ordered = sorted(pool, key=lambda q: (abs(q.difficulty_level - target), q.difficulty_level, q.id))
+        item = next((q for q in ordered if q.family_id not in seen), None)
+        if item is not None:
+            seen.add(item.family_id)
+        return item
+
+    def pick_levels(self, db, learner, skill, targets):
+        seen = self.seen_families(db, learner)
+        pool = self.tagged_pool(db, learner, skill, seen)
+        picked = [self.take_level(pool, target, seen) for target in targets]
+        return [q for q in picked if q is not None]
+
+    def retest_questions(self, db, learner, skill):
+        """S1: ten unseen families, levels 3-4 first, then the nearest tagged levels."""
+        seen = self.seen_families(db, learner)
+        candidates = self.tagged_pool(db, learner, skill, seen)
+        candidates.sort(key=lambda q: (min(abs(q.difficulty_level - 3), abs(q.difficulty_level - 4)), q.id))
+        questions = []
+        for q in candidates:
+            if q.family_id not in seen:
+                questions.append(q)
+                seen.add(q.family_id)
+            if len(questions) == mastery.RETEST_SIZE:
+                break
+        if len(questions) != mastery.RETEST_SIZE:
+            raise LearningError("insufficient_coverage",
+                                "Retest needs ten fresh reviewed question families with difficulty tags.")
+        return questions
+
     def select_fresh(self, db, learner, skill, purpose, facets=None):
-        seen = set(db.scalars(select(Exposure.family_id).where(Exposure.learner_id == learner)))
+        seen = self.seen_families(db, learner)
         selected = []
         candidates = available_questions(db, skill, purpose)
         for facet in (facets or [None]):
@@ -99,6 +185,27 @@ class LearningService:
             seen.add(item.family_id)
         return selected
 
+    # ----- version switch (D8 / C5) -----------------------------------------------------------
+
+    def version_for(self, db, learner, skill):
+        config = db.get(TopicScoringConfig, (learner, skill))
+        return config.scoring_version if config else "current"
+
+    def set_scoring_version(self, learner, skill, version):
+        """Pilot tooling only; students can never choose their own version."""
+        if skill not in SKILLS or version not in VERSIONS:
+            raise LearningError("invalid_version", "Unknown skill or scoring version.", 422)
+        with transaction(self.engine) as db:
+            self.lock_learner(db, learner)
+            config = db.get(TopicScoringConfig, (learner, skill))
+            if config is None:
+                db.add(TopicScoringConfig(learner_id=learner, skill_id=skill, scoring_version=version))
+            else:
+                config.scoring_version = version
+            return {"learner_id": learner, "skill_id": skill, "scoring_version": version}
+
+    # ----- sessions ------------------------------------------------------------------------------
+
     def create_session(self, learner, skill="divisibility", mode="practice", review_id=None, *, retest=False):
         if skill not in SKILLS or mode not in ("diagnostic", "practice", "verification", "review"):
             raise LearningError("invalid_session", "Unknown skill or activity.", 422)
@@ -106,9 +213,7 @@ class LearningService:
             raise LearningError("unsupported_policy", "Independent checks currently cover divisibility only.", 422)
         with transaction(self.engine) as db:
             self.lock_learner(db, learner)
-            active = db.scalar(select(LearningSession).where(
-                LearningSession.learner_id == learner, LearningSession.status.in_(["active", "assisted"])))
-            if active:
+            if self.active_session(db, learner):
                 raise LearningError("active_session", "Resume or abandon your current session first.")
             review = None
             if mode == "review":
@@ -119,44 +224,101 @@ class LearningService:
                     raise LearningError("review_not_due", "This review is not due.")
             elif review_id:
                 raise LearningError("invalid_session", "Review ID is valid only for a review.", 422)
+            version = self.version_for(db, learner, skill)
+            policy = POLICY
             if retest:
                 if mode != "verification" or review_id:
                     raise LearningError("invalid_session", "Retests use independent verification.", 422)
-                seen = set(db.scalars(select(Exposure.family_id).where(Exposure.learner_id == learner)))
-                candidates = [q for q in available_questions(db, skill, "verification")
-                              if q.difficulty_level is not None]
-                # Prefer levels 3-4, then nearest tagged levels. Never use hidden or draft items.
-                candidates.sort(key=lambda q: (min(abs(q.difficulty_level - 3), abs(q.difficulty_level - 4)), q.id))
-                questions = []
-                for q in candidates:
-                    if q.family_id not in seen:
-                        questions.append(q)
-                        seen.add(q.family_id)
-                    if len(questions) == 10:
-                        break
-                if len(questions) != 10:
-                    raise LearningError("insufficient_coverage", "Retest needs ten fresh reviewed question families with difficulty tags.")
+                if version == "new":
+                    policy, questions = RETEST_POLICY, self.retest_questions(db, learner, skill)
+                else:
+                    policy = LEGACY_RETEST_POLICY
+                    seen = self.seen_families(db, learner)
+                    pool = self.tagged_pool(db, learner, skill, seen)
+                    questions = [self.take_level(pool, 1, seen) for _ in range(LEGACY_RETEST_SIZE)]
+                    if None in questions:
+                        raise LearningError("insufficient_coverage",
+                                            "Retest needs three fresh tagged question families.")
+            elif mode == "diagnostic":
+                if db.get(GapState, (learner, skill)):
+                    raise LearningError("already_assessed", "This topic already has a diagnostic decision.")
+                if version == "new":
+                    policy = DIAGNOSTIC_POLICY
+                    targets = [mastery.diagnostic_level(i) for i in range(mastery.DIAGNOSTIC_MIN)]
+                else:
+                    policy, targets = LEGACY_DIAGNOSTIC_POLICY, LEGACY_DIAGNOSTIC_LEVELS
+                questions = self.pick_levels(db, learner, skill, targets)
+                if len(questions) != len(targets):
+                    raise LearningError("insufficient_coverage",
+                                        "The diagnostic needs more fresh tagged question families.")
             else:
                 questions = self.select_fresh(db, learner, skill,
                     "review" if mode == "review" else mode,
                     FACETS if mode in ("verification", "review") else None)
-            policy = RETEST_POLICY if retest else POLICY
-            session = LearningSession(id=uid(), learner_id=learner, skill_id=skill,
-                mode=mode, policy_version=policy, status="active",
-                created_at=self.now(), review_id=review_id)
-            db.add(session)
-            db.flush()
-            for position, question in enumerate(questions):
-                assignment = Assignment(id=uid(), session_id=session.id, question_id=question.id,
-                    position=position, status="pending", hint_count=0, solution_seen=False)
-                db.add(assignment)
-                db.flush()
-                # Reserve whole forms up front. Conservatively excludes them from later checks.
-                self.record_exposure(db, learner, assignment, question, "reserved")
+            session = self.start(db, learner, skill, mode, policy, version, questions, review_id=review_id)
             if review:
                 review.status = "in_progress"
-            return {"session_id": session.id, "mode": mode, "status": "active",
+            return {"session_id": session.id, "mode": mode, "status": "active", "scoring_version": version,
                     "policy_version": policy, "question_count": len(questions)}
+
+    def start(self, db, learner, skill, mode, policy, version, questions, review_id=None, stage=None):
+        session = LearningSession(id=uid(), learner_id=learner, skill_id=skill,
+            mode=mode, policy_version=policy, status="active", scoring_version=version,
+            stage=stage, created_at=self.now(), review_id=review_id)
+        db.add(session)
+        db.flush()
+        for position, question in enumerate(questions):
+            self.add_assignment(db, session, question, position)
+        return session
+
+    def add_assignment(self, db, session, question, position):
+        assignment = Assignment(id=uid(), session_id=session.id, question_id=question.id,
+            position=position, status="pending", hint_count=0, solution_seen=False)
+        db.add(assignment)
+        db.flush()
+        # Reserve whole forms up front. Conservatively excludes them from later checks.
+        self.record_exposure(db, session.learner_id, assignment, question, "reserved")
+        return assignment
+
+    def create_validation(self, learner, skill):
+        """Pilot test: Form A before the topic, Form B when it ends, Form A again a week later."""
+        if skill not in SKILLS:
+            raise LearningError("invalid_session", "Unknown skill or activity.", 422)
+        with transaction(self.engine) as db:
+            self.lock_learner(db, learner)
+            if self.active_session(db, learner):
+                raise LearningError("active_session", "Resume or abandon your current session first.")
+            done = list(db.scalars(select(LearningSession).where(
+                LearningSession.learner_id == learner, LearningSession.skill_id == skill,
+                LearningSession.policy_version == VALIDATION_POLICY,
+                LearningSession.status == "completed").order_by(LearningSession.created_at)))
+            stage = ("pre", "post", "delayed", None)[min(len(done), 3)]
+            if stage is None:
+                raise LearningError("validation_complete", "All three validation tests are complete.")
+            topic_work = db.scalar(select(LearningSession.id).where(
+                LearningSession.learner_id == learner, LearningSession.skill_id == skill,
+                LearningSession.policy_version != VALIDATION_POLICY))
+            gap = db.get(GapState, (learner, skill))
+            if stage == "pre" and topic_work:
+                raise LearningError("validation_order", "The pre-test must come before any work on this topic.")
+            if stage == "post" and (not gap or gap.status not in ("mastered", "resolved")):
+                raise LearningError("validation_order", "The post-test opens when the topic ends.")
+            if stage == "delayed":
+                finished = db.scalar(select(Evidence.created_at).where(Evidence.session_id == done[-1].id))
+                if datetime.fromisoformat(self.now()) < datetime.fromisoformat(finished) + VALIDATION_DELAY:
+                    raise LearningError("validation_not_due", "The delayed test opens one week after the post-test.")
+            form = VALIDATION_STAGES[stage]
+            questions = [q for q in db.scalars(select(Question).where(
+                Question.skill_id == skill, Question.status == "approved", Question.hidden.is_(True)
+            ).order_by(Question.difficulty_level, Question.id)) if q.snapshot.get("validation_form") == form]
+            if not questions:
+                raise LearningError("insufficient_coverage", "No reviewed validation form is available for this topic.")
+            version = self.version_for(db, learner, skill)
+            session = self.start(db, learner, skill, "verification", VALIDATION_POLICY, version, questions,
+                                 stage=stage)
+            return {"session_id": session.id, "mode": "verification", "status": "active", "stage": stage,
+                    "form": form, "scoring_version": version, "policy_version": VALIDATION_POLICY,
+                    "question_count": len(questions)}
 
     def get_session(self, learner, session_id):
         with transaction(self.engine) as db:
@@ -185,8 +347,12 @@ class LearningService:
                 history = [{"attempt_id": a.id, "assignment_id": a.assignment_id,
                     "answer": a.raw_answer, "working": a.working, "correct": a.correct,
                     "assistance": a.assistance, "created_at": a.created_at} for a in attempts]
+                if session.policy_version == VALIDATION_POLICY:
+                    for item in history:
+                        del item["correct"]  # validation forms are never followed by feedback
             return {"session_id": session.id, "skill_id": session.skill_id, "mode": session.mode,
                     "status": session.status, "policy_version": session.policy_version,
+                    "scoring_version": session.scoring_version, "stage": session.stage,
                     "question_count": len(assignments), "question": question_view, "attempts": history}
 
     def submit(self, learner, assignment_id, answer, working, key, duration_ms=None, dont_know=False):
@@ -198,7 +364,8 @@ class LearningService:
             raise LearningError("invalid_answer", "Use an empty answer when selecting I don't know.", 422)
         value = 0 if dont_know else normalized_integer(answer)
         request_hash = hashlib.sha256(json.dumps(
-            [assignment_id, answer, working] + ([] if duration_ms is None else [duration_ms]) + (["dont_know"] if dont_know else []), ensure_ascii=False).encode()).hexdigest()
+            [assignment_id, answer, working] + ([] if duration_ms is None else [duration_ms])
+            + (["dont_know"] if dont_know else []), ensure_ascii=False).encode()).hexdigest()
         with transaction(self.engine) as db:
             self.lock_learner(db, learner)
             previous = db.scalar(select(Attempt).where(
@@ -218,17 +385,23 @@ class LearningService:
             question = db.get(Question, assignment.question_id)
             if question.status != "approved":
                 raise LearningError("content_unavailable", "Question is no longer published.")
+            if dont_know and session.policy_version in LEGACY_POLICIES:
+                raise LearningError("invalid_answer", "This version has no I don't know option.", 422)
             correct = not dont_know and value == compute_answer(question.snapshot["validator"])
             assistance = "solution_exposed" if assignment.solution_seen else (
                 "hinted" if assignment.hint_count or session.status == "assisted" else "independent")
             attempt = Attempt(id=uid(), learner_id=learner, assignment_id=assignment.id,
                 idempotency_key=key, request_hash=request_hash, raw_answer="I don't know" if dont_know else answer,
                 normalized_answer=value, working=working, correct=correct, assistance=assistance,
-                duration_ms=duration_ms, scoring_version="current",
+                duration_ms=duration_ms, scoring_version=session.scoring_version,
+                source=attempt_source(session), dont_know=dont_know,
                 created_at=self.now(), response={})
             db.add(attempt)
             assignment.status = "submitted"
+            self.score_answer(db, session, question, attempt)
             db.flush()
+            if session.policy_version == DIAGNOSTIC_POLICY:
+                self.extend_diagnostic(db, session)
             unfinished = any(a.status == "pending" for a in self.assignments(db, session.id))
             response = {"attempt_id": attempt.id, "saved": True, "session_complete": not unfinished}
             if session.mode in ("practice", "diagnostic") or session.status == "assisted":
@@ -238,15 +411,83 @@ class LearningService:
             attempt.response = response
             return response
 
+    # ----- scoring (Track 1 engine wired into every answer) -------------------------------------
+
+    def estimate(self, db, learner, skill):
+        record = db.get(MasteryEstimate, (learner, skill))
+        if record is None:
+            record = MasteryEstimate(learner_id=learner, skill_id=skill, rating=0.0,
+                                     answer_count=0, recent_changes=[])
+            db.add(record)
+        return record
+
+    def score_answer(self, db, session, question, attempt):
+        """D2: every new-version answer moves the running rating; the current version is untouched.
+
+        Validation answers store the prediction but never move the rating. Help-assisted and
+        untagged answers are saved without counting as evidence.
+        """
+        if session.scoring_version != "new" or question.difficulty_level is None:
+            return
+        record = self.estimate(db, session.learner_id, session.skill_id)
+        if attempt.source == "validation" or attempt.assistance != "independent":
+            attempt.predicted_probability = mastery.expected(record.rating, question.difficulty_level)
+            return
+        step = mastery.update(record.rating, record.answer_count, record.recent_changes or [],
+                              question.difficulty_level, answer_result(attempt))
+        attempt.predicted_probability = step.expected
+        record.rating, record.answer_count, record.recent_changes = step.rating, step.answer_count, step.recent_changes
+
+    def diagnostic_answers(self, db, session):
+        rows = db.execute(select(Question.difficulty_level, Attempt).join(
+            Assignment, Assignment.question_id == Question.id).join(
+            Attempt, Attempt.assignment_id == Assignment.id).where(
+            Assignment.session_id == session.id).order_by(Assignment.position))
+        return [(level, answer_result(attempt)) for level, attempt in rows]
+
+    def extend_diagnostic(self, db, session):
+        """D4 safety zone: after 8 answers add one question at a time while undecided, up to 12."""
+        assignments = self.assignments(db, session.id)
+        if any(a.status == "pending" for a in assignments):
+            return
+        if mastery.decide(self.diagnostic_answers(db, session)).status != "continue":
+            return
+        position = len(assignments)
+        picked = self.pick_levels(db, session.learner_id, session.skill_id, [mastery.diagnostic_level(position)])
+        if picked:  # an exhausted bank ends the diagnostic as Borderline in finish()
+            self.add_assignment(db, session, picked[0], position)
+
     def finish(self, db, session):
         attempts = list(db.scalars(select(Attempt).join(Assignment).where(
             Assignment.session_id == session.id).order_by(Assignment.position)))
+        extra = {}
         if session.status == "assisted":
             result = "assisted_practice"
         elif session.policy_version == RETEST_POLICY:
-            passed = len(attempts) == 10 and all(a.assistance == "independent" for a in attempts) and sum(a.correct for a in attempts) >= 7
+            passed = mastery.retest_passed(
+                answer_result(a) if a.assistance == "independent" else mastery.WRONG for a in attempts)
             result = "retest_passed" if passed else "retest_practice_needed"
             self.set_gap(db, session, "resolved" if passed else "gap")
+        elif session.policy_version == LEGACY_RETEST_POLICY:
+            passed = (len(attempts) == LEGACY_RETEST_SIZE and all(a.assistance == "independent" for a in attempts)
+                      and sum(a.correct for a in attempts) >= LEGACY_RETEST_PASS)
+            result = "retest_passed" if passed else "retest_practice_needed"
+            self.set_gap(db, session, "resolved" if passed else "gap")
+        elif session.policy_version == DIAGNOSTIC_POLICY:
+            decision = mastery.decide(self.diagnostic_answers(db, session))
+            status = "borderline" if decision.status == "continue" else decision.status
+            # The running score continues from the re-score; order of answers no longer matters.
+            self.estimate(db, session.learner_id, session.skill_id).rating = decision.rating
+            self.set_gap(db, session, status)
+            result = "diagnostic_" + status
+            extra = {"decision": status, "score": round(decision.score, 4), "answers": decision.answers}
+        elif session.policy_version == LEGACY_DIAGNOSTIC_POLICY:
+            status = "mastered" if sum(a.correct for a in attempts) / len(attempts) > 0.5 else "gap"
+            self.set_gap(db, session, status)
+            result = "diagnostic_" + status
+            extra = {"decision": status}
+        elif session.policy_version == VALIDATION_POLICY:
+            result = "validation_completed"
         elif session.mode in ("verification", "review"):
             passed = len(attempts) == len(FACETS) and all(
                 a.correct and a.assistance == "independent" for a in attempts)
@@ -254,7 +495,7 @@ class LearningService:
                       "later_check_passed") if passed else "practice_needed"
         else:
             result = "practice_completed" if session.mode == "practice" else "diagnostic_completed"
-        if session.policy_version != RETEST_POLICY and session.mode in ("verification", "review") and session.status != "assisted":
+        if session.policy_version == POLICY and session.mode in ("verification", "review") and session.status != "assisted":
             existing_gap = db.get(GapState, (session.learner_id, session.skill_id))
             if existing_gap:
                 self.set_gap(db, session, "resolved" if result in ("independent_check_passed", "later_check_passed") else "gap")
@@ -274,7 +515,9 @@ class LearningService:
             review.status = "passed" if result == "later_check_passed" else (
                 "assisted" if result == "assisted_practice" else "mixed")
             review.completed_at = self.now()
-        return {"result": result, "policy_version": session.policy_version,
+        if session.policy_version == VALIDATION_POLICY:
+            return {"result": result, "policy_version": session.policy_version, "stage": session.stage}
+        return {"result": result, "policy_version": session.policy_version, **extra,
                 "outcomes": [{"attempt_id": a.id, "correct": a.correct,
                               "assistance": a.assistance} for a in attempts]}
 
@@ -291,6 +534,10 @@ class LearningService:
                 Exposure.assignment_id == assignment.id, Exposure.kind == "prompt"))
             if not issued or assignment.status == "cancelled" or session.status == "abandoned":
                 raise LearningError("invalid_state", "Open the current question first.")
+            if session.policy_version == VALIDATION_POLICY:
+                raise LearningError("invalid_state", "Validation tests have no hints or solutions.")
+            if session.policy_version in DIAGNOSTIC_POLICIES and session.status != "completed":
+                raise LearningError("invalid_state", "Help opens after the diagnostic ends.")
             if assignment.status == "submitted":
                 if kind != "solution" or session.status != "completed":
                     raise LearningError("invalid_state", "Finish the activity before reviewing solutions.")
@@ -329,8 +576,7 @@ class LearningService:
     def today(self, learner):
         with transaction(self.engine) as db:
             self.lock_learner(db, learner)
-            active = db.scalar(select(LearningSession).where(
-                LearningSession.learner_id == learner, LearningSession.status.in_(["active", "assisted"])))
+            active = self.active_session(db, learner)
             reviews = list(db.scalars(select(Review).where(
                 Review.learner_id == learner).order_by(Review.due_at)))
             evidence = list(db.scalars(select(Evidence).where(
@@ -343,12 +589,13 @@ class LearningService:
                 "evidence": [{"id": e.id, "session_id": e.session_id, "kind": e.kind,
                     "policy_version": e.policy_version, "created_at": e.created_at} for e in evidence]}
 
+    # ----- gaps (Track 2) and dashboard ------------------------------------------------------------
 
     def set_gap(self, db, session, status):
-        """Track 1 hook: call within its diagnostic-finalization transaction.
+        """Record an assessment-backed decision inside the deciding session's transaction.
 
-        The caller supplies a classification backed by that completed diagnostic;
-        no classification thresholds or Elo updates are invented in Track 2.
+        Only diagnostics, retests and independent checks call this. Reading /gaps and
+        movements of the running score never change a decision (D6).
         """
         if status not in ("mastered", "borderline", "gap", "resolved"):
             raise ValueError("Unknown gap status")
@@ -361,14 +608,30 @@ class LearningService:
         record.updated_at = self.now()
 
     def gaps(self, learner):
-        curriculum = load_curriculum()["skills"]
         with transaction(self.engine) as db:
             self.lock_learner(db, learner)
             records = {g.skill_id: g for g in db.scalars(select(GapState).where(GapState.learner_id == learner))}
-            return [{"skill_id": skill["id"], "prerequisites": skill["prerequisites"],
-                     "status": records[skill["id"]].status if skill["id"] in records else "unassessed",
-                     "source_session_id": records[skill["id"]].source_session_id if skill["id"] in records else None}
-                    for skill in curriculum]
+            estimates = {e.skill_id: e for e in db.scalars(select(MasteryEstimate).where(
+                MasteryEstimate.learner_id == learner))}
+            configs = {c.skill_id: c.scoring_version for c in db.scalars(select(TopicScoringConfig).where(
+                TopicScoringConfig.learner_id == learner))}
+            active = self.active_session(db, learner)
+            result = []
+            for skill in CURRICULUM:
+                sid, version = skill["id"], configs.get(skill["id"], "current")
+                record, estimate = records.get(sid), estimates.get(sid)
+                # A moving score would reveal answers inside a form that withholds feedback.
+                withheld = bool(active and active.skill_id == sid and active.mode in ("verification", "review"))
+                counted = estimate.answer_count if estimate and version == "new" else 0
+                score = None
+                if counted and not withheld:
+                    score = round(mastery.shown_score(estimate.rating), 4)
+                result.append({"skill_id": sid, "title": skill["title"], "prerequisites": skill["prerequisites"],
+                               "status": record.status if record else "unassessed",
+                               "source_session_id": record.source_session_id if record else None,
+                               "scoring_version": version, "score": score, "answer_count": counted,
+                               "mastery_bar": mastery_bar(sid), "score_withheld": withheld})
+            return result
 
     def borderline_review(self, learner, session_id):
         with transaction(self.engine) as db:
@@ -386,7 +649,8 @@ class LearningService:
                     if question.status != "approved":
                         continue
                     items.append({"assignment_id": assignment.id, "prompt": question.snapshot["prompt"],
-                                  "answer": attempt.raw_answer, "solution": question.snapshot["solution"]})
+                                  "answer": attempt.raw_answer, "dont_know": attempt.dont_know,
+                                  "solution": question.snapshot["solution"]})
                     if not assignment.solution_seen:
                         assignment.solution_seen = True
                         self.record_exposure(db, learner, assignment, question, "solution")

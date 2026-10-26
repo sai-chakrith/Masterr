@@ -3,125 +3,5112 @@
   "publication_note": "Original drafts created for Mastrr. Arithmetic validation does not constitute human review. These are not extracted from the supplied college material.",
   "questions": [
     {
-      "id": "num-001", "skill_id": "integer-properties", "family_id": "inclusive-even-interval", "purpose": "diagnostic", "difficulty": "introductory",
+      "id": "num-001",
+      "skill_id": "integer-properties",
+      "family_id": "inclusive-even-interval",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
       "prompt": "How many even integers are there from -3 to 5, including both endpoints?",
-      "answer": 4, "validator": {"kind": "even_count", "low": -3, "high": 5},
+      "answer": 4,
+      "validator": {
+        "kind": "even_count",
+        "low": -3,
+        "high": 5
+      },
       "solution": "The even integers are -2, 0, 2 and 4. There are 4. Zero and negative multiples of 2 are even.",
-      "hints": ["An even integer is divisible by 2 without a remainder.", "Check zero and the negative integers too."],
-      "reasoning_rubric": ["Includes zero", "Recognizes negative even integers", "Respects both interval endpoints"],
+      "hints": [
+        "An even integer is divisible by 2 without a remainder.",
+        "Check zero and the negative integers too."
+      ],
+      "reasoning_rubric": [
+        "Includes zero",
+        "Recognizes negative even integers",
+        "Respects both interval endpoints"
+      ],
       "possible_misconception": "May exclude zero or negative integers from even numbers; confirm with a follow-up.",
       "follow_up": "Is zero divisible by 2 without a remainder? Explain.",
-      "review_status": "draft", "provenance": "original_mastrr_draft"
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft"
     },
     {
-      "id": "num-002", "skill_id": "integer-properties", "family_id": "inclusive-even-interval", "purpose": "practice", "difficulty": "introductory",
+      "id": "num-002",
+      "skill_id": "integer-properties",
+      "family_id": "inclusive-even-interval",
+      "purpose": "practice",
+      "difficulty": "introductory",
       "prompt": "How many even integers are there from 11 to 31, including both endpoints?",
-      "answer": 10, "validator": {"kind": "even_count", "low": 11, "high": 31},
+      "answer": 10,
+      "validator": {
+        "kind": "even_count",
+        "low": 11,
+        "high": 31
+      },
       "solution": "The even integers run from 12 to 30 in steps of 2. Their count is (30-12)/2+1 = 10.",
-      "hints": ["Find the first and last even integers in the interval.", "Counting inclusive terms requires adding 1 after dividing the gap by 2."],
-      "reasoning_rubric": ["Identifies endpoints 12 and 30", "Counts terms rather than gaps"],
-      "possible_misconception": "May count gaps rather than terms.", "follow_up": "How many numbers are in the list 12, 14, 16? How many gaps?",
-      "review_status": "draft", "provenance": "original_mastrr_draft"
+      "hints": [
+        "Find the first and last even integers in the interval.",
+        "Counting inclusive terms requires adding 1 after dividing the gap by 2."
+      ],
+      "reasoning_rubric": [
+        "Identifies endpoints 12 and 30",
+        "Counts terms rather than gaps"
+      ],
+      "possible_misconception": "May count gaps rather than terms.",
+      "follow_up": "How many numbers are in the list 12, 14, 16? How many gaps?",
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft"
     },
     {
-      "id": "num-003", "skill_id": "divisibility", "family_id": "missing-digit-by-nine", "purpose": "diagnostic", "difficulty": "introductory",
+      "id": "num-003",
+      "skill_id": "divisibility",
+      "family_id": "missing-digit-by-nine",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
       "prompt": "Find the digit x such that the three-digit integer 4x2 is divisible by 9.",
-      "answer": 3, "validator": {"kind": "missing_digit", "pattern": "4?2", "divisor": 9},
+      "answer": 3,
+      "validator": {
+        "kind": "missing_digit",
+        "pattern": "4?2",
+        "divisor": 9
+      },
       "solution": "The digit sum is 4+x+2 = 6+x. With x from 0 to 9, the only multiple of 9 available is 9, so x=3.",
-      "hints": ["Use the digit-sum rule for divisibility by 9.", "The missing value is a single digit from 0 through 9."],
-      "reasoning_rubric": ["Uses digit sum", "Restricts x to a digit", "Checks uniqueness"],
-      "possible_misconception": "May confuse divisibility by 3 with divisibility by 9.", "follow_up": "Would a digit sum of 12 establish divisibility by 9?",
-      "review_status": "draft", "provenance": "original_mastrr_draft"
+      "hints": [
+        "Use the digit-sum rule for divisibility by 9.",
+        "The missing value is a single digit from 0 through 9."
+      ],
+      "reasoning_rubric": [
+        "Uses digit sum",
+        "Restricts x to a digit",
+        "Checks uniqueness"
+      ],
+      "possible_misconception": "May confuse divisibility by 3 with divisibility by 9.",
+      "follow_up": "Would a digit sum of 12 establish divisibility by 9?",
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft"
     },
     {
-      "id": "num-004", "skill_id": "divisibility", "family_id": "missing-digit-by-six", "purpose": "practice", "difficulty": "developing",
+      "id": "num-004",
+      "skill_id": "divisibility",
+      "family_id": "missing-digit-by-six",
+      "purpose": "practice",
+      "difficulty": "developing",
       "prompt": "Find the digit x such that the three-digit integer 53x is divisible by 6.",
-      "answer": 4, "validator": {"kind": "missing_digit", "pattern": "53?", "divisor": 6},
+      "answer": 4,
+      "validator": {
+        "kind": "missing_digit",
+        "pattern": "53?",
+        "divisor": 6
+      },
       "solution": "The last digit must be even and 8+x must be divisible by 3. Among 0,2,4,6,8, only 4 satisfies the digit-sum condition. The number is 534.",
-      "hints": ["Divisibility by 6 needs divisibility by both 2 and 3.", "Test even digits against the digit sum 8+x."],
-      "reasoning_rubric": ["Checks both conditions", "Finds the unique allowed digit"],
-      "possible_misconception": "May check only one condition for divisibility by 6.", "follow_up": "Is every even integer divisible by 6? Give a counterexample.",
-      "review_status": "draft", "provenance": "original_mastrr_draft"
+      "hints": [
+        "Divisibility by 6 needs divisibility by both 2 and 3.",
+        "Test even digits against the digit sum 8+x."
+      ],
+      "reasoning_rubric": [
+        "Checks both conditions",
+        "Finds the unique allowed digit"
+      ],
+      "possible_misconception": "May check only one condition for divisibility by 6.",
+      "follow_up": "Is every even integer divisible by 6? Give a counterexample.",
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft"
     },
     {
-      "id": "num-005", "skill_id": "primes-factors", "family_id": "classify-prime-list", "purpose": "diagnostic", "difficulty": "introductory",
+      "id": "num-005",
+      "skill_id": "primes-factors",
+      "family_id": "classify-prime-list",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
       "prompt": "How many of these integers are prime: 1, 2, 9, 17, 21?",
-      "answer": 2, "validator": {"kind": "prime_count", "values": [1, 2, 9, 17, 21]},
+      "answer": 2,
+      "validator": {
+        "kind": "prime_count",
+        "values": [
+          1,
+          2,
+          9,
+          17,
+          21
+        ]
+      },
       "solution": "Only 2 and 17 are prime. One is neither prime nor composite; 9=3x3 and 21=3x7.",
-      "hints": ["A prime has exactly two positive factors.", "Check 1 and 2 carefully."],
-      "reasoning_rubric": ["Excludes 1", "Includes 2", "Checks odd composites"],
-      "possible_misconception": "May classify 1 as prime or assume all odd integers are prime.", "follow_up": "List the positive factors of 1 and of 2.",
-      "review_status": "draft", "provenance": "original_mastrr_draft"
+      "hints": [
+        "A prime has exactly two positive factors.",
+        "Check 1 and 2 carefully."
+      ],
+      "reasoning_rubric": [
+        "Excludes 1",
+        "Includes 2",
+        "Checks odd composites"
+      ],
+      "possible_misconception": "May classify 1 as prime or assume all odd integers are prime.",
+      "follow_up": "List the positive factors of 1 and of 2.",
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft"
     },
     {
-      "id": "num-006", "skill_id": "primes-factors", "family_id": "count-positive-factors", "purpose": "practice", "difficulty": "developing",
+      "id": "num-006",
+      "skill_id": "primes-factors",
+      "family_id": "count-positive-factors",
+      "purpose": "practice",
+      "difficulty": "developing",
       "prompt": "How many distinct positive factors does 36 have?",
-      "answer": 9, "validator": {"kind": "factor_count", "number": 36},
+      "answer": 9,
+      "validator": {
+        "kind": "factor_count",
+        "number": 36
+      },
       "solution": "The factors are 1,2,3,4,6,9,12,18,36: nine distinct factors. The pair 6x6 contributes just one distinct factor.",
-      "hints": ["List factor pairs starting with 1x36.", "Do not count the square root twice."],
-      "reasoning_rubric": ["Enumerates all positive factors", "Counts the square root once"],
-      "possible_misconception": "May double-count the square root of a perfect square.", "follow_up": "Does the pair 6x6 contain one or two distinct values?",
-      "review_status": "draft", "provenance": "original_mastrr_draft"
+      "hints": [
+        "List factor pairs starting with 1x36.",
+        "Do not count the square root twice."
+      ],
+      "reasoning_rubric": [
+        "Enumerates all positive factors",
+        "Counts the square root once"
+      ],
+      "possible_misconception": "May double-count the square root of a perfect square.",
+      "follow_up": "Does the pair 6x6 contain one or two distinct values?",
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft"
     },
     {
-      "id": "num-007", "skill_id": "hcf-lcm", "family_id": "equal-packets-hcf", "purpose": "diagnostic", "difficulty": "developing",
+      "id": "num-007",
+      "skill_id": "hcf-lcm",
+      "family_id": "equal-packets-hcf",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
       "prompt": "You have 24 pencils and 36 erasers. All items must be distributed into identical packets, with the same number of pencils in each packet and the same number of erasers in each packet. What is the greatest possible number of packets?",
-      "answer": 12, "validator": {"kind": "gcd", "a": 24, "b": 36},
+      "answer": 12,
+      "validator": {
+        "kind": "gcd",
+        "a": 24,
+        "b": 36
+      },
       "solution": "The packet count must divide both 24 and 36. Their greatest common factor is 12, giving 2 pencils and 3 erasers per packet.",
-      "hints": ["The number of packets must divide both item counts.", "You need the greatest common factor, not a common multiple."],
-      "reasoning_rubric": ["Models packet count as a common divisor", "Maximizes the count", "Checks the contents of a packet"],
-      "possible_misconception": "May interchange HCF and LCM.", "follow_up": "Could 72 nonempty identical packets be made from these quantities? Why?",
-      "review_status": "draft", "provenance": "original_mastrr_draft"
+      "hints": [
+        "The number of packets must divide both item counts.",
+        "You need the greatest common factor, not a common multiple."
+      ],
+      "reasoning_rubric": [
+        "Models packet count as a common divisor",
+        "Maximizes the count",
+        "Checks the contents of a packet"
+      ],
+      "possible_misconception": "May interchange HCF and LCM.",
+      "follow_up": "Could 72 nonempty identical packets be made from these quantities? Why?",
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft"
     },
     {
-      "id": "num-008", "skill_id": "hcf-lcm", "family_id": "repeating-events-lcm", "purpose": "practice", "difficulty": "developing",
+      "id": "num-008",
+      "skill_id": "hcf-lcm",
+      "family_id": "repeating-events-lcm",
+      "purpose": "practice",
+      "difficulty": "developing",
       "prompt": "Two bells ring together now. One rings every 12 minutes and the other every 18 minutes. After how many minutes will they next ring together?",
-      "answer": 36, "validator": {"kind": "lcm", "a": 12, "b": 18},
+      "answer": 36,
+      "validator": {
+        "kind": "lcm",
+        "a": 12,
+        "b": 18
+      },
       "solution": "The elapsed time must be a positive multiple of both intervals. The least such time is LCM(12,18)=36 minutes.",
-      "hints": ["List the first few positive multiples of each interval.", "Select the smallest common positive time."],
-      "reasoning_rubric": ["Uses common multiples", "Excludes the initial time zero", "Finds the earliest repetition"],
-      "possible_misconception": "May use a common factor for repeating events.", "follow_up": "At 6 minutes, has either bell completed a full interval?",
-      "review_status": "draft", "provenance": "original_mastrr_draft"
+      "hints": [
+        "List the first few positive multiples of each interval.",
+        "Select the smallest common positive time."
+      ],
+      "reasoning_rubric": [
+        "Uses common multiples",
+        "Excludes the initial time zero",
+        "Finds the earliest repetition"
+      ],
+      "possible_misconception": "May use a common factor for repeating events.",
+      "follow_up": "At 6 minutes, has either bell completed a full interval?",
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft"
     },
     {
-      "id": "num-009", "skill_id": "remainders", "family_id": "integer-division-remainder", "purpose": "diagnostic", "difficulty": "introductory",
+      "id": "num-009",
+      "skill_id": "remainders",
+      "family_id": "integer-division-remainder",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
       "prompt": "What is the remainder when 137 is divided by 8?",
-      "answer": 1, "validator": {"kind": "remainder", "number": 137, "divisor": 8},
+      "answer": 1,
+      "validator": {
+        "kind": "remainder",
+        "number": 137,
+        "divisor": 8
+      },
       "solution": "137=8x17+1, so the remainder is 1. It must lie from 0 through 7.",
-      "hints": ["Find the greatest multiple of 8 not exceeding 137.", "Subtract 136 from 137."],
-      "reasoning_rubric": ["Writes quotient-remainder form", "Checks the allowed remainder range"],
-      "possible_misconception": "May confuse the quotient or decimal fraction with the remainder.", "follow_up": "In 137=8x17+1, which value is the quotient?",
-      "review_status": "draft", "provenance": "original_mastrr_draft"
+      "hints": [
+        "Find the greatest multiple of 8 not exceeding 137.",
+        "Subtract 136 from 137."
+      ],
+      "reasoning_rubric": [
+        "Writes quotient-remainder form",
+        "Checks the allowed remainder range"
+      ],
+      "possible_misconception": "May confuse the quotient or decimal fraction with the remainder.",
+      "follow_up": "In 137=8x17+1, which value is the quotient?",
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft"
     },
     {
-      "id": "num-010", "skill_id": "remainders", "family_id": "power-modulo", "purpose": "practice", "difficulty": "developing",
+      "id": "num-010",
+      "skill_id": "remainders",
+      "family_id": "power-modulo",
+      "purpose": "practice",
+      "difficulty": "developing",
       "prompt": "What is the remainder when 7 raised to the power 4 is divided by 5?",
-      "answer": 1, "validator": {"kind": "power_remainder", "base": 7, "exponent": 4, "divisor": 5},
+      "answer": 1,
+      "validator": {
+        "kind": "power_remainder",
+        "base": 7,
+        "exponent": 4,
+        "divisor": 5
+      },
       "solution": "7 has remainder 2 modulo 5. Therefore 7^4 has the same remainder as 2^4=16, which leaves remainder 1.",
-      "hints": ["Reduce the base modulo 5 first.", "Compute the remainder of 2^4."],
-      "reasoning_rubric": ["Preserves the exponent when reducing the base", "Reduces the resulting value again"],
-      "possible_misconception": "May return the base remainder without applying the exponent.", "follow_up": "Do 2 and 2^4 have the same remainder modulo 5?",
-      "review_status": "draft", "provenance": "original_mastrr_draft"
+      "hints": [
+        "Reduce the base modulo 5 first.",
+        "Compute the remainder of 2^4."
+      ],
+      "reasoning_rubric": [
+        "Preserves the exponent when reducing the base",
+        "Reduces the resulting value again"
+      ],
+      "possible_misconception": "May return the base remainder without applying the exponent.",
+      "follow_up": "Do 2 and 2^4 have the same remainder modulo 5?",
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft"
     },
     {
-      "id": "num-011", "skill_id": "digits-cyclicity", "family_id": "units-digit-of-power", "purpose": "diagnostic", "difficulty": "developing",
+      "id": "num-011",
+      "skill_id": "digits-cyclicity",
+      "family_id": "units-digit-of-power",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
       "prompt": "What is the units digit of 2 raised to the power 12?",
-      "answer": 6, "validator": {"kind": "power_remainder", "base": 2, "exponent": 12, "divisor": 10},
+      "answer": 6,
+      "validator": {
+        "kind": "power_remainder",
+        "base": 2,
+        "exponent": 12,
+        "divisor": 10
+      },
       "solution": "The units digits repeat 2,4,8,6 with cycle length 4. Since 12 is divisible by 4, use the fourth entry, 6.",
-      "hints": ["Write the units digits of 2^1 through 2^4.", "A zero remainder for the exponent selects the final cycle entry."],
-      "reasoning_rubric": ["Identifies the cycle", "Handles the zero-remainder cycle position"],
-      "possible_misconception": "May treat exponent remainder zero as the first position.", "follow_up": "What is the units digit of 2^4? How does that locate 2^12 in the cycle?",
-      "review_status": "draft", "provenance": "original_mastrr_draft"
+      "hints": [
+        "Write the units digits of 2^1 through 2^4.",
+        "A zero remainder for the exponent selects the final cycle entry."
+      ],
+      "reasoning_rubric": [
+        "Identifies the cycle",
+        "Handles the zero-remainder cycle position"
+      ],
+      "possible_misconception": "May treat exponent remainder zero as the first position.",
+      "follow_up": "What is the units digit of 2^4? How does that locate 2^12 in the cycle?",
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft"
     },
     {
-      "id": "num-012", "skill_id": "digits-cyclicity", "family_id": "units-digit-of-power", "purpose": "practice", "difficulty": "developing",
+      "id": "num-012",
+      "skill_id": "digits-cyclicity",
+      "family_id": "units-digit-of-power",
+      "purpose": "practice",
+      "difficulty": "developing",
       "prompt": "What is the units digit of 3 raised to the power 7?",
-      "answer": 7, "validator": {"kind": "power_remainder", "base": 3, "exponent": 7, "divisor": 10},
+      "answer": 7,
+      "validator": {
+        "kind": "power_remainder",
+        "base": 3,
+        "exponent": 7,
+        "divisor": 10
+      },
       "solution": "The units digits repeat 3,9,7,1. The remainder of 7 divided by 4 is 3, so choose the third entry, 7.",
-      "hints": ["Find the repeating units-digit pattern for powers of 3.", "Locate exponent 7 within a cycle of length 4."],
-      "reasoning_rubric": ["Finds the correct cycle", "Uses the exponent to select its position"],
-      "possible_misconception": "May confuse the base with its cycle position.", "follow_up": "List the units digits for exponents 1, 2, 3 and 4 before choosing a position.",
-      "review_status": "draft", "provenance": "original_mastrr_draft"
+      "hints": [
+        "Find the repeating units-digit pattern for powers of 3.",
+        "Locate exponent 7 within a cycle of length 4."
+      ],
+      "reasoning_rubric": [
+        "Finds the correct cycle",
+        "Uses the exponent to select its position"
+      ],
+      "possible_misconception": "May confuse the base with its cycle position.",
+      "follow_up": "List the units digits for exponents 1, 2, 3 and 4 before choosing a position.",
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft"
+    },
+    {
+      "id": "num-101",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--count-evens-1-to-20",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 1,
+      "prompt": "How many even integers are there from 1 to 20, including both endpoints?",
+      "answer": 10,
+      "validator": {
+        "kind": "expression",
+        "expr": "multiples(1,20,2)"
+      },
+      "solution": "The even integers are 2, 4, ..., 20. That is 20 / 2 = 10 numbers.",
+      "hints": [
+        "List the first few even numbers in the range.",
+        "Every second integer is even."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-102",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--count-odd-in-list",
+      "purpose": "verification",
+      "difficulty": "introductory",
+      "difficulty_level": 1,
+      "prompt": "How many of these integers are odd: 7, 12, 0, -5, 19, 22?",
+      "answer": 3,
+      "validator": {
+        "kind": "expression",
+        "expr": "7%2 + 12%2 + 0%2 + (-5)%2 + 19%2 + 22%2"
+      },
+      "solution": "The odd ones are 7, -5 and 19, so there are 3. Zero is even.",
+      "hints": [
+        "An odd integer leaves remainder 1 when divided by 2.",
+        "Negative numbers can be odd too."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-103",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--next-even-after",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 1,
+      "prompt": "What is the smallest even integer greater than 47?",
+      "answer": 48,
+      "validator": {
+        "kind": "expression",
+        "expr": "(47//2+1)*2"
+      },
+      "solution": "47 is odd, so the next integer, 48, is even. The answer is 48.",
+      "hints": [
+        "Is 47 even or odd?",
+        "Even and odd integers alternate."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-104",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--parity-of-sum",
+      "purpose": "verification",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "What is the remainder when 37 + 58 + 91 is divided by 2?",
+      "answer": 0,
+      "validator": {
+        "kind": "expression",
+        "expr": "(37+58+91)%2"
+      },
+      "solution": "37 and 91 are odd and 58 is even. Two odd numbers make an even sum, so the total 186 is even and the remainder is 0.",
+      "hints": [
+        "Classify each number as odd or even first.",
+        "odd + odd is even; even + even is even."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-105",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--three-consecutive-sum",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "The sum of three consecutive integers is 72. What is the largest of them?",
+      "answer": 25,
+      "validator": {
+        "kind": "expression",
+        "expr": "72//3+1"
+      },
+      "solution": "The middle integer is 72 / 3 = 24, so the integers are 23, 24 and 25. The largest is 25.",
+      "hints": [
+        "Call the middle integer m.",
+        "The three integers are m-1, m and m+1."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-106",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--strictly-between-count",
+      "purpose": "verification",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "How many integers lie strictly between -4 and 3?",
+      "answer": 6,
+      "validator": {
+        "kind": "expression",
+        "expr": "3-(-4)-1"
+      },
+      "solution": "They are -3, -2, -1, 0, 1 and 2, which is 6 integers.",
+      "hints": [
+        "Strictly between means the endpoints are not included.",
+        "Remember to count 0."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-107",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--number-line-distance",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "What is the distance on the number line between -9 and 6?",
+      "answer": 15,
+      "validator": {
+        "kind": "expression",
+        "expr": "abs(6-(-9))"
+      },
+      "solution": "The distance is |6 - (-9)| = 15.",
+      "hints": [
+        "Distance is the absolute value of the difference.",
+        "From -9 to 0 is 9 steps; from 0 to 6 is 6 more."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-108",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--count-odd-products",
+      "purpose": "verification",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "How many of the products 3 x 5, 4 x 7, 9 x 11 and 6 x 8 are odd?",
+      "answer": 2,
+      "validator": {
+        "kind": "expression",
+        "expr": "(3*5)%2 + (4*7)%2 + (9*11)%2 + (6*8)%2"
+      },
+      "solution": "A product is odd only when every factor is odd. That holds for 3 x 5 and 9 x 11, so 2 products are odd.",
+      "hints": [
+        "One even factor makes a product even.",
+        "Check each pair of factors."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-109",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--product-through-zero",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "What is the product of all the integers from -3 to 4, inclusive?",
+      "answer": 0,
+      "validator": {
+        "kind": "expression",
+        "expr": "(-3)*(-2)*(-1)*0*1*2*3*4"
+      },
+      "solution": "The list includes 0, so the product is 0.",
+      "hints": [
+        "Write out the integers in the range.",
+        "What happens when one factor is zero?"
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-110",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--four-consecutive-even-sum",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "The sum of four consecutive even integers is 108. What is the smallest of them?",
+      "answer": 24,
+      "validator": {
+        "kind": "expression",
+        "expr": "(108-12)//4"
+      },
+      "solution": "Write them as x, x+2, x+4, x+6. Then 4x + 12 = 108, so x = 24. The smallest is 24.",
+      "hints": [
+        "Consecutive even integers differ by 2.",
+        "Write all four in terms of the smallest."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-111",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--evens-in-symmetric-range",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "How many even integers are there from -15 to 15, including both endpoints?",
+      "answer": 15,
+      "validator": {
+        "kind": "expression",
+        "expr": "multiples(-15,15,2)"
+      },
+      "solution": "The even integers run from -14 to 14: seven negative, seven positive and zero. That is 15.",
+      "hints": [
+        "Zero is even.",
+        "Count the positive ones, then use symmetry."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-112",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--sum-first-odd-numbers",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the sum of the first 15 positive odd integers?",
+      "answer": 225,
+      "validator": {
+        "kind": "expression",
+        "expr": "15**2"
+      },
+      "solution": "The sum of the first n odd integers is n squared, so the sum is 15 x 15 = 225.",
+      "hints": [
+        "Try the first 1, 2 and 3 odd numbers and look for a pattern.",
+        "1 = 1, 1+3 = 4, 1+3+5 = 9."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-113",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--sum-one-to-n",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the sum of all integers from 1 to 40?",
+      "answer": 820,
+      "validator": {
+        "kind": "expression",
+        "expr": "40*41//2"
+      },
+      "solution": "Pair 1 with 40, 2 with 39 and so on: 20 pairs of 41 give 820.",
+      "hints": [
+        "Pair the first and last terms.",
+        "How many pairs are there?"
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-114",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--sum-of-evens",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the sum of all even integers from 2 to 50, inclusive?",
+      "answer": 650,
+      "validator": {
+        "kind": "expression",
+        "expr": "2*(25*26//2)"
+      },
+      "solution": "This is 2 x (1 + 2 + ... + 25) = 2 x 325 = 650.",
+      "hints": [
+        "Factor 2 out of every term.",
+        "1 + 2 + ... + 25 = 25 x 26 / 2."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-115",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--linear-inequality-count",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "How many integers x satisfy -3 < 2x + 1 < 11?",
+      "answer": 6,
+      "validator": {
+        "kind": "expression",
+        "expr": "4-(-1)+1"
+      },
+      "solution": "Subtract 1: -4 < 2x < 10. Divide by 2: -2 < x < 5. The integers are -1, 0, 1, 2, 3, 4, so there are 6.",
+      "hints": [
+        "Isolate x step by step.",
+        "The inequalities are strict."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-116",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--parity-of-polynomial",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "n is an odd integer. What is the remainder when n^2 + 3n + 4 is divided by 2?",
+      "answer": 0,
+      "validator": {
+        "kind": "expression",
+        "expr": "(7**2+3*7+4)%2"
+      },
+      "solution": "n^2 is odd and 3n is odd, so n^2 + 3n is even. Adding 4 keeps it even, so the remainder is 0. For n = 7 the value is 74.",
+      "hints": [
+        "Find the parity of each term.",
+        "Try an example such as n = 1 to check."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-117",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--average-of-consecutive",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "The average of 7 consecutive integers is 31. What is the smallest of them?",
+      "answer": 28,
+      "validator": {
+        "kind": "expression",
+        "expr": "31-3"
+      },
+      "solution": "For an odd count of consecutive integers the average is the middle one. 31 is the 4th, so the smallest is 31 - 3 = 28.",
+      "hints": [
+        "The average sits in the middle of the list.",
+        "How far is the first term from the middle?"
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-118",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--absolute-inequality-count",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "How many integers x satisfy |x - 3| <= 4?",
+      "answer": 9,
+      "validator": {
+        "kind": "expression",
+        "expr": "2*4+1"
+      },
+      "solution": "The condition means -4 <= x - 3 <= 4, so -1 <= x <= 7. That gives 9 integers.",
+      "hints": [
+        "|x - 3| is the distance from x to 3.",
+        "Both endpoints are included."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-119",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--digit-arrangement-difference",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "Using each of the digits 2, 5 and 8 exactly once, what is the largest three-digit number minus the smallest?",
+      "answer": 594,
+      "validator": {
+        "kind": "expression",
+        "expr": "852-258"
+      },
+      "solution": "The largest is 852 and the smallest is 258. 852 - 258 = 594.",
+      "hints": [
+        "Put the biggest digit first for the largest number.",
+        "Put the smallest digit first for the smallest number."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-120",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--perfect-squares-between",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "How many perfect squares lie between 50 and 500?",
+      "answer": 15,
+      "validator": {
+        "kind": "expression",
+        "expr": "isqrt(500)-isqrt(50)"
+      },
+      "solution": "The squares are 8^2 = 64 up to 22^2 = 484, which is 22 - 8 + 1 = 15 squares.",
+      "hints": [
+        "Find the smallest square above 50.",
+        "Find the largest square below 500."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-121",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--even-minus-odd-sums",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "What is the sum of the even integers from 1 to 20 minus the sum of the odd integers from 1 to 20?",
+      "answer": 10,
+      "validator": {
+        "kind": "expression",
+        "expr": "2*(10*11//2) - 10**2"
+      },
+      "solution": "Pair 2 with 1, 4 with 3, ..., 20 with 19. Each pair differs by 1 and there are 10 pairs, so the difference is 10.",
+      "hints": [
+        "Pair each even number with the odd number just below it.",
+        "How many pairs are there?"
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-122",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--consecutive-odd-product",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "The product of two consecutive odd positive integers is 323. What is the larger one?",
+      "answer": 19,
+      "validator": {
+        "kind": "expression",
+        "expr": "isqrt(323+1)+1"
+      },
+      "solution": "If the numbers are n - 1 and n + 1, their product is n^2 - 1 = 323, so n = 18. The larger is 19.",
+      "hints": [
+        "Call the even number between them n.",
+        "(n - 1)(n + 1) = n^2 - 1."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-123",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--sum-across-zero",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "What is the sum of all integers from -20 to 25, inclusive?",
+      "answer": 115,
+      "validator": {
+        "kind": "expression",
+        "expr": "25*26//2 - 20*21//2"
+      },
+      "solution": "The numbers -20 to 20 cancel in pairs. What remains is 21 + 22 + 23 + 24 + 25 = 115.",
+      "hints": [
+        "Pair each negative number with its opposite.",
+        "Which numbers have no partner?"
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-124",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--odd-multiples-of-five",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "How many integers from 100 to 400, inclusive, are odd and divisible by 5?",
+      "answer": 30,
+      "validator": {
+        "kind": "expression",
+        "expr": "multiples(100,400,5) - multiples(100,400,10)"
+      },
+      "solution": "They end in 5: 105, 115, ..., 395. That is (395 - 105) / 10 + 1 = 30 numbers.",
+      "hints": [
+        "An odd multiple of 5 ends in 5.",
+        "Count terms in steps of 10."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-125",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--parity-two-variables",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "a is odd and b is even. What is the remainder when a^3 + 5b + 2ab + 7 is divided by 2?",
+      "answer": 0,
+      "validator": {
+        "kind": "expression",
+        "expr": "(3**3+5*4+2*3*4+7)%2"
+      },
+      "solution": "a^3 is odd, 5b and 2ab are even, and 7 is odd. Odd + even + even + odd is even, so the remainder is 0.",
+      "hints": [
+        "Decide the parity of each term separately.",
+        "Test with a = 3, b = 4."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-126",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--triangular-inverse",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "The sum 1 + 2 + ... + n equals 210. What is n?",
+      "answer": 20,
+      "validator": {
+        "kind": "expression",
+        "expr": "(isqrt(8*210+1)-1)//2"
+      },
+      "solution": "n(n + 1) / 2 = 210, so n(n + 1) = 420 = 20 x 21. Therefore n = 20.",
+      "hints": [
+        "Use the formula n(n + 1) / 2.",
+        "Look for two consecutive numbers with product 420."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-127",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--squares-below-bound",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "How many integers n satisfy n^2 < 60?",
+      "answer": 15,
+      "validator": {
+        "kind": "expression",
+        "expr": "2*isqrt(59)+1"
+      },
+      "solution": "n can be -7, ..., 7 because 7^2 = 49 < 60 but 8^2 = 64. That is 15 integers.",
+      "hints": [
+        "Do not forget negative values of n.",
+        "Zero also works."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-128",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--closer-to-zero",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "How many integers from -20 to 20, inclusive, are closer to 0 than to 10?",
+      "answer": 25,
+      "validator": {
+        "kind": "expression",
+        "expr": "4-(-20)+1"
+      },
+      "solution": "A number is closer to 0 than to 10 when it is less than 5. That is -20 to 4, which is 25 integers.",
+      "hints": [
+        "The halfway point between 0 and 10 is 5.",
+        "5 itself is equally close to both."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-129",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--page-number-digits",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "How many digits are used to number the pages of a 120-page book, starting at page 1?",
+      "answer": 252,
+      "validator": {
+        "kind": "expression",
+        "expr": "9*1+90*2+21*3"
+      },
+      "solution": "Pages 1-9 use 9 digits, 10-99 use 180, and 100-120 use 21 x 3 = 63. Total: 252.",
+      "hints": [
+        "Group pages by how many digits their numbers have.",
+        "How many pages are from 100 to 120?"
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-130",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--even-triangular-count",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "For how many integers n from 1 to 50 is 1 + 2 + ... + n even?",
+      "answer": 24,
+      "validator": {
+        "kind": "expression",
+        "expr": "multiples(1,50,4)+multiples(2,51,4)"
+      },
+      "solution": "The sum is even exactly when n leaves remainder 0 or 3 on division by 4. There are 12 of each from 1 to 50, so 24.",
+      "hints": [
+        "Compute the first eight sums and look at their parity.",
+        "The pattern repeats every 4 values of n."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-131",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--five-consecutive-odd",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "The sum of five consecutive odd integers is 155. What is the largest of them?",
+      "answer": 35,
+      "validator": {
+        "kind": "expression",
+        "expr": "155//5+4"
+      },
+      "solution": "The middle one is 155 / 5 = 31. The integers are 27, 29, 31, 33, 35, so the largest is 35.",
+      "hints": [
+        "The middle term equals the average.",
+        "Odd integers step by 2."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-132",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--difference-of-squares-count",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 5,
+      "prompt": "How many integers from 1 to 30 can be written as the difference of the squares of two integers?",
+      "answer": 22,
+      "validator": {
+        "kind": "expression",
+        "expr": "30 - multiples(3,32,4)"
+      },
+      "solution": "a^2 - b^2 = (a - b)(a + b) can be any odd number or multiple of 4, but never a number that leaves remainder 2 on division by 4. Those are 2, 6, ..., 30 (8 numbers), so 22 work.",
+      "hints": [
+        "Factor a^2 - b^2.",
+        "a - b and a + b have the same parity."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-133",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--all-even-digits",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 5,
+      "prompt": "How many positive integers less than 1000 have only even digits?",
+      "answer": 124,
+      "validator": {
+        "kind": "expression",
+        "expr": "4 + 4*5 + 4*5*5"
+      },
+      "solution": "One-digit: 4 (2, 4, 6, 8). Two-digit: 4 x 5 = 20. Three-digit: 4 x 5 x 5 = 100. Total 124.",
+      "hints": [
+        "The first digit cannot be 0.",
+        "Count by number of digits."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-134",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--consecutive-sum-ways",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 5,
+      "prompt": "In how many ways can 45 be written as a sum of two or more consecutive positive integers?",
+      "answer": 5,
+      "validator": {
+        "kind": "expression",
+        "expr": "odd_factor_count(45)-1"
+      },
+      "solution": "Each odd factor of 45 other than 1 gives one way. 45 has odd factors 1, 3, 5, 9, 15, 45, so there are 5 ways, for example 22 + 23 and 14 + 15 + 16.",
+      "hints": [
+        "Try sums of 2, 3, 5 ... consecutive numbers.",
+        "A run of k numbers has sum k times its middle value."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-135",
+      "skill_id": "integer-properties",
+      "family_id": "integer-properties--digit-sum-five",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 5,
+      "prompt": "How many integers from 1 to 999 have digits that add up to 5?",
+      "answer": 21,
+      "validator": {
+        "kind": "expression",
+        "expr": "7*6//2"
+      },
+      "solution": "Write each number with three digits (leading zeros allowed). We need a + b + c = 5 with digits 0-9, which has C(7, 2) = 21 solutions.",
+      "hints": [
+        "Pad short numbers with leading zeros.",
+        "Count ways to split 5 into three ordered parts."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-136",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--count-divisible-by-5",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 1,
+      "prompt": "How many of these numbers are divisible by 5: 35, 52, 100, 205, 551?",
+      "answer": 3,
+      "validator": {
+        "kind": "expression",
+        "expr": "count_divisible(5,35,52,100,205,551)"
+      },
+      "solution": "A number is divisible by 5 when it ends in 0 or 5: 35, 100 and 205. That is 3.",
+      "hints": [
+        "Look at the last digit.",
+        "Only 0 and 5 work."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-137",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--count-divisible-by-6",
+      "purpose": "verification",
+      "difficulty": "introductory",
+      "difficulty_level": 1,
+      "prompt": "How many of these numbers are divisible by 6: 12, 18, 25, 30, 41?",
+      "answer": 3,
+      "validator": {
+        "kind": "expression",
+        "expr": "count_divisible(6,12,18,25,30,41)"
+      },
+      "solution": "Divisible by 6 means even and divisible by 3: 12, 18 and 30. That is 3.",
+      "hints": [
+        "Check divisibility by 2 and by 3.",
+        "25 and 41 are odd."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-138",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--smallest-multiple-above",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 1,
+      "prompt": "What is the smallest multiple of 9 that is greater than 100?",
+      "answer": 108,
+      "validator": {
+        "kind": "expression",
+        "expr": "(100//9+1)*9"
+      },
+      "solution": "9 x 11 = 99 is below 100, so the next multiple, 9 x 12 = 108, is the answer.",
+      "hints": [
+        "Divide 100 by 9.",
+        "Take the next whole multiple."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-139",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--missing-digit-by-nine-four-digit",
+      "purpose": "verification",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "Find the digit x such that the four-digit number 31x6 is divisible by 9.",
+      "answer": 8,
+      "validator": {
+        "kind": "missing_digit",
+        "pattern": "31?6",
+        "divisor": 9
+      },
+      "solution": "The digit sum is 3 + 1 + x + 6 = 10 + x. The only multiple of 9 possible is 18, so x = 8.",
+      "hints": [
+        "Use the digit-sum rule for 9.",
+        "x is a single digit."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-140",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--multiples-up-to-100",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "How many multiples of 7 are there from 1 to 100?",
+      "answer": 14,
+      "validator": {
+        "kind": "expression",
+        "expr": "multiples(1,100,7)"
+      },
+      "solution": "100 / 7 = 14 remainder 2, so the multiples are 7, 14, ..., 98: 14 of them.",
+      "hints": [
+        "Divide 100 by 7.",
+        "Ignore the remainder."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-141",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--count-divisible-by-4",
+      "purpose": "verification",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "How many of these numbers are divisible by 4: 316, 422, 1000, 2734, 5108?",
+      "answer": 3,
+      "validator": {
+        "kind": "expression",
+        "expr": "count_divisible(4,316,422,1000,2734,5108)"
+      },
+      "solution": "Check the last two digits: 16, 00 and 08 are multiples of 4; 22 and 34 are not. So 3 numbers.",
+      "hints": [
+        "Only the last two digits matter for 4.",
+        "Is 34 divisible by 4?"
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-142",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--count-divisible-by-11",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "How many of these numbers are divisible by 11: 121, 254, 418, 935, 1332?",
+      "answer": 3,
+      "validator": {
+        "kind": "expression",
+        "expr": "count_divisible(11,121,254,418,935,1332)"
+      },
+      "solution": "Using alternating digit sums: 121 (0), 418 (11) and 935 (11) pass; 254 (1) and 1332 (-1) fail. That is 3.",
+      "hints": [
+        "Alternate + and - signs across the digits.",
+        "The result must be a multiple of 11, including 0."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-143",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--largest-three-digit-multiple",
+      "purpose": "verification",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "What is the largest three-digit multiple of 13?",
+      "answer": 988,
+      "validator": {
+        "kind": "expression",
+        "expr": "999//13*13"
+      },
+      "solution": "999 / 13 = 76 remainder 11, so the answer is 13 x 76 = 988.",
+      "hints": [
+        "Divide 999 by 13.",
+        "Subtract the remainder from 999."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-144",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--count-divisible-by-8",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "How many of these numbers are divisible by 8: 1024, 2350, 7168, 4444, 9000?",
+      "answer": 3,
+      "validator": {
+        "kind": "expression",
+        "expr": "count_divisible(8,1024,2350,7168,4444,9000)"
+      },
+      "solution": "Check the last three digits: 024, 168 and 000 are multiples of 8; 350 and 444 are not. That is 3.",
+      "hints": [
+        "Only the last three digits matter for 8.",
+        "Is 444 divisible by 8?"
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-145",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--missing-digit-by-twelve",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "Find the digit x such that the three-digit number 7x4 is divisible by 12.",
+      "answer": 4,
+      "validator": {
+        "kind": "missing_digit",
+        "pattern": "7?4",
+        "divisor": 12
+      },
+      "solution": "Divisible by 12 means divisible by 3 and 4. x4 must be a multiple of 4 (x even), and 11 + x must be a multiple of 3 (x = 1, 4 or 7). Only x = 4 does both: 744 = 12 x 62.",
+      "hints": [
+        "12 = 3 x 4.",
+        "Test both conditions."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-146",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--missing-digit-by-eleven",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "Find the digit x such that the four-digit number 3x52 is divisible by 11.",
+      "answer": 6,
+      "validator": {
+        "kind": "missing_digit",
+        "pattern": "3?52",
+        "divisor": 11
+      },
+      "solution": "The alternating sum is 3 - x + 5 - 2 = 6 - x, which must be a multiple of 11, so x = 6. Check: 3652 = 11 x 332.",
+      "hints": [
+        "Use alternating sums for 11.",
+        "6 - x must be 0 or plus/minus 11."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-147",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--two-or-three-count",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "How many integers from 1 to 100 are divisible by 2 or by 3?",
+      "answer": 67,
+      "validator": {
+        "kind": "expression",
+        "expr": "multiples(1,100,2)+multiples(1,100,3)-multiples(1,100,6)"
+      },
+      "solution": "50 are divisible by 2 and 33 by 3, but the 16 multiples of 6 are counted twice. 50 + 33 - 16 = 67.",
+      "hints": [
+        "Count each condition separately.",
+        "Subtract the numbers counted twice."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-148",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--multiples-in-window",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "How many multiples of 6 lie from 100 to 300, inclusive?",
+      "answer": 34,
+      "validator": {
+        "kind": "expression",
+        "expr": "multiples(100,300,6)"
+      },
+      "solution": "The first is 102 and the last is 300, so there are (300 - 102) / 6 + 1 = 34.",
+      "hints": [
+        "Find the first and last multiples in range.",
+        "Count terms, not gaps."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-149",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--neither-two-nor-three",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "How many integers from 1 to 60 are neither even nor multiples of 3?",
+      "answer": 20,
+      "validator": {
+        "kind": "expression",
+        "expr": "60 - multiples(1,60,2) - multiples(1,60,3) + multiples(1,60,6)"
+      },
+      "solution": "Even or multiple of 3: 30 + 20 - 10 = 40. The rest, 60 - 40 = 20, are neither.",
+      "hints": [
+        "Count the complement first.",
+        "Multiples of 6 belong to both groups."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-150",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--missing-digit-by-thirty-six",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "Find the digit x such that 2x56 is divisible by 36.",
+      "answer": 5,
+      "validator": {
+        "kind": "missing_digit",
+        "pattern": "2?56",
+        "divisor": 36
+      },
+      "solution": "56 is divisible by 4. For 9, the digit sum 13 + x must be a multiple of 9, so x = 5. Check: 2556 = 36 x 71.",
+      "hints": [
+        "36 = 4 x 9 with no common factor.",
+        "Check 4 with the last two digits."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-151",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--sum-of-multiples",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the sum of all multiples of 5 from 1 to 100?",
+      "answer": 1050,
+      "validator": {
+        "kind": "expression",
+        "expr": "5*(20*21//2)"
+      },
+      "solution": "The multiples are 5 x 1, ..., 5 x 20, so the sum is 5 x (1 + ... + 20) = 5 x 210 = 1050.",
+      "hints": [
+        "Factor out 5.",
+        "1 + 2 + ... + 20 = 210."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-152",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--divisible-by-both",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "How many integers from 1 to 500 are divisible by both 6 and 8?",
+      "answer": 20,
+      "validator": {
+        "kind": "expression",
+        "expr": "multiples(1,500,lcm(6,8))"
+      },
+      "solution": "Divisible by both means divisible by LCM(6, 8) = 24. 500 / 24 = 20 remainder 20, so 20 numbers.",
+      "hints": [
+        "Both at once means a common multiple.",
+        "Use the least common multiple, not 6 x 8."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-153",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--seven-or-eleven-count",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "How many integers from 1 to 200 are divisible by 7 or 11?",
+      "answer": 44,
+      "validator": {
+        "kind": "expression",
+        "expr": "multiples(1,200,7)+multiples(1,200,11)-multiples(1,200,77)"
+      },
+      "solution": "28 multiples of 7 plus 18 of 11, minus 2 multiples of 77 counted twice: 44.",
+      "hints": [
+        "Count each divisor separately.",
+        "Which numbers are multiples of both?"
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-154",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--not-divisible-count",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "How many integers from 1 to 120 are not divisible by 4?",
+      "answer": 90,
+      "validator": {
+        "kind": "expression",
+        "expr": "120 - multiples(1,120,4)"
+      },
+      "solution": "There are 120 / 4 = 30 multiples of 4, so 120 - 30 = 90 are not.",
+      "hints": [
+        "Count the multiples first.",
+        "Then take the rest."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-155",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--next-common-multiple",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the smallest number greater than 200 that is divisible by 4, 5 and 6?",
+      "answer": 240,
+      "validator": {
+        "kind": "expression",
+        "expr": "(200//lcm(lcm(4,5),6)+1)*lcm(lcm(4,5),6)"
+      },
+      "solution": "LCM(4, 5, 6) = 60. The multiples are 60, 120, 180, 240, so the answer is 240.",
+      "hints": [
+        "A number divisible by all three is a multiple of their LCM.",
+        "LCM(4, 6) = 12, then include 5."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-156",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--missing-digit-by-forty-four",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "Find the digit x such that 7x36 is divisible by 44.",
+      "answer": 4,
+      "validator": {
+        "kind": "missing_digit",
+        "pattern": "7?36",
+        "divisor": 44
+      },
+      "solution": "36 is divisible by 4. For 11, 7 - x + 3 - 6 = 4 - x must be a multiple of 11, so x = 4. Check: 7436 = 44 x 169.",
+      "hints": [
+        "44 = 4 x 11.",
+        "Use the alternating sum for 11."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-157",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--three-way-inclusion-exclusion",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "How many integers from 1 to 300 are divisible by 3, 5 or 7?",
+      "answer": 162,
+      "validator": {
+        "kind": "expression",
+        "expr": "multiples(1,300,3)+multiples(1,300,5)+multiples(1,300,7)-multiples(1,300,15)-multiples(1,300,21)-multiples(1,300,35)+multiples(1,300,105)"
+      },
+      "solution": "100 + 60 + 42 - 20 - 14 - 8 + 2 = 162.",
+      "hints": [
+        "Add the three single counts.",
+        "Subtract pairs, then add back numbers divisible by all three."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-158",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--exactly-one-divisor",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "How many integers from 1 to 100 are divisible by exactly one of 4 and 6?",
+      "answer": 25,
+      "validator": {
+        "kind": "expression",
+        "expr": "multiples(1,100,4)+multiples(1,100,6)-2*multiples(1,100,12)"
+      },
+      "solution": "25 multiples of 4 and 16 of 6 include 8 multiples of 12 in both lists. Exactly one: 25 + 16 - 2 x 8 = 25.",
+      "hints": [
+        "Numbers divisible by both must be removed from both lists.",
+        "Both means divisible by 12."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-159",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--coprime-to-ninety",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "How many integers from 1 to 90 have no common factor greater than 1 with 90?",
+      "answer": 24,
+      "validator": {
+        "kind": "expression",
+        "expr": "coprime_count(1,90,90)"
+      },
+      "solution": "90 = 2 x 3^2 x 5. Removing multiples of 2, 3 or 5 leaves 90 x 1/2 x 2/3 x 4/5 = 24 numbers.",
+      "hints": [
+        "List the prime factors of 90.",
+        "Exclude multiples of each prime factor."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-160",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--digit-sum-multiple-of-nine",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "How many two-digit numbers have a digit sum that is a multiple of 9?",
+      "answer": 10,
+      "validator": {
+        "kind": "expression",
+        "expr": "multiples(10,99,9)"
+      },
+      "solution": "A number and its digit sum leave the same remainder on division by 9, so these are the two-digit multiples of 9: 18, 27, ..., 99. That is 10.",
+      "hints": [
+        "Relate the digit sum to divisibility by 9.",
+        "List the two-digit multiples of 9."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-161",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--trailing-zeros-25-factorial",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "How many zeros does 25! end with?",
+      "answer": 6,
+      "validator": {
+        "kind": "expression",
+        "expr": "trailing_zeros_factorial(25)"
+      },
+      "solution": "Each zero needs a factor 10 = 2 x 5. Count the 5s: 25 / 5 = 5, plus 25 / 25 = 1, so 6 zeros.",
+      "hints": [
+        "There are more factors of 2 than of 5.",
+        "25 contributes two factors of 5."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-162",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--three-consecutive-product",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "What is the largest integer that always divides the product of any three consecutive integers?",
+      "answer": 6,
+      "validator": {
+        "kind": "expression",
+        "expr": "gcd(gcd(1*2*3, 2*3*4), 3*4*5)"
+      },
+      "solution": "Among three consecutive integers one is even and one is a multiple of 3, so 6 always divides the product. 1 x 2 x 3 = 6 shows nothing larger works. The answer is 6.",
+      "hints": [
+        "Try 1 x 2 x 3 first.",
+        "What must always appear among three consecutive integers?"
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-163",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--three-digit-multiples-of-eleven",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "How many three-digit numbers are divisible by 11?",
+      "answer": 81,
+      "validator": {
+        "kind": "expression",
+        "expr": "multiples(100,999,11)"
+      },
+      "solution": "The first is 110 and the last is 990, so there are (990 - 110) / 11 + 1 = 81.",
+      "hints": [
+        "Find the smallest and largest three-digit multiples.",
+        "Count the terms."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-164",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--twelve-not-eighteen",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "How many integers from 1 to 1000 are divisible by 12 but not by 18?",
+      "answer": 56,
+      "validator": {
+        "kind": "expression",
+        "expr": "multiples(1,1000,12)-multiples(1,1000,lcm(12,18))"
+      },
+      "solution": "There are 83 multiples of 12. Those also divisible by 18 are multiples of LCM = 36: 27 of them. 83 - 27 = 56.",
+      "hints": [
+        "Divisible by 12 and 18 means divisible by their LCM.",
+        "LCM(12, 18) = 36."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-165",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--even-not-multiple-of-three",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "How many even integers from 200 to 400, inclusive, are not divisible by 3?",
+      "answer": 68,
+      "validator": {
+        "kind": "expression",
+        "expr": "multiples(200,400,2)-multiples(200,400,6)"
+      },
+      "solution": "There are 101 even numbers. Even and divisible by 3 means divisible by 6: 204 to 396 gives 33. 101 - 33 = 68.",
+      "hints": [
+        "Count the even numbers first.",
+        "Even multiples of 3 are multiples of 6."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-166",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--largest-n-with-count",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "Exactly 25 multiples of 8 lie from 1 to N inclusive. What is the largest possible N?",
+      "answer": 207,
+      "validator": {
+        "kind": "expression",
+        "expr": "26*8-1"
+      },
+      "solution": "The 25th multiple is 200 and the 26th is 208, so N can be at most 207.",
+      "hints": [
+        "Where is the 26th multiple?",
+        "N must stop just before it."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-167",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--power-of-three-in-factorial",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 5,
+      "prompt": "What is the largest k such that 3^k divides 50!?",
+      "answer": 22,
+      "validator": {
+        "kind": "expression",
+        "expr": "50//3+50//9+50//27"
+      },
+      "solution": "Count factors of 3: 50 / 3 = 16, 50 / 9 = 5, 50 / 27 = 1. Total k = 22.",
+      "hints": [
+        "Multiples of 9 contribute an extra factor of 3.",
+        "Add the whole-number parts of 50/3, 50/9, 50/27."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-168",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--none-of-two-three-five",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 5,
+      "prompt": "How many integers from 1 to 1000 are divisible by none of 2, 3 and 5?",
+      "answer": 266,
+      "validator": {
+        "kind": "expression",
+        "expr": "1000-(multiples(1,1000,2)+multiples(1,1000,3)+multiples(1,1000,5)-multiples(1,1000,6)-multiples(1,1000,10)-multiples(1,1000,15)+multiples(1,1000,30))"
+      },
+      "solution": "Divisible by at least one: 500 + 333 + 200 - 166 - 100 - 66 + 33 = 734. So 1000 - 734 = 266 are divisible by none.",
+      "hints": [
+        "Count the complement with inclusion-exclusion.",
+        "Pairs: 6, 10, 15; all three: 30."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-169",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--sum-multiples-three-or-five",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 5,
+      "prompt": "What is the sum of all positive integers below 100 that are multiples of 3 or 5?",
+      "answer": 2318,
+      "validator": {
+        "kind": "expression",
+        "expr": "3*(33*34//2)+5*(19*20//2)-15*(6*7//2)"
+      },
+      "solution": "Multiples of 3 sum to 1683 and of 5 to 950. Multiples of 15 (sum 315) are counted twice: 1683 + 950 - 315 = 2318.",
+      "hints": [
+        "Below 100 excludes 100.",
+        "Subtract the multiples of 15 once."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-170",
+      "skill_id": "divisibility",
+      "family_id": "divisibility--linear-divisibility",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 5,
+      "prompt": "What is the smallest positive integer n such that 7n + 3 is divisible by 11?",
+      "answer": 9,
+      "validator": {
+        "kind": "expression",
+        "expr": "smallest_n_linear(7,3,11)"
+      },
+      "solution": "We need 7n to leave remainder 8 on division by 11. Trying n = 1, 2, ... gives n = 9: 7 x 9 + 3 = 66 = 11 x 6.",
+      "hints": [
+        "Work with remainders on division by 11.",
+        "Try small values of n systematically."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-171",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--factors-of-a-prime",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 1,
+      "prompt": "How many positive factors does 29 have?",
+      "answer": 2,
+      "validator": {
+        "kind": "expression",
+        "expr": "factor_count(29)"
+      },
+      "solution": "29 is prime, so its only factors are 1 and 29: 2 factors.",
+      "hints": [
+        "Try dividing 29 by 2, 3 and 5.",
+        "A prime has exactly two factors."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-172",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--primes-below-twenty",
+      "purpose": "verification",
+      "difficulty": "introductory",
+      "difficulty_level": 1,
+      "prompt": "How many prime numbers are less than 20?",
+      "answer": 8,
+      "validator": {
+        "kind": "expression",
+        "expr": "prime_count(1,19)"
+      },
+      "solution": "They are 2, 3, 5, 7, 11, 13, 17 and 19: 8 primes.",
+      "hints": [
+        "1 is not prime.",
+        "2 is the only even prime."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-173",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--smallest-prime-factor",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 1,
+      "prompt": "What is the smallest prime factor of 91?",
+      "answer": 7,
+      "validator": {
+        "kind": "expression",
+        "expr": "smallest_prime_factor(91)"
+      },
+      "solution": "91 is odd, its digit sum is not a multiple of 3, and it does not end in 0 or 5. 91 = 7 x 13, so the answer is 7.",
+      "hints": [
+        "Test primes in order: 2, 3, 5, 7.",
+        "91 is not prime."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-174",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--factor-count-twenty-four",
+      "purpose": "verification",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "How many positive factors does 24 have?",
+      "answer": 8,
+      "validator": {
+        "kind": "expression",
+        "expr": "factor_count(24)"
+      },
+      "solution": "Factor pairs: 1 x 24, 2 x 12, 3 x 8, 4 x 6. That is 8 factors.",
+      "hints": [
+        "List factor pairs.",
+        "Stop when the pairs meet."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-175",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--largest-prime-factor",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "What is the largest prime factor of 84?",
+      "answer": 7,
+      "validator": {
+        "kind": "expression",
+        "expr": "largest_prime_factor(84)"
+      },
+      "solution": "84 = 2 x 2 x 3 x 7, so the largest prime factor is 7.",
+      "hints": [
+        "Divide by small primes repeatedly.",
+        "Keep going until 1 is left."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-176",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--primes-between-thirty-fifty",
+      "purpose": "verification",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "How many prime numbers are there between 30 and 50?",
+      "answer": 5,
+      "validator": {
+        "kind": "expression",
+        "expr": "prime_count(30,50)"
+      },
+      "solution": "They are 31, 37, 41, 43 and 47: 5 primes.",
+      "hints": [
+        "Check odd numbers only.",
+        "Test divisibility by 3, 5 and 7."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-177",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--sum-of-factors-twelve",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "What is the sum of all positive factors of 12?",
+      "answer": 28,
+      "validator": {
+        "kind": "expression",
+        "expr": "factor_sum(12)"
+      },
+      "solution": "1 + 2 + 3 + 4 + 6 + 12 = 28.",
+      "hints": [
+        "List all factors first.",
+        "Include 1 and 12."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-178",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--distinct-prime-factors",
+      "purpose": "verification",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "How many distinct prime factors does 210 have?",
+      "answer": 4,
+      "validator": {
+        "kind": "expression",
+        "expr": "prime_factor_count(210)"
+      },
+      "solution": "210 = 2 x 3 x 5 x 7, so it has 4 distinct prime factors.",
+      "hints": [
+        "Factor 210 into primes.",
+        "210 = 21 x 10."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-179",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--composites-up-to-twenty",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "How many composite numbers are there from 1 to 20?",
+      "answer": 11,
+      "validator": {
+        "kind": "expression",
+        "expr": "20 - prime_count(1,20) - 1"
+      },
+      "solution": "Of the 20 numbers, 8 are prime and 1 is neither prime nor composite. That leaves 11 composites.",
+      "hints": [
+        "1 is neither prime nor composite.",
+        "Count the primes first."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-180",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--factor-count-from-primes",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "How many positive factors does 72 = 2^3 x 3^2 have?",
+      "answer": 12,
+      "validator": {
+        "kind": "expression",
+        "expr": "factor_count(72)"
+      },
+      "solution": "Each factor is 2^a x 3^b with a from 0 to 3 and b from 0 to 2: 4 x 3 = 12 factors.",
+      "hints": [
+        "Use the exponents in the prime factorisation.",
+        "Add 1 to each exponent and multiply."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-181",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--odd-factor-count",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "How many odd factors does 120 have?",
+      "answer": 4,
+      "validator": {
+        "kind": "expression",
+        "expr": "odd_factor_count(120)"
+      },
+      "solution": "120 = 2^3 x 3 x 5. Odd factors use no 2, so they are the factors of 15: 1, 3, 5, 15. That is 4.",
+      "hints": [
+        "Remove all factors of 2.",
+        "Count the factors of what remains."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-182",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--even-factor-count",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "How many even factors does 72 have?",
+      "answer": 9,
+      "validator": {
+        "kind": "expression",
+        "expr": "even_factor_count(72)"
+      },
+      "solution": "72 has 12 factors. Its odd factors are those of 9: 3 of them. So 12 - 3 = 9 are even.",
+      "hints": [
+        "Even factors = all factors - odd factors.",
+        "72 = 8 x 9."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-183",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--square-factor-count",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "How many positive factors does 144 have?",
+      "answer": 15,
+      "validator": {
+        "kind": "expression",
+        "expr": "factor_count(144)"
+      },
+      "solution": "144 = 2^4 x 3^2, so it has (4 + 1)(2 + 1) = 15 factors. A perfect square has an odd number of factors.",
+      "hints": [
+        "Write 144 as a product of prime powers.",
+        "The square root 12 pairs with itself."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-184",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--sum-of-prime-factors",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the sum of the distinct prime factors of 330?",
+      "answer": 21,
+      "validator": {
+        "kind": "expression",
+        "expr": "prime_factor_sum(330)"
+      },
+      "solution": "330 = 2 x 3 x 5 x 11, so the sum is 2 + 3 + 5 + 11 = 21.",
+      "hints": [
+        "330 = 33 x 10.",
+        "Add each prime once."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-185",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--primes-fifty-to-hundred",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "How many prime numbers are there between 50 and 100?",
+      "answer": 10,
+      "validator": {
+        "kind": "expression",
+        "expr": "prime_count(50,100)"
+      },
+      "solution": "They are 53, 59, 61, 67, 71, 73, 79, 83, 89 and 97: 10 primes.",
+      "hints": [
+        "Only test divisibility by 2, 3, 5 and 7.",
+        "Why is 7 the largest prime you need to test?"
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-186",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--factors-that-are-multiples",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "How many factors of 60 are multiples of 3?",
+      "answer": 6,
+      "validator": {
+        "kind": "expression",
+        "expr": "factor_count(60//3)"
+      },
+      "solution": "A factor of 60 that is a multiple of 3 is 3 times a factor of 20. 20 has 6 factors, so the answer is 6.",
+      "hints": [
+        "Write such a factor as 3k.",
+        "3k divides 60 exactly when k divides 20."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-187",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--factor-pair-count",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "In how many ways can 36 be written as a x b with positive integers a <= b?",
+      "answer": 5,
+      "validator": {
+        "kind": "expression",
+        "expr": "(factor_count(36)+1)//2"
+      },
+      "solution": "The pairs are 1 x 36, 2 x 18, 3 x 12, 4 x 9 and 6 x 6: 5 ways.",
+      "hints": [
+        "List factor pairs from the smallest factor.",
+        "Count 6 x 6 once."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-188",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--sum-factors-perfect",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the sum of all positive factors of 28?",
+      "answer": 56,
+      "validator": {
+        "kind": "expression",
+        "expr": "factor_sum(28)"
+      },
+      "solution": "1 + 2 + 4 + 7 + 14 + 28 = 56. (Without 28 itself the sum is 28, so 28 is a perfect number.)",
+      "hints": [
+        "List factor pairs.",
+        "Include 28 itself."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-189",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--largest-prime-below",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the largest prime number less than 100?",
+      "answer": 97,
+      "validator": {
+        "kind": "expression",
+        "expr": "smallest_prime_factor(97)"
+      },
+      "solution": "99 = 9 x 11 and 98 is even, but 97 has no factor among 2, 3, 5, 7. The answer is 97.",
+      "hints": [
+        "Work downwards from 99.",
+        "Test divisibility by 2, 3, 5 and 7."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-190",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--product-of-two-primes",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "91 is the product of two primes. What is their sum?",
+      "answer": 20,
+      "validator": {
+        "kind": "expression",
+        "expr": "smallest_prime_factor(91) + 91//smallest_prime_factor(91)"
+      },
+      "solution": "91 = 7 x 13, so the sum is 7 + 13 = 20.",
+      "hints": [
+        "Find the smallest prime that divides 91.",
+        "Divide to find the other prime."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-191",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--smallest-with-six-factors",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "What is the smallest positive integer with exactly 6 positive factors?",
+      "answer": 12,
+      "validator": {
+        "kind": "expression",
+        "expr": "smallest_with_factor_count(6)"
+      },
+      "solution": "6 factors means the form p^5 or p^2 x q. The smallest options are 32 and 2^2 x 3 = 12, so the answer is 12.",
+      "hints": [
+        "How can 6 be written as a product of (exponent + 1) terms?",
+        "Use the smallest primes."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-192",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--factors-of-factorial",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "How many positive factors does 6! have?",
+      "answer": 30,
+      "validator": {
+        "kind": "expression",
+        "expr": "factor_count(720)"
+      },
+      "solution": "6! = 720 = 2^4 x 3^2 x 5, so it has 5 x 3 x 2 = 30 factors.",
+      "hints": [
+        "Collect the prime factors of 1 x 2 x ... x 6.",
+        "Add 1 to each exponent."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-193",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--trailing-zeros-100-factorial",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "How many zeros are at the end of 100!?",
+      "answer": 24,
+      "validator": {
+        "kind": "expression",
+        "expr": "trailing_zeros_factorial(100)"
+      },
+      "solution": "Count factors of 5: 100 / 5 = 20 plus 100 / 25 = 4, so 24 zeros.",
+      "hints": [
+        "Each zero needs one 2 and one 5.",
+        "Multiples of 25 give an extra 5."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-194",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--power-of-two-in-factorial",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "What is the largest k such that 2^k divides 30!?",
+      "answer": 26,
+      "validator": {
+        "kind": "expression",
+        "expr": "30//2+30//4+30//8+30//16"
+      },
+      "solution": "30 / 2 = 15, 30 / 4 = 7, 30 / 8 = 3, 30 / 16 = 1. k = 26.",
+      "hints": [
+        "Count multiples of 2, then of 4, 8 and 16.",
+        "Each power adds one more factor of 2."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-195",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--perfect-square-factors",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "How many factors of 360 are perfect squares?",
+      "answer": 4,
+      "validator": {
+        "kind": "expression",
+        "expr": "square_factor_count(360)"
+      },
+      "solution": "360 = 2^3 x 3^2 x 5. A square factor uses even exponents: 2^0 or 2^2, 3^0 or 3^2, and 5^0. That is 2 x 2 x 1 = 4 (1, 4, 9, 36).",
+      "hints": [
+        "In a perfect square every prime exponent is even.",
+        "List the allowed exponents for each prime."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-196",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--product-of-all-factors",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "The product of all positive factors of 36 equals 6^k. What is k?",
+      "answer": 9,
+      "validator": {
+        "kind": "expression",
+        "expr": "factor_count(36)"
+      },
+      "solution": "36 has 9 factors that pair up to 36, so the product is 36^(9/2) = 6^9. k = 9.",
+      "hints": [
+        "Pair each factor d with 36 / d.",
+        "36 = 6^2."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-197",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--sum-of-odd-factors",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "What is the sum of the odd factors of 360?",
+      "answer": 78,
+      "validator": {
+        "kind": "expression",
+        "expr": "factor_sum(45)"
+      },
+      "solution": "The odd factors of 360 = 8 x 45 are the factors of 45: 1 + 3 + 5 + 9 + 15 + 45 = 78.",
+      "hints": [
+        "Remove the power of 2.",
+        "Sum the factors of what remains."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-198",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--exactly-three-factors",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "How many integers from 1 to 100 have exactly three positive factors?",
+      "answer": 4,
+      "validator": {
+        "kind": "expression",
+        "expr": "prime_count(1,isqrt(100))"
+      },
+      "solution": "Only squares of primes have exactly three factors: 4, 9, 25 and 49. That is 4.",
+      "hints": [
+        "Try 4 and 9: list their factors.",
+        "What must a number with three factors look like?"
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-199",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--factors-of-a-square",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "n = 2 x 3 x 5. How many positive factors does n^2 have?",
+      "answer": 27,
+      "validator": {
+        "kind": "expression",
+        "expr": "factor_count((2*3*5)**2)"
+      },
+      "solution": "n^2 = 2^2 x 3^2 x 5^2, so it has 3 x 3 x 3 = 27 factors.",
+      "hints": [
+        "Square each prime power.",
+        "Add 1 to each exponent and multiply."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-200",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--sum-of-primes-below-thirty",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "What is the sum of all prime numbers less than 30?",
+      "answer": 129,
+      "validator": {
+        "kind": "expression",
+        "expr": "prime_sum(1,29)"
+      },
+      "solution": "2 + 3 + 5 + 7 + 11 + 13 + 17 + 19 + 23 + 29 = 129.",
+      "hints": [
+        "List the primes carefully.",
+        "There are ten of them."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-201",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--largest-proper-factor",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "What is the largest factor of 391 other than 391 itself?",
+      "answer": 23,
+      "validator": {
+        "kind": "expression",
+        "expr": "391//smallest_prime_factor(391)"
+      },
+      "solution": "The smallest prime factor of 391 is 17 (391 = 17 x 23). The largest proper factor is 391 / 17 = 23.",
+      "hints": [
+        "The largest proper factor is 391 divided by its smallest prime factor.",
+        "Test primes up to 19."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-202",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--odd-number-of-factors",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 5,
+      "prompt": "How many positive integers up to 50 have an odd number of positive factors?",
+      "answer": 7,
+      "validator": {
+        "kind": "expression",
+        "expr": "isqrt(50)"
+      },
+      "solution": "Factors pair up except for a square root, so exactly the perfect squares qualify: 1, 4, 9, 16, 25, 36, 49. That is 7.",
+      "hints": [
+        "Think about factor pairs.",
+        "When does a factor pair with itself?"
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-203",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--exactly-four-factors",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 5,
+      "prompt": "How many integers from 1 to 30 have exactly four positive factors?",
+      "answer": 9,
+      "validator": {
+        "kind": "expression",
+        "expr": "count_with_factor_count(1,30,4)"
+      },
+      "solution": "Four factors means p^3 or p x q. These are 6, 8, 10, 14, 15, 21, 22, 26, 27: 9 numbers.",
+      "hints": [
+        "Four factors arise from p^3 or from two different primes.",
+        "Check cubes of primes as well."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-204",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--power-of-twelve-in-factorial",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 5,
+      "prompt": "What is the largest k such that 12^k divides 20!?",
+      "answer": 8,
+      "validator": {
+        "kind": "expression",
+        "expr": "min((20//2+20//4+20//8+20//16)//2, 20//3+20//9)"
+      },
+      "solution": "12^k = 2^(2k) x 3^k. 20! has 18 factors of 2 (allowing k up to 9) and 8 factors of 3. The limit is k = 8.",
+      "hints": [
+        "Split 12 into prime factors.",
+        "Find which prime runs out first."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-205",
+      "skill_id": "primes-factors",
+      "family_id": "primes-factors--sum-of-factors-formula",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 5,
+      "prompt": "What is the sum of all positive factors of 144 = 2^4 x 3^2?",
+      "answer": 403,
+      "validator": {
+        "kind": "expression",
+        "expr": "factor_sum(144)"
+      },
+      "solution": "The sum is (1 + 2 + 4 + 8 + 16)(1 + 3 + 9) = 31 x 13 = 403.",
+      "hints": [
+        "Each factor is 2^a x 3^b.",
+        "Multiply the sums of the powers of each prime."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-206",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--hcf-of-two",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 1,
+      "prompt": "What is the HCF of 12 and 18?",
+      "answer": 6,
+      "validator": {
+        "kind": "expression",
+        "expr": "gcd(12,18)"
+      },
+      "solution": "Factors of 12 are 1, 2, 3, 4, 6, 12; of 18 are 1, 2, 3, 6, 9, 18. The highest common factor is 6.",
+      "hints": [
+        "List the factors of each number.",
+        "Pick the largest one in both lists."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-207",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--lcm-of-two",
+      "purpose": "verification",
+      "difficulty": "introductory",
+      "difficulty_level": 1,
+      "prompt": "What is the LCM of 4 and 6?",
+      "answer": 12,
+      "validator": {
+        "kind": "expression",
+        "expr": "lcm(4,6)"
+      },
+      "solution": "Multiples of 6 are 6, 12, ...; 12 is the first that is also a multiple of 4. LCM = 12.",
+      "hints": [
+        "List multiples of the larger number.",
+        "Stop at the first one the smaller number divides."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-208",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--count-common-factors",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 1,
+      "prompt": "How many common factors do 12 and 16 have?",
+      "answer": 3,
+      "validator": {
+        "kind": "expression",
+        "expr": "factor_count(gcd(12,16))"
+      },
+      "solution": "The common factors are the factors of HCF(12, 16) = 4: 1, 2 and 4. That is 3.",
+      "hints": [
+        "Common factors divide the HCF.",
+        "Find the HCF first."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-209",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--hcf-of-three",
+      "purpose": "verification",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "What is the HCF of 24, 36 and 60?",
+      "answer": 12,
+      "validator": {
+        "kind": "expression",
+        "expr": "gcd(gcd(24,36),60)"
+      },
+      "solution": "24 = 2^3 x 3, 36 = 2^2 x 3^2, 60 = 2^2 x 3 x 5. Take the lowest powers: 2^2 x 3 = 12.",
+      "hints": [
+        "Use prime factorisation.",
+        "Take each common prime with its lowest power."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-210",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--lcm-of-three",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "What is the LCM of 6, 8 and 10?",
+      "answer": 120,
+      "validator": {
+        "kind": "expression",
+        "expr": "lcm(lcm(6,8),10)"
+      },
+      "solution": "6 = 2 x 3, 8 = 2^3, 10 = 2 x 5. Take the highest powers: 2^3 x 3 x 5 = 120.",
+      "hints": [
+        "Use prime factorisation.",
+        "Take each prime with its highest power."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-211",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--flashing-lights",
+      "purpose": "verification",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "Two lights flash every 6 seconds and every 10 seconds. They flash together now. After how many seconds will they next flash together?",
+      "answer": 30,
+      "validator": {
+        "kind": "expression",
+        "expr": "lcm(6,10)"
+      },
+      "solution": "They flash together at common multiples of 6 and 10. The least is 30 seconds.",
+      "hints": [
+        "Times when both flash are common multiples.",
+        "You want the first one."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-212",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--largest-square-tile",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "What is the side length, in cm, of the largest square tile that exactly covers a 48 cm by 60 cm floor without cutting?",
+      "answer": 12,
+      "validator": {
+        "kind": "expression",
+        "expr": "gcd(48,60)"
+      },
+      "solution": "The side must divide both 48 and 60. The largest such length is HCF(48, 60) = 12 cm.",
+      "hints": [
+        "The tile side must fit exactly along both edges.",
+        "Greatest + divides both = HCF."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-213",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--other-number-from-product",
+      "purpose": "verification",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "The HCF of two numbers is 6 and their LCM is 72. One number is 18. What is the other?",
+      "answer": 24,
+      "validator": {
+        "kind": "expression",
+        "expr": "6*72//18"
+      },
+      "solution": "HCF x LCM = product of the numbers, so the other number is 6 x 72 / 18 = 24.",
+      "hints": [
+        "Use HCF x LCM = a x b.",
+        "Divide by the known number."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-214",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--lcm-of-coprimes",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "What is the LCM of 7 and 9?",
+      "answer": 63,
+      "validator": {
+        "kind": "expression",
+        "expr": "lcm(7,9)"
+      },
+      "solution": "7 and 9 share no factor other than 1, so their LCM is 7 x 9 = 63.",
+      "hints": [
+        "Do 7 and 9 have a common factor?",
+        "For coprime numbers the LCM is the product."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-215",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--fewest-single-group-rows",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "42 boys and 56 girls stand in rows. Each row has only boys or only girls, and every row has the same number of students. What is the fewest number of rows?",
+      "answer": 7,
+      "validator": {
+        "kind": "expression",
+        "expr": "42//gcd(42,56)+56//gcd(42,56)"
+      },
+      "solution": "Fewest rows means the largest row size that divides both 42 and 56: HCF = 14. That gives 3 + 4 = 7 rows.",
+      "hints": [
+        "Fewest rows means largest rows.",
+        "The row size must divide both groups."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-216",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--same-remainder-divisor",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the greatest number that divides 43, 91 and 183 leaving the same remainder each time?",
+      "answer": 4,
+      "validator": {
+        "kind": "expression",
+        "expr": "gcd(gcd(91-43,183-91),183-43)"
+      },
+      "solution": "If the remainders are equal, the divisor divides every difference: 48, 92 and 140. Their HCF is 4.",
+      "hints": [
+        "Subtract the numbers in pairs.",
+        "The remainder cancels in each difference."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-217",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--least-with-common-remainder",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the smallest number greater than 3 that leaves remainder 3 when divided by 5, 6 and 8?",
+      "answer": 123,
+      "validator": {
+        "kind": "expression",
+        "expr": "lcm(lcm(5,6),8)+3"
+      },
+      "solution": "The number minus 3 is a common multiple of 5, 6 and 8. LCM = 120, so the number is 123.",
+      "hints": [
+        "Subtract the remainder first.",
+        "Find the LCM of 5, 6, 8."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-218",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--divisor-with-given-remainders",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the greatest number that divides 70 and 125 leaving remainders 5 and 8 respectively?",
+      "answer": 13,
+      "validator": {
+        "kind": "expression",
+        "expr": "gcd(70-5,125-8)"
+      },
+      "solution": "The divisor divides 70 - 5 = 65 and 125 - 8 = 117. HCF(65, 117) = 13.",
+      "hints": [
+        "Remove each remainder from its number.",
+        "Then find the HCF."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-219",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--lcm-from-ratio",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "Two numbers are in the ratio 3 : 4 and their HCF is 5. What is their LCM?",
+      "answer": 60,
+      "validator": {
+        "kind": "expression",
+        "expr": "lcm(3*5,4*5)"
+      },
+      "solution": "The numbers are 15 and 20. Their LCM is 60.",
+      "hints": [
+        "Write the numbers as 3 x HCF and 4 x HCF.",
+        "3 and 4 have no common factor."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-220",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--rope-pieces",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "Ropes of 84 m, 126 m and 210 m are cut into equal pieces of the greatest possible length. How many pieces are there in total?",
+      "answer": 10,
+      "validator": {
+        "kind": "expression",
+        "expr": "84//gcd(gcd(84,126),210)+126//gcd(gcd(84,126),210)+210//gcd(gcd(84,126),210)"
+      },
+      "solution": "The piece length is HCF(84, 126, 210) = 42 m. That gives 2 + 3 + 5 = 10 pieces.",
+      "hints": [
+        "The piece length divides every rope length.",
+        "Divide each rope by the piece length."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-221",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--bus-departures",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "Buses leave a depot every 12, 18 and 20 minutes. All three leave together at 8:00. After how many minutes do they next leave together?",
+      "answer": 180,
+      "validator": {
+        "kind": "expression",
+        "expr": "lcm(lcm(12,18),20)"
+      },
+      "solution": "LCM(12, 18, 20) = 2^2 x 3^2 x 5 = 180 minutes.",
+      "hints": [
+        "Together again means a common multiple.",
+        "Use prime factorisation."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-222",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--pair-sum-from-hcf-lcm",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "Two numbers have HCF 12 and LCM 180, and neither number equals 12 or 180. What is their sum?",
+      "answer": 96,
+      "validator": {
+        "kind": "expression",
+        "expr": "12*3+12*5"
+      },
+      "solution": "Write the numbers as 12a and 12b with a x b = 180 / 12 = 15 and a, b sharing no factor. Excluding 1 and 15 leaves a = 3, b = 5: the numbers are 36 and 60, sum 96.",
+      "hints": [
+        "Write the numbers as HCF times coprime parts.",
+        "a x b = LCM / HCF."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-223",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--smallest-square-multiple",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the smallest perfect square divisible by 6, 9 and 15?",
+      "answer": 900,
+      "validator": {
+        "kind": "expression",
+        "expr": "lcm(lcm(6,9),15)*10"
+      },
+      "solution": "LCM(6, 9, 15) = 90 = 2 x 3^2 x 5. To make every exponent even multiply by 2 x 5 = 10, giving 900.",
+      "hints": [
+        "Start from the LCM.",
+        "Make every prime exponent even."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-224",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--largest-four-digit-common-multiple",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the largest four-digit number divisible by 12, 15 and 18?",
+      "answer": 9900,
+      "validator": {
+        "kind": "expression",
+        "expr": "9999//lcm(lcm(12,15),18)*lcm(lcm(12,15),18)"
+      },
+      "solution": "LCM(12, 15, 18) = 180. 9999 / 180 = 55 remainder 99, so the answer is 180 x 55 = 9900.",
+      "hints": [
+        "Find the LCM first.",
+        "Take the largest multiple below 10000."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-225",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--meeting-count",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "Ann visits the library every 4 days, Ben every 6 days and Cy every 9 days. All three are there today. How many more times will all three be there together in the next 365 days?",
+      "answer": 10,
+      "validator": {
+        "kind": "expression",
+        "expr": "365//lcm(lcm(4,6),9)"
+      },
+      "solution": "They meet every LCM(4, 6, 9) = 36 days. 365 / 36 = 10 remainder 5, so 10 more times.",
+      "hints": [
+        "How often do all three coincide?",
+        "Count multiples of that period up to 365."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-226",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--pairs-with-hcf-and-lcm",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "How many pairs of positive integers (a, b) with a < b have HCF 6 and LCM 180?",
+      "answer": 4,
+      "validator": {
+        "kind": "expression",
+        "expr": "factor_count(30)//2"
+      },
+      "solution": "Write a = 6x, b = 6y with x and y coprime and xy = 30. The pairs are (1, 30), (2, 15), (3, 10), (5, 6): 4 pairs.",
+      "hints": [
+        "Divide both numbers by the HCF.",
+        "Split 30 into two coprime factors."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-227",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--one-short-remainders",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "What is the smallest positive number that leaves remainders 3, 4 and 5 when divided by 4, 5 and 6 respectively?",
+      "answer": 59,
+      "validator": {
+        "kind": "expression",
+        "expr": "lcm(lcm(4,5),6)-1"
+      },
+      "solution": "Each remainder is one less than the divisor, so the number plus 1 is a multiple of 4, 5 and 6. LCM = 60, so the number is 59.",
+      "hints": [
+        "Compare each remainder with its divisor.",
+        "Add 1 to the number."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-228",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--large-same-remainder",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "What is the largest number that divides 1305, 4665 and 6905 leaving the same remainder each time?",
+      "answer": 1120,
+      "validator": {
+        "kind": "expression",
+        "expr": "gcd(gcd(4665-1305,6905-4665),6905-1305)"
+      },
+      "solution": "The differences are 3360, 2240 and 5600. Their HCF is 1120.",
+      "hints": [
+        "Use differences, as the remainder cancels.",
+        "Find the HCF of the differences."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-229",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--gear-turns",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "Two meshing gears have 24 and 36 teeth. A marked pair of teeth touches now. After how many full turns of the smaller gear do they touch again?",
+      "answer": 3,
+      "validator": {
+        "kind": "expression",
+        "expr": "lcm(24,36)//24"
+      },
+      "solution": "They touch again after LCM(24, 36) = 72 teeth pass, which is 72 / 24 = 3 turns of the smaller gear.",
+      "hints": [
+        "Count teeth passing the contact point.",
+        "Then convert teeth to turns."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-230",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--three-digit-common-multiples",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "How many three-digit numbers are divisible by 6, 8 and 10?",
+      "answer": 8,
+      "validator": {
+        "kind": "expression",
+        "expr": "multiples(100,999,lcm(lcm(6,8),10))"
+      },
+      "solution": "Such numbers are multiples of LCM = 120: 120, 240, ..., 960. That is 8.",
+      "hints": [
+        "Find the LCM.",
+        "Count its three-digit multiples."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-231",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--lcm-one-to-ten",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "What is the LCM of all the integers from 1 to 10?",
+      "answer": 2520,
+      "validator": {
+        "kind": "expression",
+        "expr": "lcm(lcm(lcm(lcm(lcm(lcm(lcm(lcm(lcm(1,2),3),4),5),6),7),8),9),10)"
+      },
+      "solution": "Take the highest prime powers up to 10: 2^3 x 3^2 x 5 x 7 = 2520.",
+      "hints": [
+        "Which prime powers are at most 10?",
+        "8 = 2^3 and 9 = 3^2."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-232",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--tile-count",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "A floor measuring 378 cm by 525 cm is covered with the largest possible identical square tiles. How many tiles are needed?",
+      "answer": 450,
+      "validator": {
+        "kind": "expression",
+        "expr": "(378//gcd(378,525))*(525//gcd(378,525))"
+      },
+      "solution": "The tile side is HCF(378, 525) = 21 cm. That gives 18 x 25 = 450 tiles.",
+      "hints": [
+        "First find the tile side.",
+        "Then count tiles along each edge."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-233",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--bells-in-six-hours",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "Three bells ring every 15, 20 and 30 minutes and ring together at noon. How many times do they ring together from noon to 6 pm, counting both noon and 6 pm?",
+      "answer": 7,
+      "validator": {
+        "kind": "expression",
+        "expr": "6*60//lcm(lcm(15,20),30)+1"
+      },
+      "solution": "They ring together every LCM = 60 minutes: at 12, 1, 2, 3, 4, 5 and 6. That is 7 times.",
+      "hints": [
+        "Find how often they coincide.",
+        "Count both endpoints."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-234",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--pairs-from-sum-and-hcf",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "Two numbers have sum 216 and HCF 27. How many such pairs of positive integers exist (order does not matter)?",
+      "answer": 2,
+      "validator": {
+        "kind": "expression",
+        "expr": "coprime_count(1,7,8)//2"
+      },
+      "solution": "Write them as 27x and 27y with x + y = 8 and x, y coprime. The options are (1, 7) and (3, 5): 2 pairs.",
+      "hints": [
+        "Divide both numbers by the HCF.",
+        "x and y must share no common factor."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-235",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--jar-of-sweets",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "A jar holds between 100 and 200 sweets. Grouped in 6s, 8s or 9s, there is always 1 left over. How many sweets are there?",
+      "answer": 145,
+      "validator": {
+        "kind": "expression",
+        "expr": "(100//lcm(lcm(6,8),9)+1)*lcm(lcm(6,8),9)+1"
+      },
+      "solution": "The number minus 1 is a multiple of LCM(6, 8, 9) = 72. Between 100 and 200 that gives 144 + 1 = 145.",
+      "hints": [
+        "Remove the leftover sweet first.",
+        "Find a common multiple in range."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-236",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--hcf-of-prime-powers",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "What is the HCF of 2^4 x 3^2 x 5 and 2^2 x 3^3 x 7?",
+      "answer": 36,
+      "validator": {
+        "kind": "expression",
+        "expr": "gcd(2**4*3**2*5, 2**2*3**3*7)"
+      },
+      "solution": "Take common primes with the lowest powers: 2^2 x 3^2 = 36.",
+      "hints": [
+        "Only primes in both numbers count.",
+        "Use the smaller exponent."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-237",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--three-remainder-conditions",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 5,
+      "prompt": "What is the smallest positive integer that leaves remainder 2 on division by 3, remainder 3 on division by 5, and remainder 2 on division by 7?",
+      "answer": 23,
+      "validator": {
+        "kind": "expression",
+        "expr": "smallest_with_remainders(3,2,5,3,7,2)"
+      },
+      "solution": "Remainder 2 on division by 3 and 7 means the number is 2 more than a multiple of 21: 2, 23, 44, ... The first with remainder 3 on division by 5 is 23.",
+      "hints": [
+        "Combine the two conditions with the same remainder.",
+        "Then test candidates against the third."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-238",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--pairs-with-given-lcm",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 5,
+      "prompt": "How many ordered pairs (a, b) of positive integers have LCM(a, b) = 12?",
+      "answer": 15,
+      "validator": {
+        "kind": "expression",
+        "expr": "(2*2+1)*(2*1+1)"
+      },
+      "solution": "12 = 2^2 x 3. For 2 the exponent pair needs maximum 2: 5 options. For 3 it needs maximum 1: 3 options. 5 x 3 = 15 pairs.",
+      "hints": [
+        "Treat each prime separately.",
+        "Count exponent pairs whose maximum is fixed."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-239",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--hcf-from-sum-and-lcm",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 5,
+      "prompt": "Two numbers have sum 45 and LCM 54. What is their HCF?",
+      "answer": 9,
+      "validator": {
+        "kind": "expression",
+        "expr": "gcd(45,54)"
+      },
+      "solution": "The HCF divides both the sum and the LCM, and in fact equals HCF(45, 54) = 9. (The numbers are 18 and 27.)",
+      "hints": [
+        "Write the numbers as h x a and h x b with a, b coprime.",
+        "a + b and a x b share no factor."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-240",
+      "skill_id": "hcf-lcm",
+      "family_id": "hcf-lcm--max-hcf-for-sum",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 5,
+      "prompt": "Two positive integers add up to 1001. What is the largest possible value of their HCF?",
+      "answer": 143,
+      "validator": {
+        "kind": "expression",
+        "expr": "1001//smallest_prime_factor(1001)"
+      },
+      "solution": "The HCF must divide 1001 and be less than it. 1001 = 7 x 11 x 13, so the largest proper factor is 143 (143 + 858).",
+      "hints": [
+        "The HCF divides the sum.",
+        "The two parts must both be positive."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-241",
+      "skill_id": "remainders",
+      "family_id": "remainders--basic-remainder",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 1,
+      "prompt": "What is the remainder when 47 is divided by 5?",
+      "answer": 2,
+      "validator": {
+        "kind": "expression",
+        "expr": "47%5"
+      },
+      "solution": "47 = 5 x 9 + 2, so the remainder is 2.",
+      "hints": [
+        "Find the largest multiple of 5 below 47.",
+        "The remainder is less than 5."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-242",
+      "skill_id": "remainders",
+      "family_id": "remainders--basic-quotient",
+      "purpose": "verification",
+      "difficulty": "introductory",
+      "difficulty_level": 1,
+      "prompt": "What is the quotient when 100 is divided by 7?",
+      "answer": 14,
+      "validator": {
+        "kind": "expression",
+        "expr": "100//7"
+      },
+      "solution": "100 = 7 x 14 + 2, so the quotient is 14.",
+      "hints": [
+        "How many 7s fit into 100?",
+        "7 x 14 = 98."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-243",
+      "skill_id": "remainders",
+      "family_id": "remainders--rebuild-dividend",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 1,
+      "prompt": "A number divided by 6 gives quotient 9 and remainder 4. What is the number?",
+      "answer": 58,
+      "validator": {
+        "kind": "expression",
+        "expr": "6*9+4"
+      },
+      "solution": "Number = divisor x quotient + remainder = 6 x 9 + 4 = 58.",
+      "hints": [
+        "Use n = dq + r.",
+        "Multiply first, then add."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-244",
+      "skill_id": "remainders",
+      "family_id": "remainders--remainder-by-nine-digit-sum",
+      "purpose": "verification",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "What is the remainder when 1234 is divided by 9?",
+      "answer": 1,
+      "validator": {
+        "kind": "expression",
+        "expr": "1234%9"
+      },
+      "solution": "A number leaves the same remainder as its digit sum on division by 9. 1 + 2 + 3 + 4 = 10, which leaves 1.",
+      "hints": [
+        "Add the digits.",
+        "Reduce the digit sum by 9."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-245",
+      "skill_id": "remainders",
+      "family_id": "remainders--remainder-by-ten",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "What is the remainder when 7893 is divided by 10?",
+      "answer": 3,
+      "validator": {
+        "kind": "expression",
+        "expr": "7893%10"
+      },
+      "solution": "The remainder on division by 10 is the units digit: 3.",
+      "hints": [
+        "Look at the last digit.",
+        "7890 is a multiple of 10."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-246",
+      "skill_id": "remainders",
+      "family_id": "remainders--remainder-of-sum",
+      "purpose": "verification",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "What is the remainder when 25 + 37 + 49 is divided by 6?",
+      "answer": 3,
+      "validator": {
+        "kind": "expression",
+        "expr": "(25+37+49)%6"
+      },
+      "solution": "Each number leaves remainder 1 on division by 6, so the sum leaves 1 + 1 + 1 = 3.",
+      "hints": [
+        "Find each remainder first.",
+        "Add the remainders and reduce."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-247",
+      "skill_id": "remainders",
+      "family_id": "remainders--remainder-of-product",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "What is the remainder when 17 x 23 is divided by 5?",
+      "answer": 1,
+      "validator": {
+        "kind": "expression",
+        "expr": "(17*23)%5"
+      },
+      "solution": "17 leaves 2 and 23 leaves 3, so the product leaves 2 x 3 = 6, which reduces to 1.",
+      "hints": [
+        "Replace each factor by its remainder.",
+        "Reduce the result again."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-248",
+      "skill_id": "remainders",
+      "family_id": "remainders--remainder-by-four",
+      "purpose": "verification",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "What is the remainder when 98765 is divided by 4?",
+      "answer": 1,
+      "validator": {
+        "kind": "expression",
+        "expr": "98765%4"
+      },
+      "solution": "Only the last two digits matter: 65 = 4 x 16 + 1, so the remainder is 1.",
+      "hints": [
+        "100 is a multiple of 4.",
+        "Divide 65 by 4."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-249",
+      "skill_id": "remainders",
+      "family_id": "remainders--largest-possible-remainder",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "What is the largest possible remainder when an integer is divided by 13?",
+      "answer": 12,
+      "validator": {
+        "kind": "expression",
+        "expr": "13-1"
+      },
+      "solution": "A remainder is always less than the divisor, so the largest possible remainder is 12.",
+      "hints": [
+        "What is the range of remainders?",
+        "0 <= r < 13."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-250",
+      "skill_id": "remainders",
+      "family_id": "remainders--negative-dividend",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the remainder when -17 is divided by 5, using 0 <= r < 5?",
+      "answer": 3,
+      "validator": {
+        "kind": "expression",
+        "expr": "(-17)%5"
+      },
+      "solution": "-17 = 5 x (-4) + 3, so the remainder is 3.",
+      "hints": [
+        "The quotient can be negative.",
+        "Pick the quotient that makes r between 0 and 4."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-251",
+      "skill_id": "remainders",
+      "family_id": "remainders--power-remainder-small",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the remainder when 2^10 is divided by 7?",
+      "answer": 2,
+      "validator": {
+        "kind": "power_remainder",
+        "base": 2,
+        "exponent": 10,
+        "divisor": 7
+      },
+      "solution": "2^3 = 8 leaves 1, so 2^9 leaves 1 and 2^10 leaves 2.",
+      "hints": [
+        "Look for a power of 2 that leaves 1.",
+        "2^3 = 8 = 7 + 1."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-252",
+      "skill_id": "remainders",
+      "family_id": "remainders--remainder-to-factor-divisor",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "A number leaves remainder 7 when divided by 12. What is its remainder when divided by 4?",
+      "answer": 3,
+      "validator": {
+        "kind": "expression",
+        "expr": "7%4"
+      },
+      "solution": "The number is 12k + 7. 12k is a multiple of 4, and 7 leaves 3, so the remainder is 3.",
+      "hints": [
+        "Write the number as 12k + 7.",
+        "4 divides 12."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-253",
+      "skill_id": "remainders",
+      "family_id": "remainders--remainder-of-two-sum",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "x leaves remainder 5 and y leaves remainder 8 when divided by 11. What is the remainder when x + y is divided by 11?",
+      "answer": 2,
+      "validator": {
+        "kind": "expression",
+        "expr": "(5+8)%11"
+      },
+      "solution": "The remainders add: 5 + 8 = 13, which leaves 2.",
+      "hints": [
+        "Add the remainders.",
+        "13 is more than 11."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-254",
+      "skill_id": "remainders",
+      "family_id": "remainders--remainder-of-square",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "n leaves remainder 4 when divided by 7. What is the remainder when n^2 is divided by 7?",
+      "answer": 2,
+      "validator": {
+        "kind": "expression",
+        "expr": "(4*4)%7"
+      },
+      "solution": "n^2 leaves the same remainder as 4^2 = 16, which is 2.",
+      "hints": [
+        "Square the remainder.",
+        "Reduce 16 by 7."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-255",
+      "skill_id": "remainders",
+      "family_id": "remainders--factorial-sum-remainder",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the remainder when 1! + 2! + 3! + ... + 10! is divided by 5?",
+      "answer": 3,
+      "validator": {
+        "kind": "expression",
+        "expr": "(1+2+6+24)%5"
+      },
+      "solution": "From 5! onwards every term is a multiple of 5. 1 + 2 + 6 + 24 = 33 leaves 3.",
+      "hints": [
+        "Which factorials contain a factor of 5?",
+        "Only the first four terms matter."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-256",
+      "skill_id": "remainders",
+      "family_id": "remainders--units-digit-of-product",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the remainder when 21 x 22 x 23 is divided by 10?",
+      "answer": 6,
+      "validator": {
+        "kind": "expression",
+        "expr": "(21*22*23)%10"
+      },
+      "solution": "Only units digits matter: 1 x 2 x 3 = 6, so the remainder is 6.",
+      "hints": [
+        "Remainder by 10 is the units digit.",
+        "Multiply the units digits."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-257",
+      "skill_id": "remainders",
+      "family_id": "remainders--large-remainder-by-nine",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the remainder when 987654321 is divided by 9?",
+      "answer": 0,
+      "validator": {
+        "kind": "expression",
+        "expr": "987654321%9"
+      },
+      "solution": "The digit sum is 45, a multiple of 9, so the remainder is 0.",
+      "hints": [
+        "Add the digits.",
+        "1 + 2 + ... + 9 = 45."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-258",
+      "skill_id": "remainders",
+      "family_id": "remainders--count-with-given-remainder",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "How many integers from 1 to 100 leave remainder 2 when divided by 7?",
+      "answer": 15,
+      "validator": {
+        "kind": "expression",
+        "expr": "multiples(6,105,7)"
+      },
+      "solution": "They are 2, 9, 16, ..., 100. That is (100 - 2) / 7 + 1 = 15 numbers.",
+      "hints": [
+        "Find the first and last such numbers.",
+        "They step by 7."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-259",
+      "skill_id": "remainders",
+      "family_id": "remainders--remainder-of-difference",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the remainder when 1000 - 77 is divided by 8?",
+      "answer": 3,
+      "validator": {
+        "kind": "expression",
+        "expr": "(1000-77)%8"
+      },
+      "solution": "1000 is a multiple of 8 and 77 leaves 5, so 1000 - 77 leaves 8 - 5 = 3.",
+      "hints": [
+        "Find the remainder of each number.",
+        "Subtract and adjust to stay between 0 and 7."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-260",
+      "skill_id": "remainders",
+      "family_id": "remainders--remainder-by-eleven",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the remainder when 8192 is divided by 11?",
+      "answer": 8,
+      "validator": {
+        "kind": "expression",
+        "expr": "8192%11"
+      },
+      "solution": "Alternating sum from the right: 2 - 9 + 1 - 8 = -14, which leaves 8 on division by 11. Check: 11 x 744 = 8184.",
+      "hints": [
+        "Use the alternating digit sum.",
+        "Add 22 to -14."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-261",
+      "skill_id": "remainders",
+      "family_id": "remainders--power-cycle-by-seven",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "What is the remainder when 3^100 is divided by 7?",
+      "answer": 4,
+      "validator": {
+        "kind": "power_remainder",
+        "base": 3,
+        "exponent": 100,
+        "divisor": 7
+      },
+      "solution": "3^6 leaves 1 on division by 7. 100 = 6 x 16 + 4, so 3^100 leaves the same as 3^4 = 81, which is 4.",
+      "hints": [
+        "Find the cycle of powers of 3 by 7.",
+        "Reduce the exponent by the cycle length."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-262",
+      "skill_id": "remainders",
+      "family_id": "remainders--power-cycle-by-five",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "What is the remainder when 2^50 is divided by 5?",
+      "answer": 4,
+      "validator": {
+        "kind": "power_remainder",
+        "base": 2,
+        "exponent": 50,
+        "divisor": 5
+      },
+      "solution": "2^4 = 16 leaves 1. 50 = 4 x 12 + 2, so 2^50 leaves 2^2 = 4.",
+      "hints": [
+        "Powers of 2 by 5 repeat every 4.",
+        "Use the exponent remainder 2."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-263",
+      "skill_id": "remainders",
+      "family_id": "remainders--power-of-minus-one",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "What is the remainder when 5^40 is divided by 6?",
+      "answer": 1,
+      "validator": {
+        "kind": "power_remainder",
+        "base": 5,
+        "exponent": 40,
+        "divisor": 6
+      },
+      "solution": "5 = 6 - 1 behaves like -1, and an even power of -1 is 1. The remainder is 1.",
+      "hints": [
+        "5 is one less than 6.",
+        "What is (-1) to an even power?"
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-264",
+      "skill_id": "remainders",
+      "family_id": "remainders--two-remainder-conditions",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "What is the smallest positive integer that leaves remainder 2 when divided by 3 and remainder 3 when divided by 4?",
+      "answer": 11,
+      "validator": {
+        "kind": "expression",
+        "expr": "smallest_with_remainders(3,2,4,3)"
+      },
+      "solution": "Remainder 3 on division by 4 gives 3, 7, 11, ... The first with remainder 2 on division by 3 is 11.",
+      "hints": [
+        "List numbers satisfying one condition.",
+        "Test them against the other."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-265",
+      "skill_id": "remainders",
+      "family_id": "remainders--product-with-a-multiple",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "What is the remainder when 1001 x 1002 x 1003 is divided by 7?",
+      "answer": 0,
+      "validator": {
+        "kind": "expression",
+        "expr": "(1001*1002*1003)%7"
+      },
+      "solution": "1001 = 7 x 143 is a multiple of 7, so the whole product is too. The remainder is 0.",
+      "hints": [
+        "Check each factor for divisibility by 7.",
+        "One multiple of 7 is enough."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-266",
+      "skill_id": "remainders",
+      "family_id": "remainders--sum-of-cubes-remainder",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "What is the remainder when 1^3 + 2^3 + ... + 10^3 is divided by 7?",
+      "answer": 1,
+      "validator": {
+        "kind": "expression",
+        "expr": "(10*11//2)**2%7"
+      },
+      "solution": "The sum of the first n cubes is (n(n + 1) / 2)^2 = 55^2 = 3025. 3025 = 7 x 432 + 1, so the remainder is 1.",
+      "hints": [
+        "Use the formula for a sum of cubes.",
+        "Or reduce each cube by 7."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-267",
+      "skill_id": "remainders",
+      "family_id": "remainders--repunit-remainder",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "What is the remainder when the number written with twenty 1s (11...1) is divided by 9?",
+      "answer": 2,
+      "validator": {
+        "kind": "expression",
+        "expr": "20%9"
+      },
+      "solution": "Its digit sum is 20, and 20 leaves 2 on division by 9, so the number does too.",
+      "hints": [
+        "Use the digit-sum rule for 9.",
+        "The digit sum is the number of 1s."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-268",
+      "skill_id": "remainders",
+      "family_id": "remainders--chained-remainders",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "n leaves remainder 3 when divided by 5, and the quotient q leaves remainder 2 when divided by 4. What is the remainder when n is divided by 20?",
+      "answer": 13,
+      "validator": {
+        "kind": "expression",
+        "expr": "(5*2+3)%20"
+      },
+      "solution": "q = 4k + 2, so n = 5q + 3 = 20k + 13. The remainder is 13.",
+      "hints": [
+        "Write n in terms of q, then q in terms of k.",
+        "Expand 5(4k + 2) + 3."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-269",
+      "skill_id": "remainders",
+      "family_id": "remainders--remainder-by-factor-of-divisor",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "A number leaves remainder 63 when divided by 899. What is its remainder when divided by 29?",
+      "answer": 5,
+      "validator": {
+        "kind": "expression",
+        "expr": "63%29"
+      },
+      "solution": "899 = 29 x 31, so the number is 29 x 31k + 63. 63 = 29 x 2 + 5 leaves 5.",
+      "hints": [
+        "Factor 899.",
+        "Only the 63 matters for division by 29."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-270",
+      "skill_id": "remainders",
+      "family_id": "remainders--day-of-week",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "Today is Monday. What day is it 100 days from now? Enter 0 for Monday, 1 for Tuesday, ..., 6 for Sunday.",
+      "answer": 2,
+      "validator": {
+        "kind": "expression",
+        "expr": "100%7"
+      },
+      "solution": "100 = 7 x 14 + 2, so it is 2 days after Monday: Wednesday, which is 2.",
+      "hints": [
+        "Days repeat every 7.",
+        "Find 100 divided by 7."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-271",
+      "skill_id": "remainders",
+      "family_id": "remainders--polynomial-remainder",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "n leaves remainder 1 when divided by 3. What is the remainder when n^2 + n + 1 is divided by 3?",
+      "answer": 0,
+      "validator": {
+        "kind": "expression",
+        "expr": "(1+1+1)%3"
+      },
+      "solution": "Replace n by 1: 1 + 1 + 1 = 3, which leaves 0.",
+      "hints": [
+        "Replace n by its remainder.",
+        "Then reduce."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-272",
+      "skill_id": "remainders",
+      "family_id": "remainders--power-cycle-by-thirteen",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 5,
+      "prompt": "What is the remainder when 2^100 is divided by 13?",
+      "answer": 3,
+      "validator": {
+        "kind": "power_remainder",
+        "base": 2,
+        "exponent": 100,
+        "divisor": 13
+      },
+      "solution": "2^12 leaves 1 on division by 13. 100 = 12 x 8 + 4, so 2^100 leaves 2^4 = 16, which is 3.",
+      "hints": [
+        "Find when powers of 2 return to 1.",
+        "2^6 = 64 leaves 12, i.e. -1."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-273",
+      "skill_id": "remainders",
+      "family_id": "remainders--sum-of-two-powers",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 5,
+      "prompt": "What is the remainder when 3^21 + 5^21 is divided by 8?",
+      "answer": 0,
+      "validator": {
+        "kind": "expression",
+        "expr": "(3**21+5**21)%8"
+      },
+      "solution": "3^2 = 9 and 5^2 = 25 both leave 1, so 3^21 leaves 3 and 5^21 leaves 5. 3 + 5 = 8 leaves 0.",
+      "hints": [
+        "Square each base modulo 8.",
+        "Odd exponents keep one factor."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-274",
+      "skill_id": "remainders",
+      "family_id": "remainders--common-remainder-count",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 5,
+      "prompt": "How many integers from 1 to 1000 leave remainder 1 when divided by both 4 and 6?",
+      "answer": 84,
+      "validator": {
+        "kind": "expression",
+        "expr": "multiples(12,1011,12)"
+      },
+      "solution": "Such numbers are 1 more than a multiple of LCM(4, 6) = 12: 1, 13, ..., 997. That is 84.",
+      "hints": [
+        "Subtract 1 and think about common multiples.",
+        "LCM(4, 6) = 12."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-275",
+      "skill_id": "remainders",
+      "family_id": "remainders--geometric-sum-remainder",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 5,
+      "prompt": "What is the remainder when 1 + 2 + 2^2 + ... + 2^30 is divided by 7?",
+      "answer": 1,
+      "validator": {
+        "kind": "expression",
+        "expr": "(2**31-1)%7"
+      },
+      "solution": "The sum is 2^31 - 1. 2^3 leaves 1, so 2^30 leaves 1 and 2^31 leaves 2. The remainder is 2 - 1 = 1.",
+      "hints": [
+        "Sum the geometric series first.",
+        "Powers of 2 by 7 repeat every 3."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-276",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--units-of-product",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 1,
+      "prompt": "What is the units digit of 23 x 47?",
+      "answer": 1,
+      "validator": {
+        "kind": "expression",
+        "expr": "(23*47)%10"
+      },
+      "solution": "Only units digits matter: 3 x 7 = 21, so the units digit is 1.",
+      "hints": [
+        "Multiply the units digits.",
+        "Keep only the last digit."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-277",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--units-of-sum",
+      "purpose": "verification",
+      "difficulty": "introductory",
+      "difficulty_level": 1,
+      "prompt": "What is the units digit of 348 + 279 + 516?",
+      "answer": 3,
+      "validator": {
+        "kind": "expression",
+        "expr": "(348+279+516)%10"
+      },
+      "solution": "8 + 9 + 6 = 23, so the units digit is 3.",
+      "hints": [
+        "Add the units digits.",
+        "Carries do not affect the units digit."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-278",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--thousands-place",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 1,
+      "prompt": "In 5872301, which digit is in the thousands place?",
+      "answer": 2,
+      "validator": {
+        "kind": "expression",
+        "expr": "5872301//1000%10"
+      },
+      "solution": "Reading from the right: 1 ones, 0 tens, 3 hundreds, 2 thousands. The digit is 2.",
+      "hints": [
+        "Count places from the right.",
+        "The fourth digit from the right."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-279",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--units-of-square",
+      "purpose": "verification",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "What is the units digit of 87^2?",
+      "answer": 9,
+      "validator": {
+        "kind": "expression",
+        "expr": "87**2%10"
+      },
+      "solution": "7 x 7 = 49, so the units digit is 9.",
+      "hints": [
+        "Square only the units digit.",
+        "7^2 = 49."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-280",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--small-power-of-two",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "What is the units digit of 2^7?",
+      "answer": 8,
+      "validator": {
+        "kind": "expression",
+        "expr": "2**7%10"
+      },
+      "solution": "2^7 = 128, so the units digit is 8.",
+      "hints": [
+        "Compute the powers of 2 in order.",
+        "2, 4, 8, 16, 32, 64, 128."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-281",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--place-minus-face-value",
+      "purpose": "verification",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "In 64357, what is the place value of the digit 4 minus its face value?",
+      "answer": 3996,
+      "validator": {
+        "kind": "expression",
+        "expr": "4000-4"
+      },
+      "solution": "The 4 is in the thousands place, so its place value is 4000 and its face value is 4. 4000 - 4 = 3996.",
+      "hints": [
+        "Place value depends on position.",
+        "Face value is the digit itself."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-282",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--largest-minus-smallest-arrangement",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "Using each of 3, 0, 7 and 5 once, what is the largest four-digit number minus the smallest four-digit number?",
+      "answer": 4473,
+      "validator": {
+        "kind": "expression",
+        "expr": "7530-3057"
+      },
+      "solution": "Largest is 7530. Smallest cannot start with 0, so it is 3057. 7530 - 3057 = 4473.",
+      "hints": [
+        "A four-digit number cannot start with 0.",
+        "Put 0 second for the smallest."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-283",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--units-of-cube",
+      "purpose": "verification",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "What is the units digit of 13^3?",
+      "answer": 7,
+      "validator": {
+        "kind": "expression",
+        "expr": "13**3%10"
+      },
+      "solution": "3^3 = 27, so the units digit is 7.",
+      "hints": [
+        "Cube the units digit.",
+        "3 x 3 x 3."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-284",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--tens-digit-of-product",
+      "purpose": "diagnostic",
+      "difficulty": "introductory",
+      "difficulty_level": 2,
+      "prompt": "What is the tens digit of 47 x 26?",
+      "answer": 2,
+      "validator": {
+        "kind": "expression",
+        "expr": "47*26//10%10"
+      },
+      "solution": "47 x 26 = 1222, so the tens digit is 2.",
+      "hints": [
+        "Compute the product.",
+        "Read the second digit from the right."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-285",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--power-of-three-cycle",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the units digit of 3^23?",
+      "answer": 7,
+      "validator": {
+        "kind": "power_remainder",
+        "base": 3,
+        "exponent": 23,
+        "divisor": 10
+      },
+      "solution": "Units digits of powers of 3 cycle 3, 9, 7, 1. 23 leaves remainder 3 on division by 4, so the digit is 7.",
+      "hints": [
+        "Find the cycle of units digits.",
+        "Use the exponent's remainder by 4."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-286",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--power-of-seven-cycle",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the units digit of 7^42?",
+      "answer": 9,
+      "validator": {
+        "kind": "power_remainder",
+        "base": 7,
+        "exponent": 42,
+        "divisor": 10
+      },
+      "solution": "Powers of 7 cycle 7, 9, 3, 1. 42 leaves remainder 2 on division by 4, so the digit is 9.",
+      "hints": [
+        "The cycle length is 4.",
+        "Remainder 2 means the second position."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-287",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--power-of-four-parity",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the units digit of 4^51?",
+      "answer": 4,
+      "validator": {
+        "kind": "power_remainder",
+        "base": 4,
+        "exponent": 51,
+        "divisor": 10
+      },
+      "solution": "Powers of 4 alternate 4, 6. Odd exponents give 4, so the units digit is 4.",
+      "hints": [
+        "The cycle length is 2.",
+        "Is 51 odd or even?"
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-288",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--power-of-nine-parity",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the units digit of 9^100?",
+      "answer": 1,
+      "validator": {
+        "kind": "power_remainder",
+        "base": 9,
+        "exponent": 100,
+        "divisor": 10
+      },
+      "solution": "Powers of 9 alternate 9, 1. Even exponents give 1.",
+      "hints": [
+        "9^2 = 81.",
+        "Is 100 odd or even?"
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-289",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--cycle-end-position",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the units digit of 2^40?",
+      "answer": 6,
+      "validator": {
+        "kind": "power_remainder",
+        "base": 2,
+        "exponent": 40,
+        "divisor": 10
+      },
+      "solution": "Powers of 2 cycle 2, 4, 8, 6. 40 is a multiple of 4, so it takes the last position of the cycle: 6.",
+      "hints": [
+        "A remainder of 0 means the end of the cycle, not the start.",
+        "2^4 = 16."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-290",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--units-of-power-product",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the units digit of 2^5 x 3^4?",
+      "answer": 2,
+      "validator": {
+        "kind": "expression",
+        "expr": "(2**5*3**4)%10"
+      },
+      "solution": "2^5 ends in 2 and 3^4 ends in 1, so the product ends in 2.",
+      "hints": [
+        "Find each units digit separately.",
+        "Then multiply them."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-291",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--units-of-power-sum",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the units digit of 3^5 + 7^5?",
+      "answer": 0,
+      "validator": {
+        "kind": "expression",
+        "expr": "(3**5+7**5)%10"
+      },
+      "solution": "3^5 ends in 3 and 7^5 ends in 7. 3 + 7 = 10, so the units digit is 0.",
+      "hints": [
+        "Exponent 5 leaves remainder 1 on division by 4.",
+        "Add the two units digits."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-292",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--last-two-digits-small",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What number is formed by the last two digits of 3^5?",
+      "answer": 43,
+      "validator": {
+        "kind": "expression",
+        "expr": "3**5%100"
+      },
+      "solution": "3^5 = 243, so the last two digits form 43.",
+      "hints": [
+        "Compute 3^5.",
+        "Keep the last two digits."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-293",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--digit-count-of-power",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "How many digits does 2^30 have?",
+      "answer": 10,
+      "validator": {
+        "kind": "expression",
+        "expr": "digit_count(2**30)"
+      },
+      "solution": "2^10 = 1024 is just over 10^3, so 2^30 is just over 10^9: 1073741824 has 10 digits.",
+      "hints": [
+        "2^10 is about 1000.",
+        "Compare with powers of 10."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-294",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--units-of-factorial-sum",
+      "purpose": "diagnostic",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the units digit of 1! + 2! + 3! + 4! + 5! + 6!?",
+      "answer": 3,
+      "validator": {
+        "kind": "expression",
+        "expr": "(1+2+6+24+120+720)%10"
+      },
+      "solution": "5! and 6! end in 0. 1 + 2 + 6 + 24 = 33, so the units digit is 3.",
+      "hints": [
+        "Factorials from 5! end in 0.",
+        "Add the rest."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-295",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--units-of-consecutive-product",
+      "purpose": "verification",
+      "difficulty": "developing",
+      "difficulty_level": 3,
+      "prompt": "What is the units digit of 11 x 12 x 13 x 14?",
+      "answer": 4,
+      "validator": {
+        "kind": "expression",
+        "expr": "(11*12*13*14)%10"
+      },
+      "solution": "1 x 2 x 3 x 4 = 24, so the units digit is 4.",
+      "hints": [
+        "Multiply the units digits.",
+        "Keep only the last digit at each step."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-296",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--power-tower-units",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "What is the units digit of 7^(4^3)?",
+      "answer": 1,
+      "validator": {
+        "kind": "expression",
+        "expr": "7**64%10"
+      },
+      "solution": "4^3 = 64 is a multiple of 4, so 7^64 takes the last position of the cycle 7, 9, 3, 1: the digit is 1.",
+      "hints": [
+        "Work out the exponent first.",
+        "Then use the cycle of 7."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-297",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--self-power-sum",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "What is the units digit of 1^1 + 2^2 + 3^3 + 4^4 + 5^5?",
+      "answer": 3,
+      "validator": {
+        "kind": "expression",
+        "expr": "(1+2**2+3**3+4**4+5**5)%10"
+      },
+      "solution": "Units digits: 1, 4, 7, 6, 5. They add to 23, so the units digit is 3.",
+      "hints": [
+        "Find each units digit separately.",
+        "3^3 = 27 and 4^4 = 256."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-298",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--units-of-power-difference",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "What is the units digit of 8^25 - 2^25?",
+      "answer": 6,
+      "validator": {
+        "kind": "expression",
+        "expr": "(8**25-2**25)%10"
+      },
+      "solution": "25 leaves remainder 1 on division by 4, so 8^25 ends in 8 and 2^25 ends in 2. 8 - 2 = 6.",
+      "hints": [
+        "Use the cycles of 8 and 2.",
+        "Both have length 4."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-299",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--trailing-zeros-of-product",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "How many zeros are at the end of 2^8 x 5^5 x 3^2?",
+      "answer": 5,
+      "validator": {
+        "kind": "expression",
+        "expr": "min(8,5)"
+      },
+      "solution": "Each zero needs a pair 2 x 5. There are only five 5s, so there are 5 zeros (the product is 10^5 x 2^3 x 9).",
+      "hints": [
+        "Pair 2s with 5s.",
+        "The factor 9 adds no zeros."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-300",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--units-of-sum-of-squares",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "What is the units digit of 1^2 + 2^2 + ... + 20^2?",
+      "answer": 0,
+      "validator": {
+        "kind": "expression",
+        "expr": "(20*21*41//6)%10"
+      },
+      "solution": "The sum is 20 x 21 x 41 / 6 = 2870, so the units digit is 0.",
+      "hints": [
+        "Use n(n + 1)(2n + 1) / 6.",
+        "Or note that each block of ten squares ends in 5."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-301",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--tens-digit-of-power",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "What is the tens digit of 7^20?",
+      "answer": 0,
+      "validator": {
+        "kind": "expression",
+        "expr": "7**20%100//10"
+      },
+      "solution": "7^4 = 2401 ends in 01, so every power of 7^4 also ends in 01. 7^20 = (7^4)^5 ends in 01, so the tens digit is 0.",
+      "hints": [
+        "Track the last two digits.",
+        "7^4 = 2401."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-302",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--large-exponent-units",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "What is the units digit of 8^2023?",
+      "answer": 2,
+      "validator": {
+        "kind": "power_remainder",
+        "base": 8,
+        "exponent": 2023,
+        "divisor": 10
+      },
+      "solution": "Powers of 8 cycle 8, 4, 2, 6. 2023 leaves remainder 3 on division by 4, so the digit is 2.",
+      "hints": [
+        "The cycle of 8 has length 4.",
+        "Remainder 3 means the third position."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-303",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--pages-from-digits",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "A book's pages are numbered from 1 and use 492 digits in total. How many pages does it have?",
+      "answer": 200,
+      "validator": {
+        "kind": "expression",
+        "expr": "99+(492-9-180)//3"
+      },
+      "solution": "Pages 1-99 use 9 + 180 = 189 digits. The remaining 303 digits cover 101 three-digit pages, so there are 99 + 101 = 200 pages.",
+      "hints": [
+        "Count digits used by one- and two-digit page numbers.",
+        "Divide the rest by 3."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-304",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--position-in-digit-string",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "The positive integers are written in a row: 123456789101112... What is the 50th digit?",
+      "answer": 3,
+      "validator": {
+        "kind": "expression",
+        "expr": "(10+(50-9-1)//2)//10"
+      },
+      "solution": "The first 9 digits are 1-9. Digits 10-49 come from 10 to 29 (20 numbers x 2 digits). The 50th digit is the first digit of 30, which is 3.",
+      "hints": [
+        "Count how many digits single-digit numbers use.",
+        "Then each later number adds 2 digits."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
+    },
+    {
+      "id": "num-305",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--tower-exponent-units",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "What is the units digit of 3^1024?",
+      "answer": 1,
+      "validator": {
+        "kind": "power_remainder",
+        "base": 3,
+        "exponent": 1024,
+        "divisor": 10
+      },
+      "solution": "1024 is a multiple of 4, so 3^1024 takes the last position of the cycle 3, 9, 7, 1: the digit is 1.",
+      "hints": [
+        "Is 1024 divisible by 4?",
+        "A multiple of 4 gives the last cycle position."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-306",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--three-digit-digit-sum-five",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 4,
+      "prompt": "How many three-digit numbers have digits that add up to 5?",
+      "answer": 15,
+      "validator": {
+        "kind": "expression",
+        "expr": "6*5//2"
+      },
+      "solution": "With first digit a >= 1, set a' = a - 1 so a' + b + c = 4. That has C(6, 2) = 15 solutions.",
+      "hints": [
+        "The first digit cannot be 0.",
+        "Count ways to split 4 into three ordered parts."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "A"
+    },
+    {
+      "id": "num-307",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--last-two-digits-by-cycle",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 5,
+      "prompt": "What is the remainder when 3^100 is divided by 100?",
+      "answer": 1,
+      "validator": {
+        "kind": "power_remainder",
+        "base": 3,
+        "exponent": 100,
+        "divisor": 100
+      },
+      "solution": "3^20 leaves 1 on division by 100 (3^10 = 59049 ends in 49, and 49^2 = 2401 ends in 01). So 3^100 = (3^20)^5 leaves 1.",
+      "hints": [
+        "Find a power of 3 ending in 01.",
+        "Square 3^10 modulo 100."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-308",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--units-of-power-sum-range",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 5,
+      "prompt": "What is the units digit of 1^61 + 2^61 + ... + 9^61?",
+      "answer": 5,
+      "validator": {
+        "kind": "expression",
+        "expr": "(1**61+2**61+3**61+4**61+5**61+6**61+7**61+8**61+9**61)%10"
+      },
+      "solution": "61 leaves remainder 1 on division by 4, so each d^61 ends in d. 1 + 2 + ... + 9 = 45, so the units digit is 5.",
+      "hints": [
+        "Every cycle of units digits divides 4.",
+        "Exponent 61 behaves like exponent 1."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-309",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--digit-count-mixed-powers",
+      "purpose": "verification",
+      "difficulty": "challenging",
+      "difficulty_level": 5,
+      "prompt": "How many digits does 5^20 x 2^23 have?",
+      "answer": 21,
+      "validator": {
+        "kind": "expression",
+        "expr": "digit_count(5**20*2**23)"
+      },
+      "solution": "5^20 x 2^23 = 10^20 x 2^3 = 8 x 10^20, which has 21 digits.",
+      "hints": [
+        "Pair each 5 with a 2.",
+        "What is left over?"
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending"
+    },
+    {
+      "id": "num-310",
+      "skill_id": "digits-cyclicity",
+      "family_id": "digits-cyclicity--squares-ending-in-six",
+      "purpose": "diagnostic",
+      "difficulty": "challenging",
+      "difficulty_level": 5,
+      "prompt": "How many of the integers 1 to 100 have a square ending in 6?",
+      "answer": 20,
+      "validator": {
+        "kind": "expression",
+        "expr": "multiples(7,106,10)+multiples(5,104,10)"
+      },
+      "solution": "A square ends in 6 exactly when the number ends in 4 or 6. Each happens 10 times from 1 to 100, giving 20.",
+      "hints": [
+        "Check which units digits square to something ending in 6.",
+        "4^2 = 16 and 6^2 = 36."
+      ],
+      "review_status": "draft",
+      "provenance": "original_mastrr_draft_bank_v1",
+      "tag_review": "pending",
+      "hidden": true,
+      "validation_form": "B"
     }
-  ]
+  ],
+  "bank_note": "num-101 onward: draft assessment bank (35 per topic, D7 split). Arithmetic is checked by validators; prompts, solutions and difficulty tags await human review."
 }

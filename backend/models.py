@@ -45,7 +45,15 @@ class LearningSession(Base):
     created_at: Mapped[str] = mapped_column(String(40))
     # Review being fulfilled; a separate FK below avoids a circular schema dependency.
     review_id: Mapped[str | None] = mapped_column(String(36))
-    __table_args__ = (CheckConstraint("mode IN ('diagnostic','practice','verification','review')"),)
+    # D8: version fixed when the session starts, so a later switch never changes it mid-way.
+    scoring_version: Mapped[str] = mapped_column(String(32), default="current", server_default="current")
+    # Pilot validation forms only: pre, post or delayed.
+    stage: Mapped[str | None] = mapped_column(String(16))
+    __table_args__ = (
+        CheckConstraint("mode IN ('diagnostic','practice','verification','review')"),
+        CheckConstraint("scoring_version IN ('current','new')", name="ck_session_scoring_version"),
+        CheckConstraint("stage IN ('pre','post','delayed')", name="ck_session_stage"),
+    )
 
 
 class Assignment(Base):
@@ -81,6 +89,9 @@ class Attempt(Base):
     duration_ms: Mapped[int | None] = mapped_column(Integer)
     predicted_probability: Mapped[float | None] = mapped_column(Float)
     scoring_version: Mapped[str] = mapped_column(String(32), default="current", server_default="current")
+    # D0: where the answer was given and whether it was "I don't know".
+    source: Mapped[str] = mapped_column(String(16), default="practice", server_default="practice")
+    dont_know: Mapped[bool] = mapped_column(Boolean, default=False, server_default="0")
     raw_answer: Mapped[str] = mapped_column(Text)
     normalized_answer: Mapped[int] = mapped_column(Integer)
     working: Mapped[str] = mapped_column(Text)
@@ -93,6 +104,8 @@ class Attempt(Base):
         CheckConstraint("duration_ms >= 0"),
         CheckConstraint("predicted_probability BETWEEN 0 AND 1"),
         CheckConstraint("scoring_version IN ('current','new')"),
+        CheckConstraint("source IN ('diagnostic','practice','verification','review','retest','validation')",
+                        name="ck_attempt_source"),
     )
 
 

@@ -12,7 +12,7 @@ Assigned from the supplied mastery scoring proposal. First slice implemented on 
 
 ## Handoff
 
-Track 1 should own rating updates and predicted probabilities. Track 2 should own retest/gap decisions. Do not enable the new scoring version until its engine exists. Configuration storage alone is not an operational version switch.
+Superseded on 26 October 2026: the engine, version switch, bank and dashboard are now built. See mastery-scoring-progress.md.
 
 ## Remaining Track 3 work
 

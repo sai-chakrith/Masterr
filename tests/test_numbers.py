@@ -60,3 +60,32 @@ class NumbersTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ExpressionValidatorTests(unittest.TestCase):
+    def test_helpers_compute_known_values(self):
+        from backend.numbers.bank import evaluate
+        self.assertEqual(evaluate("multiples(1,100,7)"), 14)
+        self.assertEqual(evaluate("factor_count(360)"), 24)
+        self.assertEqual(evaluate("smallest_with_remainders(3,2,5,3,7,2)"), 23)
+        self.assertEqual(evaluate("trailing_zeros_factorial(100)"), 24)
+
+    def test_rejects_anything_but_integer_arithmetic(self):
+        from backend.numbers.bank import evaluate
+        for expr in ('__import__("os")', "open(1)", "(1).real", "1/2", "[1]", "2**100", "x", "1.5", "'a'"):
+            with self.assertRaises((ValueError, SyntaxError)):
+                evaluate(expr)
+
+
+class DraftBankTests(unittest.TestCase):
+    def test_every_topic_meets_the_d7_split(self):
+        from backend.numbers.coverage import audit
+        skills = [s["id"] for s in load_curriculum()["skills"]]
+        for skill, report in audit(load_questions(), skills).items():
+            self.assertEqual(report["problems"], [], skill)
+            self.assertEqual(report["total"], 35, skill)
+
+    def test_draft_bank_is_not_approved(self):
+        bank = [q for q in load_questions() if q.get("difficulty_level")]
+        self.assertTrue(bank)
+        self.assertTrue(all(q["review_status"] == "draft" for q in bank))

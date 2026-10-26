@@ -8,6 +8,7 @@ from sqlalchemy import func, select
 
 from backend.content import FACETS, import_questions
 from backend.db import Base, make_engine, transaction
+from backend import mastery
 from backend.learning import LearningError, LearningService, normalized_integer
 from backend.models import Assignment, Attempt, Exposure, Question
 from backend.numbers.bank import load_questions
@@ -217,7 +218,7 @@ def test_unreviewed_seed_is_imported_idempotently_but_unavailable(tmp_path):
     engine = make_engine("sqlite:///" + str(tmp_path / "drafts.db"))
     Base.metadata.create_all(engine)
     with transaction(engine) as db:
-        assert import_questions(db, load_questions()) == 12
+        assert import_questions(db, load_questions()) == len(load_questions())
         assert import_questions(db, load_questions()) == 0
     service = LearningService(engine)
     service.register("student")
@@ -301,6 +302,8 @@ def retest_setup(setup):
         import_questions(db, questions)
         for q in db.scalars(select(Question).where(Question.item_id.like("retest-%"))):
             q.difficulty_level = 3 if int(q.item_id[-2:]) < 20 else 2
+    # Track 2 rules belong to the new scoring version (D8); the default stays "current".
+    service.set_scoring_version("alice", "divisibility", "new")
     return setup
 
 
@@ -322,7 +325,10 @@ def test_retest_boundary_skip_and_persistent_gap(retest_setup, right, expected):
         assert gap["status"] == expected
     assert all(g["status"] == "unassessed" for g in service.gaps("bob"))
     with transaction(engine) as db:
-        assert db.get(MasteryEstimate, ("alice", "divisibility")) is None
+        # S2: every retest answer moved the rating; a pass never jumps the score to 1.0.
+        estimate = db.get(MasteryEstimate, ("alice", "divisibility"))
+        assert estimate.answer_count == 10
+        assert mastery.shown_score(estimate.rating) < 0.99
 
 
 def test_retest_freshness_and_atomic_exhaustion(retest_setup):
@@ -350,16 +356,18 @@ def test_retest_help_cannot_resolve_gap(retest_setup):
     assert next(g for g in service.gaps("alice") if g["skill_id"] == "divisibility")["status"] == "unassessed"
 
 
-def test_borderline_review_is_owned_and_reuses_only_missed_items(setup):
-    from backend.models import LearningSession
-    service, _, engine = setup
+def test_borderline_review_is_owned_and_reuses_only_missed_items(retest_setup):
+    service, _, _ = retest_setup
     created = service.create_session("alice", mode="diagnostic")
-    item = service.get_session("alice", created["session_id"])["question"]
-    service.submit("alice", item["assignment_id"], "", "", "skip", dont_know=True)
-    with transaction(engine) as db:
-        service.set_gap(db, db.get(LearningSession, created["session_id"]), "borderline")
+    # Three in four right on typical questions sits inside the safety zone until question 12.
+    pattern = ["3", "3", "3", "", "3", "3", "3", "0", "3", "3", "3", "0"]
+    for i, answer in enumerate(pattern):
+        item = service.get_session("alice", created["session_id"])["question"]
+        result = service.submit("alice", item["assignment_id"], answer, "", f"diag-{i}", dont_know=answer == "")
+    assert result["decision"] == "borderline" and result["answers"] == 12
     result = service.borderline_review("alice", created["session_id"])
-    assert len(result["items"]) == 1 and result["items"][0]["solution"]
+    assert len(result["items"]) == 3 and all(i["solution"] for i in result["items"])
+    assert sum(i["dont_know"] for i in result["items"]) == 1
     assert result["next_action"] == "retest"
     with pytest.raises(LearningError) as error:
         service.borderline_review("bob", created["session_id"])
@@ -370,11 +378,11 @@ def test_resolved_gap_reopens_only_after_new_independent_check(retest_setup):
     from backend.models import LearningSession
     service, _, engine = retest_setup
     # A prior decision remains stable across reads and ordinary practice.
-    diagnostic = service.create_session("alice", mode="diagnostic")
-    item = service.get_session("alice", diagnostic["session_id"])["question"]
-    service.submit("alice", item["assignment_id"], "3", "", "diag")
+    earlier = service.create_session("alice", mode="practice")
+    item = service.get_session("alice", earlier["session_id"])["question"]
+    service.submit("alice", item["assignment_id"], "3", "", "earlier")
     with transaction(engine) as db:
-        service.set_gap(db, db.get(LearningSession, diagnostic["session_id"]), "resolved")
+        service.set_gap(db, db.get(LearningSession, earlier["session_id"]), "resolved")
     form(service, mode="practice", answers=["0"])
     assert next(g for g in service.gaps("alice") if g["skill_id"] == "divisibility")["status"] == "resolved"
     form(service, answers=["0", "0", "0"])

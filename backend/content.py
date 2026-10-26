@@ -32,6 +32,9 @@ def import_questions(db, questions):
         hidden = question.get("hidden", False)
         if type(hidden) is not bool:
             raise ValueError("Hidden must be a boolean")
+        form = question.get("validation_form")
+        if form is not None and (form not in ("A", "B") or not hidden):
+            raise ValueError("Validation form must be A or B and only on hidden questions")
         sub_topic = question.get("sub_topic")
         if sub_topic is not None and (not isinstance(sub_topic, str) or len(sub_topic) > 128):
             raise ValueError("Subtopic must be text of at most 128 characters")

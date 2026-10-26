@@ -56,6 +56,10 @@ def create_app(engine=None, settings=None):
     def retest(skill_id: str, owner: Annotated[str, Depends(learner)]):
         return service.create_session(owner, skill_id, "verification", retest=True)
 
+    @app.post("/v1/topics/{skill_id}/validation", status_code=201)
+    def validation(skill_id: str, owner: Annotated[str, Depends(learner)]):
+        return service.create_validation(owner, skill_id)
+
     @app.get("/v1/sessions/{session_id}/borderline-review")
     def borderline_review(session_id: str, owner: Annotated[str, Depends(learner)]):
         return service.borderline_review(owner, session_id)
