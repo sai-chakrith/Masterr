@@ -20,3 +20,4 @@ __pycache__/
 /backups/
 /data/backups/
 /.e2e/
+/.demo/

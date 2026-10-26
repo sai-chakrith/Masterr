@@ -12,6 +12,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from fractions import Fraction
 from urllib.request import Request, urlopen
+from urllib.error import HTTPError
 from uuid import uuid4
 
 from sqlalchemy import select
@@ -162,6 +163,11 @@ class TutorService:
                               "finish_reason": finish, "duration_ms": round((time.monotonic() - started) * 1000)})
                 if isinstance(content, str) and content.strip() and finish == "stop":
                     return content.strip()
+            except HTTPError as error:
+                usage.append({"part": part, "attempt": attempt + 1, "model": self.settings.model,
+                              "error": "provider_http_error", "http_status": error.code,
+                              "duration_ms": round((time.monotonic() - started) * 1000)})
+                return None
             except Exception:
                 # Never store provider errors: they can contain credentials or learner data.
                 usage.append({"part": part, "attempt": attempt + 1, "model": self.settings.model,

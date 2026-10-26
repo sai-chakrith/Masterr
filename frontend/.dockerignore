@@ -1,5 +1,6 @@
 node_modules
 .next
+.next-demo
 .env*
 !.env.example
 test-results

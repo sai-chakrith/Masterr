@@ -95,10 +95,19 @@ class TimedAnswerBody(StrictBody):
 
 
 def create_app(engine=None, settings=None):
+    if settings is None and os.environ.get("LOCAL_DEVELOPMENT") == "1":
+        from backend.local_env import load_local_env
+        load_local_env()
     settings = settings or Settings.from_env()
     if os.environ.get("MASTRR_ENV") == "production" and settings.local_development:
         raise ValueError("Production cannot use local developer authentication.")
     engine = engine or make_engine(settings.database_url)
+    demo_mode = os.environ.get("MASTRR_DEMO") == "1"
+    if demo_mode:
+        if not settings.local_development:
+            raise ValueError("Demo mode requires explicit local development authentication.")
+        from backend.demo import assert_demo_database
+        assert_demo_database(engine)
     service = LearningService(engine)
     tutor_service = TutorService(engine)
     personalisation = PersonalisationService(engine, service)
@@ -209,6 +218,10 @@ def create_app(engine=None, settings=None):
     @app.get("/health")
     def health():
         return {"status": "ok", "version": "0.1.0", "ai_enabled": bool(tutor_service.settings.api_key)}
+
+    @app.get("/runtime")
+    def runtime():
+        return JSONResponse(content={"demo": demo_mode, "ai_configured": bool(tutor_service.settings.api_key)}, headers={"Cache-Control": "no-store"})
 
     @app.post("/v1/me/tutor/{skill_id}")
     def tutor(skill_id: str, owner: Annotated[str, Depends(learner)]):

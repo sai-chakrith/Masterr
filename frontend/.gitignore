@@ -4,3 +4,4 @@
 *.tsbuildinfo
 /test-results/
 /playwright-report/
+/.next-demo/

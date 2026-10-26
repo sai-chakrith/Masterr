@@ -5,6 +5,7 @@ import type { NextConfig } from "next";
 const apiOrigin = process.env.MASTRR_API_ORIGIN ?? "http://127.0.0.1:8000";
 
 const config: NextConfig = {
+  distDir: process.env.MASTRR_DEMO_FRONTEND === "1" ? ".next-demo" : ".next",
   async headers() {
     return [{ source: "/:path*", headers: [
       { key: "X-Content-Type-Options", value: "nosniff" },
