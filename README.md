@@ -1,131 +1,72 @@
 # Mastrr
 
-Aptitude and reasoning preparation, beginning with a complete Numbers learning loop.
+Aptitude learning with diagnosis, topic notes, personal tutoring, adaptive practice,
+independent retests and scheduled reviews. The current curriculum covers 15 topics.
 
-## Built so far
+## Implemented application
 
-The first backend foundation is implemented with FastAPI, SQLAlchemy, and Alembic:
+- Next.js learner roadmap, goals, lessons, personal tutor, persistent sessions and history.
+- Supabase email signup, confirmation, login, refresh, password recovery and sign-out.
+- FastAPI ownership checks, immutable question versions, deterministic arithmetic grading,
+  diagnostic/retest policies, transparent progress and fresh-family reservations.
+- Topic-scoped RAG tutoring with caches, bounded retries, final-answer checks, labelled
+  fallbacks, recorded usage and per-user/shared provider budgets.
+- Timed mixed-topic practice with server deadlines and results withheld until completion.
+  Timed practice does not change mastery decisions.
+- Reviewer console for curriculum, notes, profiles, misconceptions, question editing,
+  explicit publication, withdrawal and learner reports. Changes have versioned audit records.
+- Private data export, account deletion, stale-assessment handling, request limits,
+  readiness checks, safe request logging, backup/restore verification and deployment files.
 
-- Durable sessions, fixed question versions, saved working, and server-side integer scoring.
-- Recorded family reservations, prompt exposure, hints, and solution exposure.
-- Three-facet independent checks with results withheld until the form ends.
-- Help converts a check to assisted practice before releasing the hint or solution.
-- Idempotent submissions, ownership checks, and serialized learner operations.
-- Evidence events and review records scheduled two and seven days after a passed check.
-- Resume, abandon, due-review inspection, and fresh-content exhaustion responses.
-- Explicit single-developer local authentication; Supabase asymmetric JWT verification support.
-- An idempotent importer preserving the twelve original questions as drafts.
+## Run locally
 
-This is a backend milestone, not a complete student application. The frontend,
-adaptive teaching, reasoning AI, reviewer UI, correction/recomputation workflow,
-and public deployment remain to be built. The provisional policy describes
-performance on a small check, not calibrated mastery or placement readiness.
+Install Python 3.12 and Node 22 or newer. Create `.venv`, install
+`requirements.lock.txt`, and run `npm ci` inside `frontend/`.
+Then run `scripts/start-local.ps1` and `scripts/start-frontend.ps1` in separate
+terminals. Open [the local app](http://127.0.0.1:3000), sign in with the ignored
+`data/local-api-token`, and choose a goal.
 
-All supplied questions still await genuine human review. Student sessions
-currently return insufficient coverage. Approved fixtures exist only inside tests;
-they are not imported by startup and are not approved learning material.
+The local launcher defaults to the new scoring policy. Pilot assignments can still
+select the legacy policy explicitly. Local reviewer access requires setting
+`MASTRR_ADMIN_SUBJECTS=local-developer` before starting the API.
 
-## Mastery scoring upgrade
+## Content and launch status
 
-The scoring proposal is implemented behind a per-learner, per-topic version switch:
-an Elo running score with an "I don't know" option, an 8-12 question diagnostic
-re-scored into Mastered / Borderline / Gap, a 10-question retest passed at 7/10,
-Borderline review, pilot check-in forms, a Next.js roadmap, a simulation and
-pilot analysis scripts. The current rules stay alive as the comparison group.
-See [docs/mastery-scoring-progress.md](docs/mastery-scoring-progress.md).
+**This is not a published learner service yet.** The source bank contains 1,272
+unapproved drafts, including 135 retention-review items. Curriculum, notes,
+misconceptions and exam mappings need genuine content review. The app intentionally
+refuses to serve drafts; test-fixture approvals are never imported into real data.
+A mathematically checked parameter variation is not proof of independent family
+coverage or learning effectiveness.
 
-A 210-question draft assessment bank (35 per topic) is included. It is still
-draft: nothing is served until people review and approve it.
+Database-backed reviewer publications are used at runtime. Source files remain
+editable drafts; do not confuse their status with a reviewed live database.
+Supabase, SMTP, Groq and hosting need owner configuration. No accounts, deployment,
+real learner outcomes or live model quality are claimed by the source code.
 
-## Local setup
-
-Use Python 3.12 and uv. From the repository root:
-
-~~~powershell
-uv venv --python 3.12 .venv
-uv pip sync --python .venv/Scripts/python.exe requirements.lock.txt
-.\scripts\start-local.ps1
-~~~
-
-The launcher migrates the local database, imports drafts without publishing them,
-creates a local API token if needed, and starts on http://127.0.0.1:8000.
-API documentation is at http://127.0.0.1:8000/docs.
-
-The student frontend lives in frontend/ (Node 22+). In a second terminal:
-
-~~~powershell
-cd frontend
-npm ci
-npm run build
-npm start
-~~~
-
-Open http://localhost:3000 and sign in with the local API token. The frontend
-forwards /api to the backend on 127.0.0.1:8000 (set MASTRR_API_ORIGIN to change it).
-
-The token lives in ignored data/local-api-token. Supply it through the
-Authorization header as Bearer followed by the token. Never publish local mode
-or share that token. Startup does not load .env files automatically; .env.example
-documents environment variables.
-
-~~~powershell
-$headers = @{ Authorization = 'Bearer ' + (Get-Content data/local-api-token -Raw).Trim() }
-Invoke-RestMethod http://127.0.0.1:8000/v1/me/today -Headers $headers
-~~~
-
-To use PostgreSQL, configure DATABASE_URL as a postgresql+psycopg URL and run the
-same migrations. Before multi-user use, disable local development, configure
-SUPABASE_URL with asymmetric signing keys, use a restricted database role, deny
-browser database access, and complete deployment/isolation verification.
-No real Supabase project has been provisioned or verified yet.
+Read [the deployment and review runbook](docs/deployment.md) for exact setup,
+publication, security, backup and pilot steps. [Tutor v2](docs/tutor-v2.md) records
+the tutoring design and its original verification snapshot.
 
 ## Checks
 
-~~~powershell
-New-Item -ItemType Directory .test-tmp -Force | Out-Null
-.venv/Scripts/python.exe -m pytest -q --basetemp=.test-tmp/current
-.venv/Scripts/python.exe -m backend.numbers
-.venv/Scripts/python.exe -m scripts.question_bank audit
-.venv/Scripts/python.exe -m scripts.convergence_study
-~~~
+```text
+python -m pytest -q
+cd frontend
+npm ci
+npm run typecheck
+npm run build
+npx playwright install chromium
+npm run test:e2e
+```
 
-The tests use synthetic fixtures to exercise the complete deterministic flow.
-They cover persistence, grading, public payloads, assistance, cross-user isolation,
-concurrent/replayed submissions, actual due dates under a test clock, exhausted
-families, JWT verification, and migration upgrade/downgrade. Test-clock reviews
-verify software behavior; they do not measure student retention.
+For browser tests, build with `NEXT_PUBLIC_LOCAL_DEVELOPMENT=1` and
+`MASTRR_API_ORIGIN=http://127.0.0.1:8765`. Playwright starts a separate loopback API
+on 8765 and frontend on 3765, creates a new guarded synthetic database in `.e2e/`,
+and makes no paid provider calls. It never uses the normal development database.
+See the GitHub workflow for the Linux setup. Use a fresh workspace-local pytest
+`--basetemp` and `-s` if Windows sandbox output capture or temp paths fail.
 
-SQLite is the local/test fallback. PostgreSQL migration SQL compilation is tested;
-live PostgreSQL integration and concurrency are not verified on this machine.
-
-## API outline
-
-| Method | Path | Purpose |
-| --- | --- | --- |
-| GET | /health | Process health and AI availability |
-| GET | /v1/me/today | Active session, reviews, evidence |
-| POST | /v1/sessions | Start diagnostic, practice, verification, or due review |
-| GET | /v1/sessions/{id} | Resume and issue current public question |
-| POST | /v1/sessions/{id}/abandon | End session without reclaiming reserved families |
-| POST | /v1/assignments/{id}/submit | Submit using an Idempotency-Key header |
-| POST | /v1/assignments/{id}/help | Release reviewed hint or solution with exposure recorded |
-| GET | /v1/me/gaps | Roadmap: status, version, score and answer count per topic |
-| POST | /v1/topics/{skill}/retest | Start the retest for the learner's version |
-| GET | /v1/sessions/{id}/borderline-review | Missed diagnostic questions with solutions |
-| POST | /v1/topics/{skill}/validation | Start the next pilot check-in form (pre, post, delayed) |
-
-Independent checks currently cover divisibility only and require approved basic,
-combined, and constraints facets from distinct unseen families. Direct challenge
-checks are allowed. Prerequisite diagnostics and automatic teaching routes are
-not yet integrated. Diagnostic/practice sessions currently contain one question;
-the next milestone connects these into the adaptive student journey.
-
-## Project records
-
-- [Selected stack](docs/tech-stack.md)
-- [Current build status](docs/build-status.md)
-- [First learning-loop plan](docs/first-learning-loop-plan.md)
-- [Longer implementation plan](docs/implementation-plan.md)
-- [Mastery scoring upgrade status](docs/mastery-scoring-progress.md)
-- [Simulation results](docs/simulation-results.md)
-- [Pilot protocol](docs/pilot-protocol.md)
+The CI workflow includes PostgreSQL migration and public-role isolation checks.
+Docker runtime verification requires a running Docker engine. Hosted account,
+email and Groq checks require real configured services.

@@ -1,3 +1,5 @@
+> Current application update (27 October 2026): this document retains its earlier milestone snapshot. See [application status](application-status.md) and [deployment instructions](deployment.md) for the integrated app, current checks and remaining launch requirements.
+
 # First backend milestone
 
 Updated 23 October 2026.

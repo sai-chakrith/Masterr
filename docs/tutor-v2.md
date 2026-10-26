@@ -1,3 +1,5 @@
+> Current application update (27 October 2026): this document retains its earlier milestone snapshot. See [application status](application-status.md) and [deployment instructions](deployment.md) for the integrated app, current checks and remaining launch requirements.
+
 # Tutor v2 implementation
 
 Implemented 27 October 2026 against this repository's FastAPI/SQLAlchemy application.

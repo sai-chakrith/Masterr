@@ -84,7 +84,9 @@ test("reviewer can save drafts and explicitly publish notes", async ({ page }, i
 test("timed practice withholds results until finished", async ({ page }, info) => {
   await login(page);
   await page.getByRole("link", { name: "Timed practice", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Timed mixed practice", exact: true })).toBeVisible();
   await page.getByRole("checkbox", { name: "Divisibility rules", exact: true }).check();
+  await expect(page.getByRole("checkbox", { name: "Divisibility rules", exact: true })).toBeChecked();
   await page.getByLabel("Questions", { exact: true }).fill("3");
   await page.getByRole("button", { name: "Start timed practice", exact: true }).click();
   for (let i = 0; i < 3; i++) {

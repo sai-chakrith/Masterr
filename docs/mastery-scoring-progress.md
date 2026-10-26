@@ -1,3 +1,5 @@
+> Current application update (27 October 2026): this document retains its earlier milestone snapshot. See [application status](application-status.md) and [deployment instructions](deployment.md) for the integrated app, current checks and remaining launch requirements.
+
 # Mastery scoring upgrade: build status
 
 Updated 26 October 2026. Tracks the task list in the "Mastrr Mastery Scoring Upgrade"
