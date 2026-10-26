@@ -17,3 +17,6 @@ __pycache__/
 /data/*.db
 /data/*.db-*
 /data/local-api-token
+/backups/
+/data/backups/
+/.e2e/

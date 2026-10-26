@@ -1,0 +1,14 @@
+.git
+.venv
+.env
+.env.*
+!.env.example
+frontend
+output
+.tool-cache
+.test-tmp
+.api-smoke-*
+data
+backups
+__pycache__
+.pytest_cache

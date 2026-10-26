@@ -1,0 +1,60 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: mastrr
+      POSTGRES_DB: mastrr
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set a strong URL-safe database password}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, pg_isready -U mastrr -d mastrr]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+  migrate:
+    build: .
+    environment:
+      DATABASE_URL: postgresql+psycopg://mastrr:${POSTGRES_PASSWORD}@db/mastrr
+    command: [sh, -c, "python -m alembic upgrade head && python -m backend.seed"]
+    depends_on:
+      db:
+        condition: service_healthy
+  api:
+    build: .
+    environment:
+      DATABASE_URL: postgresql+psycopg://mastrr:${POSTGRES_PASSWORD}@db/mastrr
+      LOCAL_DEVELOPMENT: "0"
+      MASTRR_ENV: production
+      MASTRR_DEFAULT_SCORING_VERSION: new
+      SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:?Create a Supabase project first}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:-}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      MASTRR_ADMIN_SUBJECTS: ${MASTRR_ADMIN_SUBJECTS:-}
+      MASTRR_TUTOR_DAILY_CALLS: ${MASTRR_TUTOR_DAILY_CALLS:-60}
+      MASTRR_TUTOR_DAILY_TOKEN_BUDGET: ${MASTRR_TUTOR_DAILY_TOKEN_BUDGET:-120000}
+      MASTRR_TUTOR_GLOBAL_TOKEN_BUDGET: ${MASTRR_TUTOR_GLOBAL_TOKEN_BUDGET:-1000000}
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/ready', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:?Set the Supabase URL}
+        NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:?Set the public publishable key}
+    ports:
+      - 127.0.0.1:3000:3000
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+volumes:
+  postgres-data:
