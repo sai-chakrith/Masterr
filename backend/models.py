@@ -10,6 +10,20 @@ class Learner(Base):
     id: Mapped[str] = mapped_column(String(128), primary_key=True)
 
 
+class LearnerGoal(Base):
+    __tablename__ = "learner_goals"
+    learner_id: Mapped[str] = mapped_column(ForeignKey("learners.id"), primary_key=True)
+    curriculum_id: Mapped[str] = mapped_column(String(128))
+    curriculum_version: Mapped[str] = mapped_column(String(64))
+    target_skill_ids: Mapped[list] = mapped_column(JSON)
+    exam_profile_id: Mapped[str | None] = mapped_column(String(128))
+    exam_profile_version: Mapped[str | None] = mapped_column(String(64))
+    exam_profile_snapshot: Mapped[dict | None] = mapped_column(JSON)
+    exam_date: Mapped[str | None] = mapped_column(String(10))
+    timezone: Mapped[str] = mapped_column(String(64), default="Asia/Kolkata", server_default="Asia/Kolkata")
+    updated_at: Mapped[str] = mapped_column(String(40))
+
+
 class Question(Base):
     __tablename__ = "question_versions"
     id: Mapped[str] = mapped_column(String(128), primary_key=True)
@@ -31,6 +45,29 @@ class Question(Base):
         CheckConstraint("difficulty_level BETWEEN 1 AND 5"),
         CheckConstraint("status IN ('draft','approved','withdrawn')"),
         CheckConstraint("purpose IN ('diagnostic','practice','verification','review')"),
+    )
+
+
+class Misconception(Base):
+    __tablename__ = "misconceptions"
+    id: Mapped[str] = mapped_column(String(128), primary_key=True)
+    skill_id: Mapped[str] = mapped_column(String(128), index=True)
+    description: Mapped[str] = mapped_column(Text)
+    short_fix: Mapped[str] = mapped_column(Text)
+
+
+class QuestionOption(Base):
+    __tablename__ = "question_options"
+    question_id: Mapped[str] = mapped_column(ForeignKey("question_versions.id"), primary_key=True)
+    option_id: Mapped[str] = mapped_column(String(128), primary_key=True)
+    position: Mapped[int] = mapped_column(Integer)
+    text: Mapped[str] = mapped_column(Text)
+    value: Mapped[int] = mapped_column(Integer)
+    is_correct: Mapped[bool] = mapped_column(Boolean)
+    misconception_id: Mapped[str | None] = mapped_column(ForeignKey("misconceptions.id"))
+    __table_args__ = (
+        UniqueConstraint("question_id", "position"),
+        CheckConstraint("position >= 0"),
     )
 
 
@@ -94,6 +131,8 @@ class Attempt(Base):
     dont_know: Mapped[bool] = mapped_column(Boolean, default=False, server_default="0")
     raw_answer: Mapped[str] = mapped_column(Text)
     normalized_answer: Mapped[int] = mapped_column(Integer)
+    selected_option_id: Mapped[str | None] = mapped_column(String(128))
+    misconception_id: Mapped[str | None] = mapped_column(String(128))
     working: Mapped[str] = mapped_column(Text)
     correct: Mapped[bool] = mapped_column(Boolean)
     assistance: Mapped[str] = mapped_column(String(32))
@@ -135,6 +174,47 @@ class Review(Base):
     )
 
 
+class LearningProgress(Base):
+    __tablename__ = "learning_progress"
+    learner_id: Mapped[str] = mapped_column(ForeignKey("learners.id"), primary_key=True)
+    skill_id: Mapped[str] = mapped_column(String(128), primary_key=True)
+    phase: Mapped[str] = mapped_column(String(40), default="none", server_default="none")
+    practice_count: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+    best_probability: Mapped[float | None] = mapped_column(Float)
+    no_progress_count: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+    recent_probabilities: Mapped[list] = mapped_column(JSON, default=list)
+    stuck: Mapped[bool] = mapped_column(Boolean, default=False, server_default="0")
+    policy_version: Mapped[str] = mapped_column(String(64))
+    updated_at: Mapped[str] = mapped_column(String(40))
+    __table_args__ = (
+        CheckConstraint("phase IN ('none','diagnostic','tutoring','tutoring_complete','practice','ready_for_retest','stuck','review')"),
+        CheckConstraint("practice_count >= 0"),
+        CheckConstraint("no_progress_count >= 0"),
+        CheckConstraint("best_probability IS NULL OR best_probability BETWEEN 0 AND 1"),
+    )
+
+
+class RecommendationEvent(Base):
+    __tablename__ = "recommendation_events"
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    learner_id: Mapped[str] = mapped_column(ForeignKey("learners.id"), index=True)
+    action_kind: Mapped[str] = mapped_column(String(40))
+    skill_id: Mapped[str | None] = mapped_column(String(128))
+    reason_code: Mapped[str] = mapped_column(String(64))
+    reason: Mapped[str] = mapped_column(Text)
+    alternatives: Mapped[list] = mapped_column(JSON, default=list)
+    state_fingerprint: Mapped[str] = mapped_column(String(64))
+    policy_version: Mapped[str] = mapped_column(String(64))
+    status: Mapped[str] = mapped_column(String(24), default="shown", server_default="shown")
+    shown_at: Mapped[str] = mapped_column(String(40))
+    followed_at: Mapped[str | None] = mapped_column(String(40))
+    dismissed_at: Mapped[str | None] = mapped_column(String(40))
+    __table_args__ = (
+        CheckConstraint("status IN ('shown','followed','dismissed','expired')"),
+        Index("ix_recommendation_learner_shown", "learner_id", "shown_at"),
+    )
+
+
 class TopicScoringConfig(Base):
     """Per-learner/topic assignment; defaults preserve the current learning policy."""
     __tablename__ = "topic_scoring_configs"
@@ -142,6 +222,15 @@ class TopicScoringConfig(Base):
     skill_id: Mapped[str] = mapped_column(String(128), primary_key=True)
     scoring_version: Mapped[str] = mapped_column(String(32), default="current", server_default="current")
     __table_args__ = (CheckConstraint("scoring_version IN ('current','new')"),)
+
+
+class TopicPracticeConfig(Base):
+    """Independent practice treatment assignment; it does not alter scoring policy."""
+    __tablename__ = "topic_practice_configs"
+    learner_id: Mapped[str] = mapped_column(ForeignKey("learners.id"), primary_key=True)
+    skill_id: Mapped[str] = mapped_column(String(128), primary_key=True)
+    strategy: Mapped[str] = mapped_column(String(24), default="personalised", server_default="personalised")
+    __table_args__ = (CheckConstraint("strategy IN ('personalised','fixed')"),)
 
 
 class MasteryEstimate(Base):

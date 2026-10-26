@@ -2,15 +2,401 @@
   "schema_version": 1,
   "id": "numbers",
   "title": "Numbers",
-  "audience": ["placement preparation", "college-level aptitude learners"],
+  "audience": [
+    "placement preparation",
+    "college-level aptitude learners"
+  ],
   "status": "draft",
   "scope_note": "Proposed original curriculum. The supplied college material shows a Numbers chapter on page 7; chapter content has not been provided or reviewed.",
   "skills": [
-    {"id": "integer-properties", "title": "Integers, parity and number properties", "prerequisites": [], "objective": "Classify integers and reason about odd and even numbers.", "lesson": "An integer is even when it is divisible by 2, including zero and negative multiples of 2. Other integers are odd. Test a claim with examples, then explain it using 2k or 2k+1."},
-    {"id": "divisibility", "title": "Divisibility rules", "prerequisites": ["integer-properties"], "objective": "Apply divisibility rules and combine conditions.", "lesson": "A number is divisible by 3 or 9 when its digit sum is divisible by 3 or 9. Divisibility by 6 requires divisibility by both 2 and 3. Applying only one necessary condition is insufficient."},
-    {"id": "primes-factors", "title": "Primes, composites and factors", "prerequisites": ["divisibility"], "objective": "Recognize prime numbers and enumerate positive factors.", "lesson": "A prime is an integer greater than 1 with exactly two positive factors. One is neither prime nor composite. Pair factors around the square root; count the square root only once for perfect squares."},
-    {"id": "hcf-lcm", "title": "HCF and LCM", "prerequisites": ["primes-factors"], "objective": "Distinguish common factors from common multiples and apply each in context.", "lesson": "HCF is the greatest positive common factor; LCM is the least positive common multiple. Equal groups without leftovers typically use HCF; simultaneous repeating events typically use LCM. For positive integers a and b, HCF(a,b) times LCM(a,b) equals a times b."},
-    {"id": "remainders", "title": "Remainders", "prerequisites": ["divisibility"], "objective": "Use quotient-remainder form and simplify powers modulo a positive divisor.", "lesson": "For an integer n and positive divisor d, write n = dq+r with 0 <= r < d. Reduce factors before multiplying. A remainder is constrained by the divisor and is not the decimal part of division."},
-    {"id": "digits-cyclicity", "title": "Place value and units-digit cycles", "prerequisites": ["remainders"], "objective": "Use place value and repeated units-digit patterns.", "lesson": "The units digit is the remainder modulo 10. Powers of 2 end in 2,4,8,6 and repeat. An exponent divisible by the cycle length uses the last position of the cycle, not the first."}
+    {
+      "id": "integer-properties",
+      "title": "Number Systems: Integers and Properties",
+      "prerequisites": [],
+      "objective": "Classify integers and reason about odd and even numbers.",
+      "lesson": "An integer is even when it is divisible by 2, including zero and negative multiples of 2. Other integers are odd. Test a claim with examples, then explain it using 2k or 2k+1.",
+      "worked_example": {
+        "prompt": "How many even integers are from -2 through 8, including both endpoints?",
+        "steps": [
+          "List the even integers in order: -2, 0, 2, 4, 6, 8.",
+          "Count each term once. There are six terms."
+        ],
+        "answer": "6"
+      },
+      "half_worked_example": {
+        "prompt": "How many even integers are from -4 through 10, including both endpoints?",
+        "steps": [
+          "The first even integer is -4.",
+          "The last even integer is 10.",
+          "The terms increase by 2; count the terms in this sequence."
+        ],
+        "learner_prompt": "How many terms are there?"
+      }
+    },
+    {
+      "id": "divisibility",
+      "title": "Divisibility rules",
+      "prerequisites": [
+        "integer-properties"
+      ],
+      "objective": "Apply divisibility rules and combine conditions.",
+      "lesson": "A number is divisible by 3 or 9 when its digit sum is divisible by 3 or 9. Divisibility by 6 requires divisibility by both 2 and 3. Applying only one necessary condition is insufficient.",
+      "worked_example": {
+        "prompt": "What digit replaces ? in 53? so the number is divisible by 6?",
+        "steps": [
+          "Divisibility by 6 requires an even last digit and a digit sum divisible by 3.",
+          "The known digits sum to 8. Among even digits, 4 makes 8 + 4 divisible by 3.",
+          "The missing digit is 4, giving 534."
+        ],
+        "answer": "4"
+      },
+      "half_worked_example": {
+        "prompt": "What digit replaces ? in 53? so the number is divisible by 6?",
+        "steps": [
+          "The last digit must be even.",
+          "The known digits sum to 8, so the total digit sum must be a multiple of 3.",
+          "Check even digits against that condition."
+        ],
+        "learner_prompt": "Which digit satisfies both rules?"
+      }
+    },
+    {
+      "id": "primes-factors",
+      "title": "Primes, composites and factors",
+      "prerequisites": [
+        "divisibility"
+      ],
+      "objective": "Recognize prime numbers and enumerate positive factors.",
+      "lesson": "A prime is an integer greater than 1 with exactly two positive factors. One is neither prime nor composite. Pair factors around the square root; count the square root only once for perfect squares.",
+      "worked_example": {
+        "prompt": "How many positive factors does 36 have?",
+        "steps": [
+          "Pair factors: 1×36, 2×18, 3×12, 4×9, and 6×6.",
+          "The square-root pair contributes one distinct factor, 6, not two.",
+          "The distinct factors are 1, 2, 3, 4, 6, 9, 12, 18, 36."
+        ],
+        "answer": "9"
+      },
+      "half_worked_example": {
+        "prompt": "How many positive factors does 49 have?",
+        "steps": [
+          "The factor pairs are 1×49 and 7×7.",
+          "The repeated factor 7 is counted once."
+        ],
+        "learner_prompt": "How many distinct positive factors are there?"
+      }
+    },
+    {
+      "id": "hcf-lcm",
+      "title": "HCF and LCM",
+      "prerequisites": [
+        "primes-factors"
+      ],
+      "objective": "Distinguish common factors from common multiples and apply each in context.",
+      "lesson": "HCF is the greatest positive common factor; LCM is the least positive common multiple. Equal groups without leftovers typically use HCF; simultaneous repeating events typically use LCM. For positive integers a and b, HCF(a,b) times LCM(a,b) equals a times b.",
+      "worked_example": {
+        "prompt": "Find the HCF and LCM of 12 and 18.",
+        "steps": [
+          "12 = 2²×3 and 18 = 2×3².",
+          "Use the minimum shared powers for HCF: 2×3 = 6.",
+          "Use the maximum powers for LCM: 2²×3² = 36."
+        ],
+        "answer": "HCF = 6; LCM = 36"
+      },
+      "half_worked_example": {
+        "prompt": "Find the HCF and LCM of 8 and 12.",
+        "steps": [
+          "8 = 2³ and 12 = 2²×3.",
+          "For HCF, take the minimum powers of shared primes.",
+          "For LCM, take the maximum power of each prime present."
+        ],
+        "learner_prompt": "What are the HCF and LCM?"
+      }
+    },
+    {
+      "id": "remainders",
+      "title": "Remainders",
+      "prerequisites": [
+        "divisibility"
+      ],
+      "objective": "Use quotient-remainder form and simplify powers modulo a positive divisor.",
+      "lesson": "For an integer n and positive divisor d, write n = dq+r with 0 <= r < d. Reduce factors before multiplying. A remainder is constrained by the divisor and is not the decimal part of division.",
+      "worked_example": {
+        "prompt": "What is the remainder when 7⁴ is divided by 5?",
+        "steps": [
+          "Since 7 leaves remainder 2 modulo 5, replace 7⁴ with 2⁴ modulo 5.",
+          "2⁴ = 16 = 3×5 + 1.",
+          "The remainder is 1."
+        ],
+        "answer": "1"
+      },
+      "half_worked_example": {
+        "prompt": "What is the remainder when 3⁵ is divided by 8?",
+        "steps": [
+          "3² = 9 leaves remainder 1 modulo 8.",
+          "Write 3⁵ as 3×(3²)², then reduce each factor modulo 8."
+        ],
+        "learner_prompt": "What remainder do you get?"
+      }
+    },
+    {
+      "id": "digits-cyclicity",
+      "title": "Place value and units-digit cycles",
+      "prerequisites": [
+        "remainders"
+      ],
+      "objective": "Use place value and repeated units-digit patterns.",
+      "lesson": "The units digit is the remainder modulo 10. Powers of 2 end in 2,4,8,6 and repeat. An exponent divisible by the cycle length uses the last position of the cycle, not the first.",
+      "worked_example": {
+        "prompt": "What is the units digit of 3⁷?",
+        "steps": [
+          "The units digits of powers of 3 repeat 3, 9, 7, 1; the cycle length is 4.",
+          "7 leaves remainder 3 when divided by 4.",
+          "The third digit in the cycle is 7."
+        ],
+        "answer": "7"
+      },
+      "half_worked_example": {
+        "prompt": "What is the units digit of 2¹⁰?",
+        "steps": [
+          "The units digits of powers of 2 repeat 2, 4, 8, 6.",
+          "Reduce the exponent 10 modulo the cycle length 4."
+        ],
+        "learner_prompt": "Which position of the cycle gives the units digit?"
+      }
+    },
+    {
+      "id": "percentages",
+      "title": "Percentages",
+      "prerequisites": [
+        "integer-properties"
+      ],
+      "objective": "Interpret a percent as a rate per hundred and calculate percentage change from the correct base.",
+      "lesson": "A percent is a fraction with denominator 100. For a percentage of an amount, multiply by the rate and divide by 100. For percentage change, compare the change with the original amount, not the new amount.",
+      "worked_example": {
+        "prompt": "Find 15% of 240.",
+        "steps": [
+          "15% means 15 per 100.",
+          "Compute 240 × 15 / 100.",
+          "The result is 36."
+        ],
+        "answer": "36"
+      },
+      "half_worked_example": {
+        "prompt": "A price of 500 increases by 12%. What is the increase?",
+        "steps": [
+          "The increase is 12% of the original price.",
+          "Compute 500 × 12 / 100."
+        ],
+        "learner_prompt": "What is the increase?"
+      }
+    },
+    {
+      "id": "profit-loss",
+      "title": "Profit and Loss",
+      "prerequisites": [
+        "percentages"
+      ],
+      "objective": "Calculate selling price and percentage profit or loss using cost price as the base.",
+      "lesson": "Profit equals selling price minus cost price; loss equals cost price minus selling price. Profit or loss percent is measured against cost price. A selling price at a profit rate is cost × (100 + rate)/100; at a loss rate it is cost × (100 - rate)/100.",
+      "worked_example": {
+        "prompt": "An item costs 800 and is sold at a 15% profit. Find the selling price.",
+        "steps": [
+          "Profit is 15% of the cost: 800 × 15 / 100 = 120.",
+          "Add the profit to cost price: 800 + 120."
+        ],
+        "answer": "920"
+      },
+      "half_worked_example": {
+        "prompt": "An item costs 600 and is sold at a 10% loss. Find the selling price.",
+        "steps": [
+          "Loss is 10% of cost price.",
+          "Subtract the loss from the cost price."
+        ],
+        "learner_prompt": "What is the selling price?"
+      }
+    },
+    {
+      "id": "simple-interest",
+      "title": "Simple Interest",
+      "prerequisites": [
+        "percentages"
+      ],
+      "objective": "Calculate simple interest and total amount from principal, annual rate and time.",
+      "lesson": "Simple interest is calculated on the original principal for every period. With annual rate R percent and time T years, interest is P × R × T / 100. The total amount is principal plus interest.",
+      "worked_example": {
+        "prompt": "Find the simple interest on 2,000 at 5% per year for 3 years.",
+        "steps": [
+          "Use I = PRT/100.",
+          "I = 2,000 × 5 × 3 / 100 = 300.",
+          "The principal is unchanged each year."
+        ],
+        "answer": "300"
+      },
+      "half_worked_example": {
+        "prompt": "Find the simple interest on 1,500 at 8% per year for 2 years.",
+        "steps": [
+          "Use I = PRT/100.",
+          "Substitute P = 1,500, R = 8 and T = 2."
+        ],
+        "learner_prompt": "What is the interest?"
+      }
+    },
+    {
+      "id": "compound-interest",
+      "title": "Compound Interest",
+      "prerequisites": [
+        "simple-interest"
+      ],
+      "objective": "Calculate annual compound growth by applying each period's rate to the current amount.",
+      "lesson": "Under annual compounding, each period's interest becomes part of the next period's principal. Amount after T years is P × (1 + R/100)^T; compound interest is amount minus P. Unlike simple interest, later interest is earned on earlier interest too.",
+      "worked_example": {
+        "prompt": "Find the compound interest on 1,000 at 10% per year for 2 years, compounded annually.",
+        "steps": [
+          "After year one: 1,000 × 1.1 = 1,100.",
+          "After year two: 1,100 × 1.1 = 1,210.",
+          "Subtract the original principal: 1,210 - 1,000."
+        ],
+        "answer": "210"
+      },
+      "half_worked_example": {
+        "prompt": "Find the compound interest on 2,000 at 10% per year for 3 years, compounded annually.",
+        "steps": [
+          "Multiply the principal by 1.1 once for each year.",
+          "Subtract the starting principal from the final amount."
+        ],
+        "learner_prompt": "What is the compound interest?"
+      }
+    },
+    {
+      "id": "ratio-proportion",
+      "title": "Ratio and Proportion",
+      "prerequisites": [
+        "integer-properties"
+      ],
+      "objective": "Simplify ratios and divide a whole into shares proportional to given terms.",
+      "lesson": "A ratio compares quantities in the same order and units. To divide a total in ratio a:b, there are a+b equal parts; each part is total/(a+b). A proportion states that two ratios are equal and can be solved by cross multiplication.",
+      "worked_example": {
+        "prompt": "Divide 420 in the ratio 2:5.",
+        "steps": [
+          "The total number of parts is 2 + 5 = 7.",
+          "Each part is 420 / 7 = 60.",
+          "The shares are 2 × 60 and 5 × 60."
+        ],
+        "answer": "120 and 300"
+      },
+      "half_worked_example": {
+        "prompt": "Divide 360 in the ratio 1:5.",
+        "steps": [
+          "There are 1 + 5 equal parts.",
+          "Find the value of one part, then multiply by each ratio term."
+        ],
+        "learner_prompt": "What are the two shares?"
+      }
+    },
+    {
+      "id": "averages",
+      "title": "Averages",
+      "prerequisites": [
+        "ratio-proportion"
+      ],
+      "objective": "Use arithmetic mean and infer a total or missing value from a mean.",
+      "lesson": "The arithmetic mean is the sum of values divided by the number of values. Therefore sum = mean × count. When one value is missing, find the required total first, then subtract the known values.",
+      "worked_example": {
+        "prompt": "The average of 5 numbers is 18. What is their total?",
+        "steps": [
+          "Use total = average × count.",
+          "Multiply 18 by 5."
+        ],
+        "answer": "90"
+      },
+      "half_worked_example": {
+        "prompt": "Four scores have average 25. Three scores are 20, 24 and 30. Find the fourth score.",
+        "steps": [
+          "The total of all four scores is 25 × 4.",
+          "Subtract the three known scores from that total."
+        ],
+        "learner_prompt": "What is the missing score?"
+      }
+    },
+    {
+      "id": "mixtures-alligations",
+      "title": "Mixtures and Alligation",
+      "prerequisites": [
+        "ratio-proportion",
+        "percentages"
+      ],
+      "objective": "Find a mixture concentration or component ratio using weighted averages and alligation.",
+      "lesson": "A mixture's concentration is a weighted mean: total pure ingredient divided by total mixture. For two strengths L and H mixed to target M, the amounts are in ratio (H-M):(M-L), provided L < M < H. Keep the differences attached to the opposite ingredients.",
+      "worked_example": {
+        "prompt": "Mix equal amounts of 20% and 40% solutions. What is the concentration?",
+        "steps": [
+          "Each amount contributes its concentration weighted by its quantity.",
+          "For equal quantities, the weighted mean is (20 + 40)/2."
+        ],
+        "answer": "30%"
+      },
+      "half_worked_example": {
+        "prompt": "Mix a 10% and a 40% solution to make a 20% mixture. What is the ratio of 10% solution to 40% solution?",
+        "steps": [
+          "Use alligation: the low-strength amount is the difference 40 - 20.",
+          "The high-strength amount is the difference 20 - 10."
+        ],
+        "learner_prompt": "What is the simplified ratio?"
+      }
+    },
+    {
+      "id": "partnership",
+      "title": "Partnership",
+      "prerequisites": [
+        "ratio-proportion"
+      ],
+      "objective": "Divide partnership profit in proportion to invested capital and time.",
+      "lesson": "When partners invest for different durations, their profit shares follow capital × time. Compute each partner's capital-month product, form the ratio, then divide total profit in that ratio. For equal time, the ratio reduces to the capitals.",
+      "worked_example": {
+        "prompt": "A invests 10,000 for 12 months and B invests 20,000 for 6 months. Divide a profit of 6,000.",
+        "steps": [
+          "A's capital-time product is 10,000 × 12 = 120,000.",
+          "B's product is 20,000 × 6 = 120,000, so shares are equal.",
+          "Split 6,000 equally."
+        ],
+        "answer": "3,000 each"
+      },
+      "half_worked_example": {
+        "prompt": "A invests 8,000 for 12 months and B invests 12,000 for 6 months. Divide a profit of 9,000.",
+        "steps": [
+          "Calculate each capital-time product.",
+          "Simplify their ratio and divide the profit accordingly."
+        ],
+        "learner_prompt": "What is A's share?"
+      }
+    },
+    {
+      "id": "time-work",
+      "title": "Time and Work",
+      "prerequisites": [
+        "ratio-proportion"
+      ],
+      "objective": "Combine work rates and solve completion-time questions using a consistent work unit.",
+      "lesson": "If a worker completes a job in d days, their daily rate is 1/d of the job. Add rates for people working together. A shared integer work-unit total can make rates easier to calculate; ensure the chosen unit is divisible by each worker's days.",
+      "worked_example": {
+        "prompt": "A completes a job in 6 days and B in 3 days. How many of 6 equal work units do they complete together each day?",
+        "steps": [
+          "A completes 6/6 = 1 unit each day.",
+          "B completes 6/3 = 2 units each day.",
+          "Together they complete 1 + 2 units."
+        ],
+        "answer": "3 units per day"
+      },
+      "half_worked_example": {
+        "prompt": "A completes a job in 4 days and B in 6 days. Use 12 equal units. How many units do they complete together each day?",
+        "steps": [
+          "A completes 12/4 units per day.",
+          "B completes 12/6 units per day.",
+          "Add the two rates."
+        ],
+        "learner_prompt": "How many units per day?"
+      }
+    }
   ]
 }

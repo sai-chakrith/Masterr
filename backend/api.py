@@ -9,6 +9,9 @@ from backend.auth import Settings, make_identity
 from backend.db import make_engine
 from backend.learning import LearningError, LearningService
 from backend.tutor import TutorService
+from backend.personalisation import PersonalisationError, PersonalisationService
+from backend.curriculum import load_curriculum
+from backend.exam_profiles import approved_profiles, load_exam_profiles
 
 
 class StrictBody(BaseModel):
@@ -23,6 +26,7 @@ class SessionBody(StrictBody):
 
 class Submission(StrictBody):
     answer: str = Field(default="", max_length=32)
+    option_id: str | None = Field(default=None, max_length=128)
     dont_know: bool = Field(default=False, strict=True)
     working: str = Field(default="", max_length=2000)
     duration_ms: int | None = Field(default=None, ge=0, le=86400000, strict=True)
@@ -32,14 +36,28 @@ class HelpBody(StrictBody):
     kind: Literal["hint", "solution"]
 
 
+class GoalBody(StrictBody):
+    target_skill_ids: list[str] = Field(default_factory=list, max_length=35)
+    exam_profile_id: str | None = Field(default=None, max_length=128)
+    exam_date: str | None = Field(default=None, pattern=r"^\d{4}-\d{2}-\d{2}$")
+    timezone: str = Field(default="Asia/Kolkata", max_length=64)
+
+
+class RecommendationBody(StrictBody):
+    state_fingerprint: str = Field(min_length=64, max_length=64)
+    action_index: int = Field(default=0, ge=0, le=2, strict=True)
+
+
 def create_app(engine=None, settings=None):
     settings = settings or Settings.from_env()
     engine = engine or make_engine(settings.database_url)
     service = LearningService(engine)
     tutor_service = TutorService(engine)
+    personalisation = PersonalisationService(engine, service)
     app = FastAPI(title="Mastrr learning API", version="0.1.0")
     app.state.service = service
     app.state.tutor = tutor_service
+    app.state.personalisation = personalisation
     authenticate = make_identity(settings)
 
     def learner(subject: Annotated[str, Depends(authenticate)]):
@@ -50,6 +68,66 @@ def create_app(engine=None, settings=None):
     def domain_error(request: Request, error: LearningError):
         return JSONResponse(status_code=error.status,
                             content={"error": {"code": error.code, "message": error.message}})
+
+    @app.exception_handler(PersonalisationError)
+    def personalisation_error(request: Request, error: PersonalisationError):
+        return JSONResponse(status_code=error.status,
+                            content={"error": {"code": error.code, "message": error.message}})
+
+    @app.get("/v1/curriculum")
+    def curriculum(owner: Annotated[str, Depends(learner)]):
+        document = load_curriculum()
+        return {
+            "id": document["id"],
+            "version": str(document.get("schema_version", "1")),
+            "status": document.get("status", "draft"),
+            "skills": [
+                {"id": s["id"], "title": s["title"], "prerequisites": s["prerequisites"],
+                 "objective": s.get("objective") if document.get("status") == "approved" else None,
+                 "lesson": s.get("lesson") if document.get("status") == "approved" else None}
+                for s in document["skills"]
+            ],
+            "exam_profiles": [
+                {"id": profile["id"], "name": profile["name"],
+                 "target_skill_ids": profile["target_skill_ids"],
+                 "default_mastery_bar": profile.get("default_mastery_bar", 0.75),
+                 "topic_bars": profile.get("topic_bars", {})}
+                for profile in approved_profiles(load_exam_profiles())
+            ],
+        }
+
+    @app.get("/v1/me/goal")
+    def get_goal(owner: Annotated[str, Depends(learner)]):
+        return personalisation.get_goal(owner)
+
+    @app.put("/v1/me/goal")
+    def set_goal(body: GoalBody, owner: Annotated[str, Depends(learner)]):
+        return personalisation.set_goal(owner, body.target_skill_ids, body.exam_date,
+                                        body.timezone, body.exam_profile_id)
+
+    @app.get("/v1/me/next-action")
+    def next_action(owner: Annotated[str, Depends(learner)]):
+        return personalisation.next_action(owner)
+
+    @app.get("/v1/me/roadmap")
+    def roadmap(owner: Annotated[str, Depends(learner)]):
+        return personalisation.roadmap(owner)
+
+    @app.get("/v1/me/teaching/{skill_id}")
+    def teaching(skill_id: str, owner: Annotated[str, Depends(learner)]):
+        return personalisation.teaching(owner, skill_id)
+
+    @app.post("/v1/me/recommendations", status_code=201)
+    def record_recommendation(body: RecommendationBody, owner: Annotated[str, Depends(learner)]):
+        return personalisation.record_recommendation(owner, body.state_fingerprint, body.action_index)
+
+    @app.post("/v1/me/recommendations/{recommendation_id}/dismiss")
+    def dismiss_recommendation(recommendation_id: str, owner: Annotated[str, Depends(learner)]):
+        return personalisation.dismiss_recommendation(owner, recommendation_id)
+
+    @app.post("/v1/me/recommendations/{recommendation_id}/follow")
+    def follow_recommendation(recommendation_id: str, owner: Annotated[str, Depends(learner)]):
+        return personalisation.follow_recommendation(owner, recommendation_id)
 
     @app.get("/v1/me/gaps")
     def gaps(owner: Annotated[str, Depends(learner)]):
@@ -99,7 +177,8 @@ def create_app(engine=None, settings=None):
     @app.post("/v1/assignments/{assignment_id}/submit")
     def submit(assignment_id: str, body: Submission, owner: Annotated[str, Depends(learner)],
                idempotency_key: Annotated[str, Header(min_length=1, max_length=128)]):
-        return service.submit(owner, assignment_id, body.answer, body.working, idempotency_key, body.duration_ms, body.dont_know)
+        return service.submit(owner, assignment_id, body.answer, body.working, idempotency_key,
+                              body.duration_ms, body.dont_know, body.option_id)
 
     @app.post("/v1/assignments/{assignment_id}/help")
     def help(assignment_id: str, body: HelpBody, owner: Annotated[str, Depends(learner)]):

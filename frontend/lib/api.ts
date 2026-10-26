@@ -21,6 +21,7 @@ export interface QuestionView {
   difficulty: string;
   position: number;
   facet: string;
+  options?: { id: string; text: string }[];
 }
 
 export interface SessionView {
@@ -44,6 +45,14 @@ export interface SubmitResult {
   decision?: string;
   score?: number;
   answers?: number;
+  explanation?: string;
+  misconception_feedback?: {
+    id: string;
+    description: string;
+    short_fix: string;
+    occurrence_count: number;
+    targeted_reset: boolean;
+  };
   outcomes?: { attempt_id: string; correct: boolean; assistance: string }[];
 }
 
@@ -53,6 +62,47 @@ export interface ReviewItem {
   answer: string;
   dont_know: boolean;
   solution: string;
+}
+
+export interface LearningAction {
+  kind: string;
+  skill_id: string | null;
+  reason_code: string;
+  reason: string;
+}
+
+export interface TeachingPlan {
+  skill_id: string;
+  curriculum_version: string;
+  mode: "worked_examples" | "hinted_practice" | "practice_first";
+  score: number | null;
+  content_available: boolean;
+  objective: string | null;
+  lesson: string | null;
+  worked_example: { prompt: string; steps: string[]; answer: string } | null;
+  half_worked_example: { prompt: string; steps: string[]; learner_prompt: string } | null;
+  hints_available: boolean;
+  explanation_after_mistake: boolean;
+}
+
+export interface Roadmap {
+  route_skill_ids: string[];
+  state_fingerprint: string;
+  nodes: {
+    skill_id: string;
+    title: string;
+    prerequisites: string[];
+    status: string;
+    phase: string;
+    score: number | null;
+    mastery_bar: number;
+    answer_count: number;
+    next_review_at: string | null;
+    available: boolean;
+    source_session_id: string | null;
+  }[];
+  next_actions: LearningAction[];
+  weekly_pace: { remaining_topics: number; weeks_left: number; topics_per_week: number | null; exam_date_passed: boolean } | null;
 }
 
 export class ApiError extends Error {
@@ -96,13 +146,65 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
 }
 
 export const api = {
+  curriculum: () => request<{
+    id: string;
+    version: string;
+    status: string;
+    skills: { id: string; title: string; prerequisites: string[]; objective: string | null; lesson: string | null }[];
+    exam_profiles: {
+      id: string;
+      name: string;
+      target_skill_ids: string[];
+      default_mastery_bar: number;
+      topic_bars: Record<string, number>;
+    }[];
+  }>("/v1/curriculum"),
+  goal: () => request<{
+    target_skill_ids: string[];
+    route_skill_ids: string[];
+    exam_profile_id: string | null;
+    exam_profile_version: string | null;
+    exam_profile_name: string | null;
+    exam_date: string | null;
+    timezone: string;
+  } | null>("/v1/me/goal"),
+  setGoal: (body: { target_skill_ids?: string[]; exam_profile_id?: string | null; exam_date?: string | null; timezone?: string }) =>
+    request<{ route_skill_ids: string[]; exam_profile_id: string | null; exam_profile_name: string | null }>("/v1/me/goal", {
+      method: "PUT", body: JSON.stringify(body),
+    }),
+  roadmap: () => request<Roadmap>("/v1/me/roadmap"),
+  teaching: (skillId: string) => request<TeachingPlan>(`/v1/me/teaching/${skillId}`),
+  nextAction: () => request<{
+    state_fingerprint: string;
+    availability: string;
+    actions: LearningAction[];
+  }>("/v1/me/next-action"),
+  logRecommendation: (state_fingerprint: string, action_index: number) =>
+    request<{ recommendation_id: string; action: LearningAction }>("/v1/me/recommendations", {
+      method: "POST", body: JSON.stringify({ state_fingerprint, action_index }),
+    }),
+  dismissRecommendation: (id: string) =>
+    request<{ status: string }>("/v1/me/recommendations/" + id + "/dismiss", { method: "POST" }),
+  followRecommendation: (id: string) =>
+    request<{ status: string }>("/v1/me/recommendations/" + id + "/follow", { method: "POST" }),
   gaps: () => request<Topic[]>("/v1/me/gaps"),
-  today: () => request<{ active_session_id: string | null }>("/v1/me/today"),
+  today: () => request<{
+    active_session_id: string | null;
+    reviews: { id: string; skill_id: string; is_due: boolean; due_at: string }[];
+  }>("/v1/me/today"),
   session: (id: string) => request<SessionView>(`/v1/sessions/${id}`),
   startDiagnostic: (skill: string) =>
     request<{ session_id: string }>("/v1/sessions", {
       method: "POST",
       body: JSON.stringify({ skill_id: skill, mode: "diagnostic" }),
+    }),
+  startPractice: (skill: string) =>
+    request<{ session_id: string }>("/v1/sessions", {
+      method: "POST", body: JSON.stringify({ skill_id: skill, mode: "practice" }),
+    }),
+  startReview: (skill: string, reviewId: string) =>
+    request<{ session_id: string }>("/v1/sessions", {
+      method: "POST", body: JSON.stringify({ skill_id: skill, mode: "review", review_id: reviewId }),
     }),
   startRetest: (skill: string) => request<{ session_id: string }>(`/v1/topics/${skill}/retest`, { method: "POST" }),
   startValidation: (skill: string) =>
@@ -113,11 +215,16 @@ export const api = {
   submit: (
     assignmentId: string,
     key: string,
-    body: { answer: string; dont_know: boolean; working: string; duration_ms: number },
+    body: { answer: string; option_id?: string | null; dont_know: boolean; working: string; duration_ms: number },
   ) =>
     request<SubmitResult>(`/v1/assignments/${assignmentId}/submit`, {
       method: "POST",
       headers: { "Idempotency-Key": key },
       body: JSON.stringify(body),
     }),
+  help: (assignmentId: string, kind: "hint" | "solution") =>
+    request<{ kind: string; text: string; assessment_ended: boolean }>(
+      `/v1/assignments/${assignmentId}/help`,
+      { method: "POST", body: JSON.stringify({ kind }) },
+    ),
 };

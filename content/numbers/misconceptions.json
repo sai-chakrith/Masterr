@@ -1,0 +1,285 @@
+{
+  "schema_version": 2,
+  "misconceptions": [
+    {
+      "id": "percent-forgot-divide-100",
+      "skill_id": "percentages",
+      "description": "Multiplies by the percentage number but does not divide by 100.",
+      "short_fix": "Convert the percent to a fraction over 100 before multiplying.",
+      "review_status": "draft"
+    },
+    {
+      "id": "percent-part-vs-new-total",
+      "skill_id": "percentages",
+      "description": "Adds the percentage part to the original amount when the question asks for the part alone.",
+      "short_fix": "Check whether the task asks for the percentage amount or the updated total.",
+      "review_status": "draft"
+    },
+    {
+      "id": "percent-complement-confusion",
+      "skill_id": "percentages",
+      "description": "Uses the complementary percentage when asked for the percentage amount itself.",
+      "short_fix": "Identify whether the question asks for the part, the remaining part, or the new total.",
+      "review_status": "draft"
+    },
+    {
+      "id": "profit-loss-base-confusion",
+      "skill_id": "profit-loss",
+      "description": "Calculates the profit or loss percentage using selling price rather than cost price.",
+      "short_fix": "Profit and loss percentages use cost price as their base.",
+      "review_status": "draft"
+    },
+    {
+      "id": "profit-loss-direction-reversed",
+      "skill_id": "profit-loss",
+      "description": "Adds a loss or subtracts a profit when calculating selling price.",
+      "short_fix": "Profit increases selling price above cost; loss decreases it below cost.",
+      "review_status": "draft"
+    },
+    {
+      "id": "profit-loss-amount-vs-price",
+      "skill_id": "profit-loss",
+      "description": "Reports the profit or loss amount instead of the requested selling price.",
+      "short_fix": "Combine the change amount with the cost price to find selling price.",
+      "review_status": "draft"
+    },
+    {
+      "id": "simple-interest-time-omitted",
+      "skill_id": "simple-interest",
+      "description": "Calculates one period of interest and ignores the number of years.",
+      "short_fix": "Multiply the annual interest by the full time in years.",
+      "review_status": "draft"
+    },
+    {
+      "id": "simple-interest-percent-scale",
+      "skill_id": "simple-interest",
+      "description": "Uses the rate as a whole number without converting percent to a fraction.",
+      "short_fix": "Divide the rate by 100 in the PRT/100 formula.",
+      "review_status": "draft"
+    },
+    {
+      "id": "simple-vs-compound",
+      "skill_id": "simple-interest",
+      "description": "Applies a changing balance even though the question specifies simple interest.",
+      "short_fix": "Simple interest is calculated on the original principal each period.",
+      "review_status": "draft"
+    },
+    {
+      "id": "compound-as-simple",
+      "skill_id": "compound-interest",
+      "description": "Adds the same interest amount each year instead of compounding.",
+      "short_fix": "Apply the growth factor to the current amount after every period.",
+      "review_status": "draft"
+    },
+    {
+      "id": "compound-amount-vs-interest",
+      "skill_id": "compound-interest",
+      "description": "Reports the final amount rather than subtracting the original principal to get interest.",
+      "short_fix": "Compound interest equals final amount minus principal.",
+      "review_status": "draft"
+    },
+    {
+      "id": "compound-time-missed",
+      "skill_id": "compound-interest",
+      "description": "Applies the growth factor too few or too many times.",
+      "short_fix": "Apply one growth factor for each completed compounding period.",
+      "review_status": "draft"
+    },
+    {
+      "id": "ratio-total-parts-missed",
+      "skill_id": "ratio-proportion",
+      "description": "Uses a ratio term as if it were the whole number of parts.",
+      "short_fix": "Add all ratio terms to find the total equal parts.",
+      "review_status": "draft"
+    },
+    {
+      "id": "ratio-share-reversed",
+      "skill_id": "ratio-proportion",
+      "description": "Assigns the share for one ratio term to the other quantity.",
+      "short_fix": "Keep the order of quantities aligned with the order of ratio terms.",
+      "review_status": "draft"
+    },
+    {
+      "id": "ratio-total-not-recombined",
+      "skill_id": "ratio-proportion",
+      "description": "Finds one share but does not verify that all shares add to the given total.",
+      "short_fix": "Check that the divided shares sum to the original total.",
+      "review_status": "draft"
+    },
+    {
+      "id": "average-total-confusion",
+      "skill_id": "averages",
+      "description": "Reports the total when the question asks for the arithmetic mean.",
+      "short_fix": "Divide the total by the number of observations to get the mean.",
+      "review_status": "draft"
+    },
+    {
+      "id": "average-count-off-by-one",
+      "skill_id": "averages",
+      "description": "Divides by the wrong number of observations.",
+      "short_fix": "Count every included value once, including a missing value being solved for.",
+      "review_status": "draft"
+    },
+    {
+      "id": "average-missing-value-subtraction",
+      "skill_id": "averages",
+      "description": "Adds the known values to the required total instead of subtracting them.",
+      "short_fix": "Find the required full total first, then subtract the known values.",
+      "review_status": "draft"
+    },
+    {
+      "id": "mixture-unweighted-mean",
+      "skill_id": "mixtures-alligations",
+      "description": "Averages concentrations without weighting by the amount of each solution.",
+      "short_fix": "Multiply each concentration by its quantity before dividing by total quantity.",
+      "review_status": "draft"
+    },
+    {
+      "id": "alligation-differences-not-crossed",
+      "skill_id": "mixtures-alligations",
+      "description": "Pairs each ingredient with its own distance from the target instead of the opposite difference.",
+      "short_fix": "For low and high strengths, use high-minus-target for low-strength quantity and target-minus-low for high-strength quantity.",
+      "review_status": "draft"
+    },
+    {
+      "id": "mixture-concentration-vs-quantity",
+      "skill_id": "mixtures-alligations",
+      "description": "Confuses the concentration value with the amount of solution needed.",
+      "short_fix": "Use the target concentration to derive a quantity ratio, then apply the ratio to the total.",
+      "review_status": "draft"
+    },
+    {
+      "id": "partnership-time-ignored",
+      "skill_id": "partnership",
+      "description": "Divides profit only by invested capitals even though partners invested for different durations.",
+      "short_fix": "Use capital multiplied by time for each partner.",
+      "review_status": "draft"
+    },
+    {
+      "id": "partnership-capital-ignored",
+      "skill_id": "partnership",
+      "description": "Divides profit only by time and ignores how much capital each partner invested.",
+      "short_fix": "Compare each partner’s capital-time product.",
+      "review_status": "draft"
+    },
+    {
+      "id": "partnership-ratio-misaligned",
+      "skill_id": "partnership",
+      "description": "Assigns a profit share to the wrong partner after forming the capital-time ratio.",
+      "short_fix": "Keep each capital-time product attached to its partner when dividing profit.",
+      "review_status": "draft"
+    },
+    {
+      "id": "work-times-added",
+      "skill_id": "time-work",
+      "description": "Adds completion times instead of adding work rates.",
+      "short_fix": "Convert each completion time into a rate of work per day, then add rates.",
+      "review_status": "draft"
+    },
+    {
+      "id": "work-reciprocal-confusion",
+      "skill_id": "time-work",
+      "description": "Uses days per job as if it were jobs or units per day.",
+      "short_fix": "Rate is work divided by time; with one job, a d-day worker completes 1/d per day.",
+      "review_status": "draft"
+    },
+    {
+      "id": "work-units-inconsistent",
+      "skill_id": "time-work",
+      "description": "Combines rates that use different units for the total job.",
+      "short_fix": "Choose one common work total divisible by each completion time.",
+      "review_status": "draft"
+    },
+    {
+      "id": "integer-parity-negative",
+      "skill_id": "integer-properties",
+      "description": "Treats negative even integers as odd because the number is below zero.",
+      "short_fix": "Divisibility by 2 determines parity for negative numbers too.",
+      "review_status": "draft"
+    },
+    {
+      "id": "integer-inclusive-endpoints",
+      "skill_id": "integer-properties",
+      "description": "Omits an even endpoint while counting an inclusive integer interval.",
+      "short_fix": "Check both endpoints and include them when they meet the condition.",
+      "review_status": "draft"
+    },
+    {
+      "id": "integer-zero-parity",
+      "skill_id": "integer-properties",
+      "description": "Treats zero as odd or excludes it from the even integers.",
+      "short_fix": "Zero is even because it is divisible by 2.",
+      "review_status": "draft"
+    },
+    {
+      "id": "integer-properties-calculation-slip",
+      "skill_id": "integer-properties",
+      "description": "Integer interval count arithmetic was miscalculated.",
+      "short_fix": "Recheck the first and last eligible integers and count by twos.",
+      "review_status": "draft"
+    },
+    {
+      "id": "percentages-calculation-slip",
+      "skill_id": "percentages",
+      "description": "The final multiplication or division for a percentage was miscalculated.",
+      "short_fix": "Recheck the multiplication and divide by 100 exactly once.",
+      "review_status": "draft"
+    },
+    {
+      "id": "profit-loss-calculation-slip",
+      "skill_id": "profit-loss",
+      "description": "The profit or loss calculation contains an arithmetic slip.",
+      "short_fix": "Recompute the percentage amount, then check the addition or subtraction.",
+      "review_status": "draft"
+    },
+    {
+      "id": "simple-interest-calculation-slip",
+      "skill_id": "simple-interest",
+      "description": "The simple-interest calculation contains an arithmetic slip.",
+      "short_fix": "Recheck principal × rate × time, then divide by 100.",
+      "review_status": "draft"
+    },
+    {
+      "id": "compound-interest-calculation-slip",
+      "skill_id": "compound-interest",
+      "description": "The compound-interest calculation contains an arithmetic slip.",
+      "short_fix": "Recheck each growth period and subtract the starting principal.",
+      "review_status": "draft"
+    },
+    {
+      "id": "ratio-proportion-calculation-slip",
+      "skill_id": "ratio-proportion",
+      "description": "The ratio-share arithmetic contains a calculation slip.",
+      "short_fix": "Check the total number of parts and the resulting share.",
+      "review_status": "draft"
+    },
+    {
+      "id": "averages-calculation-slip",
+      "skill_id": "averages",
+      "description": "The mean calculation contains an arithmetic slip.",
+      "short_fix": "Recheck the total and divide by the correct count.",
+      "review_status": "draft"
+    },
+    {
+      "id": "mixtures-calculation-slip",
+      "skill_id": "mixtures-alligations",
+      "description": "The weighted mixture calculation contains an arithmetic slip.",
+      "short_fix": "Recheck each concentration-times-quantity product and the total quantity.",
+      "review_status": "draft"
+    },
+    {
+      "id": "partnership-calculation-slip",
+      "skill_id": "partnership",
+      "description": "The capital-time share arithmetic contains a calculation slip.",
+      "short_fix": "Recheck each capital-time product and the profit split.",
+      "review_status": "draft"
+    },
+    {
+      "id": "time-work-calculation-slip",
+      "skill_id": "time-work",
+      "description": "The combined work-rate arithmetic contains a calculation slip.",
+      "short_fix": "Recheck each worker’s rate in the same work units before adding.",
+      "review_status": "draft"
+    }
+  ]
+}

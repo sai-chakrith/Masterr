@@ -6,11 +6,13 @@ of prose, which must still receive human review before publication.
 
 import ast
 import json
+from datetime import date
 from math import gcd, isqrt, lcm
 from pathlib import Path
 
 
 CONTENT = Path(__file__).resolve().parents[2] / "content" / "numbers"
+MISCONCEPTIONS = CONTENT / "misconceptions.json"
 
 
 def load_curriculum():
@@ -19,6 +21,12 @@ def load_curriculum():
 
 def load_questions():
     return json.loads((CONTENT / "questions.json").read_text(encoding="utf-8"))["questions"]
+
+
+def load_misconceptions():
+    if not MISCONCEPTIONS.exists():
+        return []
+    return json.loads(MISCONCEPTIONS.read_text(encoding="utf-8")).get("misconceptions", [])
 
 
 def compute_answer(spec):
@@ -160,11 +168,39 @@ def evaluate(expr):
     return value
 
 
-def validate_bank(questions=None):
+def validate_bank(questions=None, misconceptions=None):
     """Return errors, without promoting drafts to approved content."""
     questions = load_questions() if questions is None else questions
+    misconceptions = load_misconceptions() if misconceptions is None else misconceptions
     skills = {s["id"] for s in load_curriculum()["skills"]}
-    errors, seen = [], set()
+    errors, seen, misconception_index = [], set(), {}
+    for misconception in misconceptions:
+        mid = misconception.get("id")
+        if not isinstance(mid, str) or not mid or mid in misconception_index:
+            errors.append(f"misconception {mid!r}: IDs must be present and unique")
+            continue
+        if misconception.get("skill_id") not in skills:
+            errors.append(f"{mid}: unknown skill")
+        if not all(isinstance(misconception.get(field), str) and misconception[field].strip()
+                   for field in ("description", "short_fix")):
+            errors.append(f"{mid}: description and short_fix are required")
+        review_status = misconception.get("review_status", "draft")
+        if review_status not in {"draft", "approved"}:
+            errors.append(f"{mid}: review_status must be draft or approved")
+        if review_status == "approved":
+            review = misconception.get("review")
+            if not isinstance(review, dict) or not all(
+                isinstance(review.get(key), str) and review[key].strip()
+                for key in ("reviewer", "date")
+            ):
+                errors.append(f"{mid}: approval requires a human reviewer and date")
+            else:
+                try:
+                    if date.fromisoformat(review["date"]).isoformat() != review["date"]:
+                        raise ValueError
+                except ValueError:
+                    errors.append(f"{mid}: review date must use YYYY-MM-DD")
+        misconception_index[mid] = misconception
     for question in questions:
         qid = question.get("id", "<missing>")
         try:
@@ -186,6 +222,37 @@ def validate_bank(questions=None):
                 raise ValueError("Expected an integer answer")
             if compute_answer(question["validator"]) != question["answer"]:
                 raise ValueError("Stored answer disagrees with arithmetic validator")
+            options = question.get("options")
+            if options is not None:
+                if not isinstance(options, list) or len(options) != 4:
+                    raise ValueError("Multiple-choice items need exactly four options")
+                ids, values = set(), set()
+                correct_values = []
+                for option in options:
+                    if not isinstance(option, dict):
+                        raise ValueError("Every option must be an object")
+                    option_id, text, value = option.get("id"), option.get("text"), option.get("value")
+                    if not isinstance(option_id, str) or not option_id or option_id in ids:
+                        raise ValueError("Option IDs must be non-empty and unique")
+                    if not isinstance(text, str) or not text.strip():
+                        raise ValueError("Every option needs display text")
+                    if type(value) is not int or value in values:
+                        raise ValueError("Option values must be distinct integers")
+                    ids.add(option_id)
+                    values.add(value)
+                    if value == question["answer"]:
+                        correct_values.append(option)
+                    else:
+                        mid = option.get("misconception_id")
+                        if mid not in misconception_index:
+                            raise ValueError(f"Wrong option {option_id} needs a known misconception tag")
+                        if misconception_index[mid].get("skill_id") != question["skill_id"]:
+                            raise ValueError(f"Wrong option {option_id} has a misconception from another skill")
+                        if (question["review_status"] == "approved"
+                                and misconception_index[mid].get("review_status", "draft") != "approved"):
+                            raise ValueError(f"Wrong option {option_id} uses an unreviewed misconception")
+                if len(correct_values) != 1 or correct_values[0].get("misconception_id"):
+                    raise ValueError("Exactly one correct option is required and it cannot carry a misconception")
         except (KeyError, TypeError, ValueError) as exc:
             errors.append(f"{qid}: {exc}")
     return errors

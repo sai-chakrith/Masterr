@@ -9,15 +9,15 @@ from sqlalchemy import func, select
 from backend.content import FACETS, import_questions
 from backend.db import Base, make_engine, transaction
 from backend import mastery
-from backend.learning import LearningError, LearningService, normalized_integer
-from backend.models import Assignment, Attempt, Exposure, Question
+from backend.learning import LearningError, LearningService, learner_mastery_bar, normalized_integer
+from backend.models import Assignment, Attempt, Exposure, LearnerGoal, Question
 from backend.numbers.bank import load_questions
 
 
 def fixtures():
     seed = next(q for q in load_questions() if q["id"] == "num-003")
     questions = []
-    for purpose, count in (("diagnostic", 1), ("practice", 1), ("verification", 1), ("review", 2)):
+    for purpose, count in (("diagnostic", 1), ("practice", 1), ("verification", 1), ("review", 3)):
         for occasion in range(count):
             for facet in FACETS:
                 q = copy.deepcopy(seed)
@@ -60,10 +60,41 @@ def test_form_withholds_feedback_and_creates_reviews_after_pass(setup):
     assert "result" not in responses[1]
     assert responses[-1]["result"] == "independent_check_passed"
     today = service.today("alice")
-    assert len(today["reviews"]) == 2
-    assert [r["occasion"] for r in today["reviews"]] == [2, 7]
+    assert len(today["reviews"]) == 1
+    assert [r["occasion"] for r in today["reviews"]] == [0]
     assert not any(r["is_due"] for r in today["reviews"])
     assert today["evidence"][0]["session_id"] == created["session_id"]
+
+
+def test_exam_date_moves_review_to_day_before_exam(setup):
+    service, _, engine = setup
+    with transaction(engine) as db:
+        db.add(LearnerGoal(
+            learner_id="alice", curriculum_id="numbers", curriculum_version="1",
+            target_skill_ids=["divisibility"], exam_profile_id=None,
+            exam_date="2026-10-25", timezone="Asia/Kolkata",
+            updated_at="2026-10-23T12:00:00+00:00",
+        ))
+    with transaction(engine) as db:
+        due = service.review_due_at(db, "alice", 3)
+    assert due == "2026-10-24T03:30:00+00:00"
+
+
+def test_exam_profile_bar_controls_practice_readiness_threshold(setup):
+    service, _, engine = setup
+    with transaction(engine) as db:
+        db.add(LearnerGoal(
+            learner_id="alice", curriculum_id="numbers", curriculum_version="1",
+            target_skill_ids=[], exam_profile_id="profile-1", exam_profile_version="1",
+            exam_profile_snapshot={
+                "id": "profile-1", "default_mastery_bar": 0.75,
+                "topic_bars": {"divisibility": 0.8},
+            },
+            exam_date=None, timezone="Asia/Kolkata", updated_at=service.now(),
+        ))
+    with transaction(engine) as db:
+        assert learner_mastery_bar(db, "alice", "divisibility") == 0.8
+        assert learner_mastery_bar(db, "alice", "remainders") == 0.75
 
 
 def test_restart_preserves_resume_and_evidence(setup):
@@ -204,14 +235,18 @@ def test_delayed_reviews_require_actual_due_date_and_new_families(setup):
     with pytest.raises(LearningError) as error:
         service.create_session("alice", mode="review", review_id=reviews[0]["id"])
     assert error.value.code == "review_not_due"
-    instant[0] += timedelta(days=2)
+    instant[0] += timedelta(days=3)
     _, result = form(service, mode="review", review_id=reviews[0]["id"])
     assert result[-1]["result"] == "later_check_passed"
-    instant[0] += timedelta(days=5)
-    _, result = form(service, mode="review", review_id=reviews[1]["id"])
+    next_review = service.today("alice")["reviews"][1]
+    instant[0] += timedelta(days=7)
+    _, result = form(service, mode="review", review_id=next_review["id"])
     assert result[-1]["result"] == "later_check_passed"
-    assert [r["status"] for r in service.today("alice")["reviews"]] == ["passed", "passed"]
-    assert len(service.today("alice")["reviews"]) == 2
+    assert [r["status"] for r in service.today("alice")["reviews"]] == ["passed", "passed", "pending"]
+    instant[0] += timedelta(days=21)
+    _, result = form(service, mode="review", review_id=service.today("alice")["reviews"][2]["id"])
+    assert result[-1]["result"] == "later_check_passed"
+    assert [r["status"] for r in service.today("alice")["reviews"]] == ["passed", "passed", "passed"]
 
 
 def test_unreviewed_seed_is_imported_idempotently_but_unavailable(tmp_path):

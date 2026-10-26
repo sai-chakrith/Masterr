@@ -112,3 +112,28 @@ def test_validation_route_requires_identity_and_reports_missing_forms(client):
 def test_gaps_payload_carries_dashboard_fields(client):
     row = client.get("/v1/me/gaps", headers=auth()).json()[0]
     assert {"title", "scoring_version", "score", "answer_count", "mastery_bar", "score_withheld"} <= set(row)
+
+
+def test_goal_route_api_returns_content_gating_and_pace(client):
+    response = client.put("/v1/me/goal", headers=auth(), json={
+        "target_skill_ids": ["hcf-lcm"], "exam_date": "2026-12-01", "timezone": "Asia/Kolkata",
+    })
+    assert response.status_code == 200
+    assert response.json()["route_skill_ids"] == [
+        "integer-properties", "divisibility", "primes-factors", "hcf-lcm",
+    ]
+    roadmap = client.get("/v1/me/roadmap", headers=auth())
+    assert roadmap.status_code == 200
+    assert roadmap.json()["weekly_pace"]["remaining_topics"] == 4
+    assert all(node["available"] is False for node in roadmap.json()["nodes"])
+    suggestion = client.get("/v1/me/next-action", headers=auth()).json()
+    assert suggestion["actions"] == []
+    assert suggestion["availability"] == "no_reviewed_content_for_next_step"
+
+
+def test_unreviewed_exam_profiles_are_rejected_explicitly(client):
+    response = client.put("/v1/me/goal", headers=auth(), json={
+        "target_skill_ids": ["divisibility"], "exam_profile_id": "bank-po",
+    })
+    assert response.status_code == 422
+    assert response.json()["error"]["code"] == "profile_unavailable"

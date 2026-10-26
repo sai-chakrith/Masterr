@@ -13,7 +13,7 @@ from backend import mastery
 from backend.content import import_questions
 from backend.db import Base, make_engine, transaction
 from backend.learning import LearningError, LearningService
-from backend.models import Assignment, Attempt, MasteryEstimate, Question
+from backend.models import Assignment, Attempt, GapState, LearningProgress, MasteryEstimate, Question
 from backend.numbers.bank import load_questions
 from backend.numbers.coverage import HIDDEN_SPLIT, TARGET_SPLIT, audit, split_forms
 
@@ -156,6 +156,46 @@ def test_retest_after_diagnostic_uses_only_unseen_questions(bank):
         assert db.get(MasteryEstimate, ("ana", "divisibility")).answer_count == 18
     gap = next(g for g in service.gaps("ana") if g["skill_id"] == "divisibility")
     assert gap["status"] == "resolved" and gap["score"] < 0.99
+    reviews = service.today("ana")["reviews"]
+    assert len(reviews) == 1 and reviews[0]["occasion"] == 0
+    assert reviews[0]["due_at"].startswith("2026-11-05")
+
+
+def test_personalised_and_fixed_practice_are_independent_of_scoring_version(bank):
+    service, engine, _ = bank
+    seed = next(q for q in load_questions() if q["id"] == "num-003")
+    practice = []
+    for level in range(1, 6):
+        for copy_no in range(2):
+            q = copy.deepcopy(seed)
+            q.update(id=f"practice-{level}-{copy_no}", family_id=f"practice-family-{level}-{copy_no}",
+                     purpose="practice", difficulty_level=level, hidden=False,
+                     review_status="approved",
+                     review={"reviewer": "synthetic-test-fixture", "date": "test-only"},
+                     provenance="SYNTHETIC_TEST_ONLY_NOT_HUMAN_APPROVED")
+            practice.append(q)
+    with transaction(engine) as db:
+        import_questions(db, practice)
+
+    service.set_scoring_version("ana", "divisibility", "new")
+    adaptive = service.create_session("ana", mode="practice")
+    assert adaptive["policy_version"] == "adaptive-practice-v1"
+    assert adaptive["question_count"] == 10
+    response, answered = run(service, "ana", adaptive, [RIGHT] * 10)
+    assert 5 <= len(answered) < 10 and response["session_complete"]
+    with transaction(engine) as db:
+        progress = db.get(LearningProgress, ("ana", "divisibility"))
+        assert progress.phase == "ready_for_retest"
+        assert db.get(GapState, ("ana", "divisibility")) is None
+
+    service.set_scoring_version("ben", "divisibility", "new")
+    service.set_practice_strategy("ben", "divisibility", "fixed")
+    fixed = service.create_session("ben", mode="practice")
+    assert fixed["policy_version"] == "fixed-practice-v1"
+    with transaction(engine) as db:
+        assignments = service.assignments(db, fixed["session_id"])
+        levels = sorted(db.get(Question, a.question_id).difficulty_level for a in assignments)
+        assert levels == [1, 1, 2, 2, 3, 3, 4, 4, 5, 5]
 
 
 def test_current_version_keeps_the_old_rules(bank):
@@ -185,6 +225,8 @@ def test_legacy_diagnostic_marks_more_than_half_as_mastered(bank):
     created = service.create_session("ana", mode="diagnostic")
     response, _ = run(service, "ana", created, [RIGHT] * 4 + [WRONG] * 2)
     assert response["decision"] == "mastered"
+    reviews = service.today("ana")["reviews"]
+    assert len(reviews) == 1 and reviews[0]["due_at"].startswith("2026-11-05")
 
 
 def test_switch_flips_a_topic_and_sessions_keep_their_version(bank):
@@ -239,7 +281,7 @@ def test_validation_forms_pre_post_delayed(bank):
     with pytest.raises(LearningError) as error:
         service.create_validation("ana", "divisibility")
     assert error.value.code == "validation_not_due"
-    clock[0] += timedelta(days=8)
+    clock[0] += timedelta(days=15)
     delayed = service.create_validation("ana", "divisibility")
     _, again = run(service, "ana", delayed, [RIGHT] * 5)
     assert delayed["stage"] == "delayed" and again == form_a

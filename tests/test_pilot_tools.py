@@ -3,7 +3,7 @@ import pytest
 
 from backend.numbers.coverage import flag_tags, split_forms
 from scripts import pilot_analysis as pa
-from scripts.pilot import SKILL_IDS, split_topics
+from scripts.pilot import PILOT_SKILL_IDS, SKILL_IDS, split_practice_topics, split_topics
 
 
 def test_pilot_split_gives_half_the_topics_the_new_design():
@@ -12,6 +12,22 @@ def test_pilot_split_gives_half_the_topics_the_new_design():
     assert split_topics("learner-1", "seed") == first           # stable per learner
     patterns = {tuple(split_topics(f"learner-{i}", "seed").values()) for i in range(30)}
     assert len(patterns) > 5                                       # random across learners
+
+
+def test_personalised_practice_split_is_stable_and_balanced():
+    skills = [f"topic-{i}" for i in range(10)]
+    first = split_practice_topics("learner-1", "seed", skills)
+    assert sum(value == "personalised" for value in first.values()) == 5
+    assert sum(value == "fixed" for value in first.values()) == 5
+    assert split_practice_topics("learner-1", "seed", skills) == first
+
+
+def test_default_personalisation_pilot_targets_the_proposed_ten_topics():
+    assert len(PILOT_SKILL_IDS) == 10
+    assert set(PILOT_SKILL_IDS) <= set(SKILL_IDS)
+    assignment = split_practice_topics("learner-1", "seed", PILOT_SKILL_IDS)
+    assert len(assignment) == 10
+    assert sum(value == "personalised" for value in assignment.values()) == 5
 
 
 def test_split_forms_balances_levels():

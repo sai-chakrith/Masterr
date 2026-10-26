@@ -46,6 +46,7 @@ class NumbersTests(unittest.TestCase):
 
     def test_freshness_is_by_family(self):
         question = copy.deepcopy(load_questions()[0])
+        question.pop("options", None)  # This test covers family freshness, not MCQ review gates.
         question["review_status"] = "approved"
         # Synthetic review metadata is a test fixture, never a real approval.
         question["review"] = {"reviewer": "test-fixture", "date": "test-fixture"}

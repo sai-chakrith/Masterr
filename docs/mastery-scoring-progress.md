@@ -18,7 +18,7 @@ proposal. Earlier slices are recorded in track2-progress.md and track3-progress.
 | S4 | Borderline review of missed and "I don't know" questions, then retest | Done (API and screen) | borderline_review(), frontend/app/review |
 | S5 | Pilot design and Stage 2-3 analysis | Forms, protocol and analysis built. Recruiting and survey are people work | docs/pilot-protocol.md, scripts/pilot_analysis.py |
 | C1 | Database: answers, rating storage, hidden/sub_topic, version | Done. Migration b7d41e0c2a15 adds answer source, "I don't know" flag, session version and stage | backend/models.py, migrations/ |
-| C2 | Question bank 35 per topic, 3/6/11/11/4, 10 hidden, tag review | 210 draft questions written and validated. Human tag review and approval pending | content/numbers/questions.json, scripts/question_bank.py |
+| C2 | Question bank 35 assessment items per topic, 3/6/11/11/4, 10 hidden, tag review | 525 assessment drafts and 600 practice drafts are validated across 15 curriculum topics. Human content review and approval pending | content/numbers/questions.json, scripts/question_bank.py, scripts/generate_questions.py |
 | C3 | Record every answer with time taken, source and version | Done | submit() |
 | C4 | Dashboard: "I don't know" button and wording, browser timing, score line, Borderline colour, 10-question retest screen | Done (Next.js) | frontend/ |
 | C5 | Version switch per learner and topic, pilot accounts, updated tests | Done. 103 backend tests pass | scripts/pilot.py, tests/ |
@@ -56,7 +56,7 @@ move the running score.
   visible). This is what makes the bank split matter, as in the proposal.
 - **Validation forms:** hidden questions are split A / B by snake draft (A = levels 1,3,3,4,4;
   B = 2,2,3,4,5). Order is enforced: pre (A) before any topic work, post (B) once the topic is
-  Mastered or Resolved, delayed (A) at least 7 days after the post-test. No feedback, no help.
+  Mastered or Resolved, delayed (A) at least 14 days after the post-test. No feedback, no help.
 - **Dashboard score is hidden during a retest or check** so a moving number cannot reveal answers.
 - **Question families:** the project rule says changing only numbers does not make a new
   family, so each of the 35 questions per topic is a different structure with its own family.
@@ -76,7 +76,7 @@ Decide at the week-1 meeting whether to keep 7/10.
 
 ## Remaining work that needs people
 
-1. Review and approve the 210 draft questions (num-101 to num-310): wording, solutions and
+1. Review and approve the 210 assessment draft questions (num-101 to num-310): wording, solutions and
    difficulty tags. Use `python -m scripts.question_bank export data/question_bank.csv`, edit
    tags in the sheet, then `apply-tags`. Only approved questions are served.
 2. Configure Supabase Auth and create pilot accounts; then assign versions with

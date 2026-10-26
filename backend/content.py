@@ -4,16 +4,25 @@ import json
 
 from sqlalchemy import select
 
-from backend.models import Question
-from backend.numbers.bank import validate_bank
+from backend.models import Misconception, Question, QuestionOption
+from backend.numbers.bank import load_misconceptions, validate_bank
 
 FACETS = ("basic", "combined", "constraints")
 
 
-def import_questions(db, questions):
-    errors = validate_bank(questions)
+def import_questions(db, questions, misconceptions=None):
+    misconceptions = load_misconceptions() if misconceptions is None else misconceptions
+    errors = validate_bank(questions, misconceptions)
     if errors:
         raise ValueError("; ".join(errors))
+    for item in misconceptions:
+        current = db.get(Misconception, item["id"])
+        if current and (current.skill_id != item["skill_id"] or current.description != item["description"]
+                        or current.short_fix != item["short_fix"]):
+            raise ValueError(f"Misconception {item['id']} changed: create a new misconception id")
+        if current is None:
+            db.add(Misconception(id=item["id"], skill_id=item["skill_id"],
+                                 description=item["description"], short_fix=item["short_fix"]))
     imported = 0
     for question in questions:
         version = question.get("version", 1)
@@ -45,14 +54,24 @@ def import_questions(db, questions):
             review = question.get("review", {})
             if not all(isinstance(review.get(k), str) and review[k].strip() for k in ("reviewer", "date")):
                 raise ValueError("Approval requires reviewer and date")
-        db.add(Question(
+        record = Question(
             id=qid, item_id=question["id"], version=version,
             skill_id=question["skill_id"], family_id=question["family_id"],
             purpose=question["purpose"], facet=facet,
             status=question["review_status"], checksum=digest, snapshot=question,
             difficulty_level=level, hidden=hidden, sub_topic=sub_topic,
-        ))
+        )
+        db.add(record)
         imported += 1
+        if question.get("options"):
+            db.flush()
+            for position, option in enumerate(question["options"]):
+                db.add(QuestionOption(
+                    question_id=qid, option_id=option["id"], position=position,
+                    text=option["text"], value=option["value"],
+                    is_correct=option["value"] == question["answer"],
+                    misconception_id=option.get("misconception_id"),
+                ))
     db.flush()
     return imported
 

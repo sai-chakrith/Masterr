@@ -17,7 +17,11 @@ export default function SessionPage() {
   const router = useRouter();
   const [view, setView] = useState<SessionView | null>(null);
   const [answer, setAnswer] = useState("");
+  const [selectedOptionId, setSelectedOptionId] = useState("");
   const [feedback, setFeedback] = useState<boolean | null>(null);
+  const [explanation, setExplanation] = useState<string | null>(null);
+  const [misconceptionFeedback, setMisconceptionFeedback] = useState<SubmitResult["misconception_feedback"]>();
+  const [hint, setHint] = useState<string | null>(null);
   const [finished, setFinished] = useState<SubmitResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -31,6 +35,8 @@ export default function SessionPage() {
       const next = await api.session(id);
       setView(next);
       setAnswer("");
+      setSelectedOptionId("");
+      setHint(null);
       shownAt.current = performance.now();
     } catch (e) {
       if (e instanceof ApiError && e.status === 401) router.replace("/login");
@@ -51,11 +57,14 @@ export default function SessionPage() {
     try {
       const result = await api.submit(question.assignment_id, keys.current[question.assignment_id], {
         answer: dontKnow ? "" : answer.trim(),
+        option_id: dontKnow ? null : (question.options?.length ? selectedOptionId : null),
         dont_know: dontKnow,
         working: "",
         duration_ms: Math.max(0, Math.round(performance.now() - shownAt.current)),
       });
       setFeedback(result.correct ?? null);
+      setExplanation(result.explanation ?? null);
+      setMisconceptionFeedback(result.misconception_feedback);
       if (result.session_complete) setFinished(result);
       else await load();
     } catch (e) {
@@ -69,6 +78,21 @@ export default function SessionPage() {
     if (!view || !window.confirm("Leave this session? Its questions will not be offered again.")) return;
     await api.abandon(view.session_id).catch(() => undefined);
     router.push("/");
+  }
+
+  async function requestHint() {
+    const assignmentId = view?.question?.assignment_id;
+    if (!assignmentId) return;
+    setBusy(true);
+    setError(null);
+    try {
+      const result = await api.help(assignmentId, "hint");
+      setHint(result.text);
+    } catch (e) {
+      setError(e instanceof ApiError ? e.message : "Could not load a hint.");
+    } finally {
+      setBusy(false);
+    }
   }
 
   if (error && !view) return <p className="text-rose-600">{error}</p>;
@@ -143,6 +167,20 @@ export default function SessionPage() {
           Previous answer: {feedback ? "correct" : "not correct"}
         </p>
       )}
+      {misconceptionFeedback && (
+        <aside className="rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm text-amber-950 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-100" aria-live="polite">
+          <p className="font-semibold">{misconceptionFeedback.targeted_reset ? "Let's reset this idea" : "Check this idea"}</p>
+          <p className="mt-1">{misconceptionFeedback.description}</p>
+          {misconceptionFeedback.targeted_reset && <p className="mt-1">This same misconception has appeared more than once. Review the key step:</p>}
+          <p className="mt-1">{misconceptionFeedback.short_fix}</p>
+        </aside>
+      )}
+      {explanation && (
+        <aside className="rounded-lg border border-sky-200 bg-sky-50 p-4 text-sm text-sky-950 dark:border-sky-900 dark:bg-sky-950 dark:text-sky-100" aria-live="polite">
+          <p className="font-semibold">Worked explanation</p>
+          <p className="mt-1">{explanation}</p>
+        </aside>
+      )}
       {question && (
         <form
           onSubmit={(e) => {
@@ -152,19 +190,41 @@ export default function SessionPage() {
           className="space-y-4"
         >
           <p className="text-lg leading-relaxed">{question.prompt}</p>
-          <input
-            inputMode="numeric"
-            autoFocus
-            value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
-            aria-label="Your answer (a whole number)"
-            placeholder="Whole number"
-            className="w-48 rounded-md border border-slate-300 bg-transparent px-3 py-2 text-lg dark:border-slate-700"
-          />
+          {view.mode === "practice" && (
+            <div className="space-y-2">
+              <button type="button" onClick={() => void requestHint()} disabled={busy}
+                className="rounded-md border border-slate-300 px-3 py-1.5 text-sm dark:border-slate-700">
+                Get a hint
+              </button>
+              {hint && <p className="rounded-lg bg-sky-50 p-3 text-sm text-sky-950 dark:bg-sky-950 dark:text-sky-100" aria-live="polite">{hint}</p>}
+            </div>
+          )}
+          {question.options?.length ? (
+            <fieldset className="space-y-2">
+              <legend className="text-sm font-medium">Choose one answer</legend>
+              {question.options.map((option) => (
+                <label key={option.id} className="flex cursor-pointer items-start gap-3 rounded-lg border border-slate-300 p-3 dark:border-slate-700">
+                  <input type="radio" name="answer-option" value={option.id} checked={selectedOptionId === option.id}
+                    onChange={() => setSelectedOptionId(option.id)} />
+                  <span>{option.text}</span>
+                </label>
+              ))}
+            </fieldset>
+          ) : (
+            <input
+              inputMode="numeric"
+              autoFocus
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+              aria-label="Your answer (a whole number)"
+              placeholder="Whole number"
+              className="w-48 rounded-md border border-slate-300 bg-transparent px-3 py-2 text-lg dark:border-slate-700"
+            />
+          )}
           <div className="flex flex-wrap items-start gap-3">
             <button
               type="submit"
-              disabled={busy || !answer.trim()}
+              disabled={busy || (question.options?.length ? !selectedOptionId : !answer.trim())}
               className="rounded-md bg-slate-900 px-4 py-2 text-white dark:bg-slate-100 dark:text-slate-900"
             >
               Submit
