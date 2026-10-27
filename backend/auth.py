@@ -4,7 +4,7 @@ import hmac
 import os
 
 import jwt
-from fastapi import Header, HTTPException
+from fastapi import Cookie, Header, HTTPException, Request
 
 
 @dataclass(frozen=True)
@@ -26,9 +26,9 @@ class Settings:
         )
 
 
-def make_identity(settings):
+def make_identity(settings, local_accounts=None):
     if settings.local_development:
-        if len(settings.local_token) < 32:
+        if settings.local_token and len(settings.local_token) < 32:
             raise ValueError("Local development requires LOCAL_API_TOKEN of at least 32 characters")
         jwks = None
     else:
@@ -36,12 +36,18 @@ def make_identity(settings):
             raise ValueError("Configure SUPABASE_URL or explicit local development")
         jwks = jwt.PyJWKClient(settings.supabase_url + "/auth/v1/.well-known/jwks.json")
 
-    def identity(authorization: str | None = Header(default=None)):
+    def identity(authorization: str | None = Header(default=None), mastrr_session: str | None = Cookie(default=None),
+                 request: Request = None):
+        if settings.local_development and not authorization and local_accounts:
+            if request is not None:
+                from backend.local_accounts import check_origin
+                check_origin(request)
+            return local_accounts.authenticate(mastrr_session if isinstance(mastrr_session, str) else None)
         if not authorization or not authorization.startswith("Bearer "):
             raise HTTPException(status_code=401, detail="Authentication required")
         token = authorization[7:]
         if settings.local_development:
-            if not hmac.compare_digest(token.encode(), settings.local_token.encode()):
+            if not settings.local_token or not hmac.compare_digest(token.encode(), settings.local_token.encode()):
                 raise HTTPException(status_code=401, detail="Invalid identity")
             return "local-developer"
         try:

@@ -2,6 +2,7 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 let client: SupabaseClient | null = null;
 export const SESSION_KEY = "mastrr-auth-session";
+export const LOCAL_SESSION = "local-session"; // UI hint only; the secret is an HttpOnly cookie.
 export function hostedAuthConfigured() {
   return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY);
 }
@@ -29,7 +30,7 @@ export function savedToken(): string | null {
 }
 export async function accessToken(): Promise<string | null> {
   const supabase = authClient();
-  if (!supabase) return savedToken();
+  if (!supabase) { const token = savedToken(); return token === LOCAL_SESSION ? null : token; }
   const { data, error } = await supabase.auth.getSession();
   if (error) throw new Error("Your session could not be refreshed. Sign in again.");
   return data.session?.access_token ?? null;
@@ -40,6 +41,9 @@ export async function signOut() {
     if (supabase) {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
+    } else if (savedToken() === LOCAL_SESSION) {
+      const response = await fetch("/api/v1/auth/logout", { method: "POST" });
+      if (!response.ok) throw new Error("Could not revoke your session.");
     }
   } finally {
     window.localStorage.removeItem("mastrr-token");

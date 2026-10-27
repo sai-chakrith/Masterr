@@ -23,7 +23,7 @@ def doctor(engine):
     try:
         with engine.connect() as db:
             db.execute(text("SELECT 1")); result["database"] = True
-            result["migrations_current"] = set(db.scalars(text("SELECT version_num FROM alembic_version"))) == {"b3c509d12e8f"}
+            result["migrations_current"] = set(db.scalars(text("SELECT version_num FROM alembic_version"))) == {"c6e1f892a470"}
         result["published_curriculum"] = load_document(engine, "curriculum", load_curriculum).get("status") == "approved"
         result["approved_questions"] = ReviewService(engine).questions(status="approved", limit=1)["total"]
     except Exception:

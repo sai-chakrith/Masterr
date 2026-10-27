@@ -55,6 +55,20 @@ class UsageBucket(Base):
     reserved_tokens: Mapped[int] = mapped_column(Integer, default=0)
 
 
+class LocalCredential(Base):
+    __tablename__ = "local_credentials"
+    username: Mapped[str] = mapped_column(String(32), primary_key=True)
+    learner_id: Mapped[str] = mapped_column(ForeignKey("learners.id"), unique=True)
+    password_hash: Mapped[str] = mapped_column(String(256))
+
+
+class LocalSession(Base):
+    __tablename__ = "local_sessions"
+    token_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    learner_id: Mapped[str] = mapped_column(ForeignKey("learners.id"), index=True)
+    expires_at: Mapped[str] = mapped_column(String(40))
+
+
 class TimedTest(Base):
     __tablename__ = "timed_tests"
     id: Mapped[str] = mapped_column(String(36), primary_key=True)

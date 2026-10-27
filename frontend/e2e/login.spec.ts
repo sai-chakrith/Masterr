@@ -1,0 +1,38 @@
+import { test, expect } from "@playwright/test";
+import path from "node:path";
+
+test("username accounts connect to the backend, keep progress, and sign out", async ({ page }, info) => {
+  const username = `browser_${info.project.name}_${Date.now()}`;
+  const password = "Synthetic-password-2026";
+  await page.goto("/login");
+  await expect(page.getByRole("heading", { name: "Welcome back." })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.screenshot({ path: path.resolve("../output/login-ui", `login-${info.project.name}.png`), fullPage: true });
+  await page.getByRole("button", { name: "Create account", exact: true }).click();
+  await page.getByLabel("Username", { exact: false }).fill(username);
+  await page.getByLabel("Password", { exact: true }).fill(password);
+  await page.getByLabel("Confirm password").fill("does-not-match");
+  await page.getByRole("button", { name: "Create your account", exact: true }).click();
+  await expect(page.locator("form [role=alert]")).toContainText("passwords don’t match");
+  await page.getByLabel("Confirm password").fill(password);
+  await page.getByRole("button", { name: "Create your account", exact: true }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await page.getByRole("checkbox", { name: "Divisibility rules", exact: true }).check();
+  await page.getByRole("button", { name: "Set goal", exact: true }).click();
+  await expect(page.getByText("Recommended next step", { exact: true })).toBeVisible();
+  const cookie = (await page.context().cookies()).find(c => c.name === "mastrr_session");
+  expect(cookie?.httpOnly).toBe(true);
+  expect(await page.evaluate(() => localStorage.getItem("mastrr-token"))).toBe("local-session");
+  await page.getByRole("button", { name: "Sign out", exact: true }).click();
+  await expect(page).toHaveURL(/\/login$/);
+  await page.getByLabel("Username", { exact: true }).fill(username);
+  await page.getByLabel("Password", { exact: true }).fill("wrong-password");
+  await page.getByRole("button", { name: "Sign in to Mastrr", exact: true }).click();
+  await expect(page.locator("form [role=alert]")).toContainText("Username or password is incorrect");
+  await page.getByLabel("Password", { exact: true }).fill(password);
+  await page.getByRole("button", { name: "Show password", exact: true }).click();
+  await expect(page.getByLabel("Password", { exact: true })).toHaveAttribute("type", "text");
+  await page.getByRole("button", { name: "Sign in to Mastrr", exact: true }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.getByText("Recommended next step", { exact: true })).toBeVisible();
+});

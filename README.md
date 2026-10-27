@@ -6,7 +6,8 @@ independent retests and scheduled reviews. The current curriculum covers 15 topi
 ## Implemented application
 
 - Next.js learner roadmap, goals, lessons, personal tutor, persistent sessions and history.
-- Supabase email signup, confirmation, login, refresh, password recovery and sign-out.
+- Local username/password accounts with private learner histories and revocable
+  HttpOnly cookie sessions; Supabase email accounts for hosted deployments.
 - FastAPI ownership checks, immutable question versions, deterministic arithmetic grading,
   diagnostic/retest policies, transparent progress and fresh-family reservations.
 - Topic-scoped RAG tutoring with caches, bounded retries, final-answer checks, labelled
@@ -23,8 +24,19 @@ independent retests and scheduled reviews. The current curriculum covers 15 topi
 Install Python 3.12 and Node 22 or newer. Create `.venv`, install
 `requirements.lock.txt`, and run `npm ci` inside `frontend/`.
 Then run `scripts/start-local.ps1` and `scripts/start-frontend.ps1` in separate
-terminals. Open [the local app](http://127.0.0.1:3000), sign in with the ignored
-`data/local-api-token`, and choose a goal.
+terminals. Open [the local app](http://127.0.0.1:3000), choose **Create account**,
+and set your username and password. Accounts and progress persist in the local
+database; no developer token is needed for normal learning. Existing developer
+access remains under the collapsed **Developer access** section, using the ignored
+`data/local-api-token`. Existing databases need `python -m alembic upgrade head`.
+
+Local usernames are case-insensitive and use 3–32 letters, numbers, dots,
+hyphens or underscores. Passwords require at least 12 characters and are stored
+as salted scrypt hashes. Local sessions expire after 12 hours, or seven days with
+**Keep me signed in**. Signing out revokes the current server session. Local
+password recovery/email verification is not offered; configure Supabase for hosted
+accounts and email recovery. Local accounts are disabled outside explicit local
+development mode. See [the account implementation](docs/local-accounts.md).
 
 The local launcher defaults to the new scoring policy. Pilot assignments can still
 select the legacy policy explicitly. Local reviewer access requires setting
@@ -44,7 +56,7 @@ Add `--live` only after saving a replacement Groq key privately in the root
 `.env`. See [the recording guide](docs/recording-demo.md) for sign-in, stop and
 live verification commands. Default demo mode makes no paid provider calls.
 
-**This is not a published learner service yet.** The source bank contains 1,272
+**This is not a published learner service yet.** The source bank contains 1,312
 unapproved drafts, including 135 retention-review items. Curriculum, notes,
 misconceptions and exam mappings need genuine content review. The app intentionally
 refuses to serve drafts; test-fixture approvals are never imported into real data.

@@ -3,8 +3,9 @@ import { test, expect, type Page } from "@playwright/test";
 const headers = { Authorization: "Bearer e2e-only-token-not-a-real-secret-123456" };
 async function login(page: Page) {
   await page.goto("/login");
+  await page.getByText("Developer access", { exact: true }).click();
   await page.getByLabel("Local development token").fill("e2e-only-token-not-a-real-secret-123456");
-  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.getByRole("button", { name: "Use developer token", exact: true }).click();
   await expect(page).toHaveURL(/\/$/);
   await expect(page.getByRole("heading", { name: "Numbers, one next step at a time" })).toBeVisible();
 }

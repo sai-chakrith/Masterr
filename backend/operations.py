@@ -42,10 +42,10 @@ class BudgetService:
                    .on_conflict_do_nothing(index_elements=["scope", "period"]))
         return db.scalar(select(UsageBucket).where(UsageBucket.scope == scope, UsageBucket.period == period).with_for_update())
 
-    def rate_limit(self, owner):
+    def rate_limit(self, owner, limit=None):
         with transaction(self.engine) as db:
             bucket = self._row(db, "api:" + owner_scope(owner), utcnow()[:16])
-            if bucket.calls >= self.api_per_minute:
+            if bucket.calls >= (limit if limit is not None else self.api_per_minute):
                 raise LearningError("rate_limit", "Too many requests. Please wait a minute.", 429)
             bucket.calls += 1
 
@@ -101,6 +101,8 @@ class AccountService:
             session_ids = [s.id for s in sessions]
             result = {}
             for table in Base.metadata.sorted_tables:
+                if table.name in {"local_credentials", "local_sessions"}:
+                    continue  # Password hashes and session verifiers never belong in exports.
                 if "learner_id" in table.c:
                     rows = db.execute(select(table).where(table.c.learner_id == owner)).mappings().all()
                     result[table.name] = [dict(row) for row in rows]

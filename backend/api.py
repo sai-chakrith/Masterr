@@ -21,6 +21,7 @@ from backend.db import transaction
 from sqlalchemy import select, text
 from backend.http_safety import RequestSafetyMiddleware
 from backend.timed_practice import TimedPracticeService
+from backend.local_accounts import LocalAccounts, COOKIE, check_origin
 
 
 class StrictBody(BaseModel):
@@ -94,6 +95,12 @@ class TimedAnswerBody(StrictBody):
     dont_know: bool = Field(default=False, strict=True)
 
 
+class CredentialsBody(StrictBody):
+    username: str = Field(min_length=1, max_length=64)
+    password: str = Field(min_length=1, max_length=128)
+    remember: bool = Field(default=False, strict=True)
+
+
 def create_app(engine=None, settings=None):
     if settings is None and os.environ.get("LOCAL_DEVELOPMENT") == "1":
         from backend.local_env import load_local_env
@@ -119,7 +126,42 @@ def create_app(engine=None, settings=None):
     app.state.tutor = tutor_service
     app.state.personalisation = personalisation
     app.state.accounts = accounts
-    authenticate = make_identity(settings)
+    local_accounts = LocalAccounts(engine)
+    authenticate = make_identity(settings, local_accounts)
+
+    def local_only(request):
+        if not settings.local_development:
+            raise HTTPException(404, "Local accounts are not enabled.")
+        check_origin(request)
+
+    def credentials(body, request, signup=False):
+        local_only(request)
+        # Independent IP and username budgets bound guessing and password-hash work.
+        budget.rate_limit("auth-ip:" + (request.client.host if request.client else "unknown"), limit=20)
+        budget.rate_limit("auth-user:" + body.username.strip().lower(), limit=10)
+        token, lifetime, username = local_accounts.sign_in(body.username, body.password, signup, body.remember)
+        response = JSONResponse({"username": username}, headers={"Cache-Control": "no-store"})
+        response.set_cookie(COOKIE, token, httponly=True, samesite="strict", path="/",
+                            secure=request.url.scheme == "https", max_age=lifetime if body.remember else None)
+        return response
+
+    @app.post("/v1/auth/signup", status_code=201)
+    def signup(body: CredentialsBody, request: Request):
+        response = credentials(body, request, signup=True)
+        response.status_code = 201
+        return response
+
+    @app.post("/v1/auth/login")
+    def login(body: CredentialsBody, request: Request):
+        return credentials(body, request)
+
+    @app.post("/v1/auth/logout")
+    def logout(request: Request):
+        local_only(request)
+        local_accounts.sign_out(request.cookies.get(COOKIE))
+        response = JSONResponse({"signed_out": True}, headers={"Cache-Control": "no-store"})
+        response.delete_cookie(COOKIE, path="/", httponly=True, samesite="strict")
+        return response
 
     def learner(subject: Annotated[str, Depends(authenticate)]):
         with transaction(engine) as db:
@@ -260,7 +302,7 @@ def create_app(engine=None, settings=None):
             with engine.connect() as db:
                 db.execute(text("SELECT 1"))
                 versions = set(db.scalars(text("SELECT version_num FROM alembic_version")))
-                if versions != {"b3c509d12e8f"}:
+                if versions != {"c6e1f892a470"}:
                     return JSONResponse(status_code=503, content={"status": "not_ready", "reason": "migrations_required"})
             return {"status": "ready"}
         except Exception:
