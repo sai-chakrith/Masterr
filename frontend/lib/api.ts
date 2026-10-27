@@ -27,6 +27,7 @@ export interface QuestionView {
 }
 
 export interface SessionView {
+  completion?: SubmitResult | null;
   session_id: string;
   skill_id: string;
   mode: string;

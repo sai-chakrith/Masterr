@@ -1,5 +1,12 @@
 # Hands-on demo walkthrough — 27 October 2026
 
+Follow-up: D1–D4 below have implementation fixes: persisted completion results,
+expanded Divisibility notes, safe lesson formatting, and more varied practice with
+actionable hints. Regression checks and the production build pass. The six audit
+defects are also repaired. Later live-demo screenshots and recorded Groq usage are
+linked in [the completion record](completion-2026-10-27.md). The original offline
+walkthrough below remains historical evidence, not a description of current defects.
+
 This was a browser-operated learner demonstration against application revision
 `35deead`, not a rerun of the synthetic Playwright suite. The launcher created a
 fresh isolated sample database, with the Divisibility goal preselected and no

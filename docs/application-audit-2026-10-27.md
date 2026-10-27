@@ -1,5 +1,12 @@
 # Application test and flaw review — 27 October 2026
 
+Completion update: all six findings below are repaired in the working changes
+verified on 27 October. The backend regressions run without expected-failure
+markers; both browser regressions pass. Current totals: 217 backend tests passed,
+11 browser tests passed and three intentionally skipped, production build passed.
+See [the completion record](completion-2026-10-27.md). The original reproduction
+details and counts below describe the earlier audited revision.
+
 Audited application revision: `67708a7`. This review changes tests and documentation,
 not application behaviour. Six defects were reproduced. The application is suitable
 for a clearly labelled local demonstration, but these defects should be resolved

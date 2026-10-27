@@ -33,14 +33,20 @@ def select_adaptive_questions(questions, rating: float, count: int = PRACTICE_BL
         key=lambda q: (abs(q.difficulty_level - target),
                        abs(expected(rating, q.difficulty_level) - TARGET_SUCCESS), q.id),
     )
-    result, families = [], set()
-    for question in candidates:
-        if question.family_id in families:
-            continue
+    result, families, methods = [], set(), {}
+    def method(q):
+        return getattr(q, "sub_topic", None) or getattr(q, "snapshot", {}).get("template_id", "unclassified")
+    while len(result) < count:
+        fresh = [q for q in candidates if q.family_id not in families]
+        if not fresh:
+            break
+        # Keep the difficulty target first; diversify methods within that band.
+        question = min(fresh, key=lambda q: (
+            abs(q.difficulty_level - target), methods.get(method(q), 0),
+            abs(expected(rating, q.difficulty_level) - TARGET_SUCCESS), q.id))
         result.append(question)
         families.add(question.family_id)
-        if len(result) == count:
-            break
+        methods[method(question)] = methods.get(method(question), 0) + 1
     return result
 
 

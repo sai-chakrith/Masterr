@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEvent, useCallback, useEffect, useState } from "react";
+import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { ApiError, api, getToken, type LearningAction, type Roadmap } from "@/lib/api";
 import SkillRouteGraph from "@/components/SkillRouteGraph";
 
@@ -31,36 +31,43 @@ export default function RoadmapPage() {
   const [notice, setNotice] = useState<string | null>(null);
   const [dismissed, setDismissed] = useState(false);
 
+  const generation = useRef(0);
+  const hydrated = useRef(false);
   const load = useCallback(async () => {
+    const request = ++generation.current;
     try {
       const [catalog, savedGoal, today] = await Promise.all([api.curriculum(), api.goal(), api.today()]);
+      if (request !== generation.current) return;
       setCurriculum(catalog);
       setGoal(savedGoal);
       setActive(today.active_session_id);
       if (savedGoal) {
         const [route, suggestion] = await Promise.all([api.roadmap(), api.nextAction()]);
-        setRoadmap(route);
+        if (request !== generation.current) return;
         setRoadmap({ ...route, next_actions: suggestion.actions, state_fingerprint: suggestion.state_fingerprint });
-        if (!targets.length && savedGoal.target_skill_ids.length) setTargets(savedGoal.target_skill_ids);
-        if (savedGoal.exam_date) setDate(savedGoal.exam_date);
-        setExamProfileId(savedGoal.exam_profile_id ?? "");
-      } else {
-        setExamProfileId("");
+        if (!hydrated.current) {
+          setTargets(savedGoal.target_skill_ids);
+          setDate(savedGoal.exam_date ?? "");
+          setExamProfileId(savedGoal.exam_profile_id ?? "");
+        }
       }
+      hydrated.current = true;
     } catch (e) {
       if (e instanceof ApiError && e.status === 401) router.replace("/login");
       else setError(e instanceof ApiError ? e.message : "The backend is not reachable. Start it with scripts/start-local.ps1.");
     }
-  }, [router, targets]);
+  }, [router]);
 
   useEffect(() => {
     if (!getToken()) router.replace("/login");
     else void load();
+    return () => { generation.current++; };
   }, [load, router]);
 
   async function saveGoal(event: FormEvent) {
     event.preventDefault();
     if (!targets.length && !examProfileId) return;
+    generation.current++;
     setBusy(true); setError(null); setNotice(null);
     try {
       await api.setGoal({ target_skill_ids: targets, exam_profile_id: examProfileId || null,

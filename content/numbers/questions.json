@@ -8286,10 +8286,10 @@
         "pattern": "44?",
         "divisor": 6
       },
-      "solution": "Testing the divisibility rule gives the unique digit 4.",
+      "solution": "The known digits sum to 8. The digit 4 gives digit sum 12 and number 444. The completed number is even and its digit sum is divisible by 3; both tests hold.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Divisibility by 6 needs BOTH an even final digit and a digit sum divisible by 3.",
+        "Try 0, 2, 4, 6 and 8. Add each to 8 and check for a multiple of 3."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -8298,7 +8298,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0002",
@@ -8315,10 +8317,10 @@
         "pattern": "13?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 5.",
+      "solution": "The known digits sum to 4. The digit 5 gives digit sum 9 and number 135. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 4. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 4 and 13, then subtract 4."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -8327,7 +8329,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0003",
@@ -8344,10 +8348,10 @@
         "pattern": "98?",
         "divisor": 6
       },
-      "solution": "Testing the divisibility rule gives the unique digit 4.",
+      "solution": "The known digits sum to 17. The digit 4 gives digit sum 21 and number 984. The completed number is even and its digit sum is divisible by 3; both tests hold.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Divisibility by 6 needs BOTH an even final digit and a digit sum divisible by 3.",
+        "Try 0, 2, 4, 6 and 8. Add each to 17 and check for a multiple of 3."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -8356,7 +8360,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0004",
@@ -8373,10 +8379,10 @@
         "pattern": "74?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 7.",
+      "solution": "The known digits sum to 11. The digit 7 gives digit sum 18 and number 747. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 11. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 11 and 20, then subtract 11."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -8385,7 +8391,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0005",
@@ -8402,10 +8410,10 @@
         "pattern": "22?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 5.",
+      "solution": "The known digits sum to 4. The digit 5 gives digit sum 9 and number 225. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 4. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 4 and 13, then subtract 4."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -8414,7 +8422,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0006",
@@ -8431,10 +8441,10 @@
         "pattern": "80?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 1.",
+      "solution": "The known digits sum to 8. The digit 1 gives digit sum 9 and number 801. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 8. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 8 and 17, then subtract 8."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -8443,7 +8453,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0007",
@@ -8460,10 +8472,10 @@
         "pattern": "62?",
         "divisor": 6
       },
-      "solution": "Testing the divisibility rule gives the unique digit 4.",
+      "solution": "The known digits sum to 8. The digit 4 gives digit sum 12 and number 624. The completed number is even and its digit sum is divisible by 3; both tests hold.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Divisibility by 6 needs BOTH an even final digit and a digit sum divisible by 3.",
+        "Try 0, 2, 4, 6 and 8. Add each to 8 and check for a multiple of 3."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -8472,7 +8484,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0009",
@@ -8489,10 +8503,10 @@
         "pattern": "53?",
         "divisor": 6
       },
-      "solution": "Testing the divisibility rule gives the unique digit 4.",
+      "solution": "The known digits sum to 8. The digit 4 gives digit sum 12 and number 534. The completed number is even and its digit sum is divisible by 3; both tests hold.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Divisibility by 6 needs BOTH an even final digit and a digit sum divisible by 3.",
+        "Try 0, 2, 4, 6 and 8. Add each to 8 and check for a multiple of 3."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -8501,7 +8515,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0010",
@@ -8518,10 +8534,10 @@
         "pattern": "93?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 6.",
+      "solution": "The known digits sum to 12. The digit 6 gives digit sum 18 and number 936. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 12. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 12 and 21, then subtract 12."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -8530,7 +8546,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0011",
@@ -8547,10 +8565,10 @@
         "pattern": "71?",
         "divisor": 6
       },
-      "solution": "Testing the divisibility rule gives the unique digit 4.",
+      "solution": "The known digits sum to 8. The digit 4 gives digit sum 12 and number 714. The completed number is even and its digit sum is divisible by 3; both tests hold.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Divisibility by 6 needs BOTH an even final digit and a digit sum divisible by 3.",
+        "Try 0, 2, 4, 6 and 8. Add each to 8 and check for a multiple of 3."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -8559,7 +8577,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0012",
@@ -8576,10 +8596,10 @@
         "pattern": "46?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 8.",
+      "solution": "The known digits sum to 10. The digit 8 gives digit sum 18 and number 468. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 10. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 10 and 19, then subtract 10."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -8588,7 +8608,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0013",
@@ -8605,10 +8627,10 @@
         "pattern": "89?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 1.",
+      "solution": "The known digits sum to 17. The digit 1 gives digit sum 18 and number 891. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 17. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 17 and 26, then subtract 17."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -8617,7 +8639,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0014",
@@ -8634,10 +8658,10 @@
         "pattern": "44?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 1.",
+      "solution": "The known digits sum to 8. The digit 1 gives digit sum 9 and number 441. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 8. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 8 and 17, then subtract 8."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -8646,7 +8670,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0015",
@@ -8663,10 +8689,10 @@
         "pattern": "41?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 4.",
+      "solution": "The known digits sum to 5. The digit 4 gives digit sum 9 and number 414. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 5. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 5 and 14, then subtract 5."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -8675,7 +8701,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0016",
@@ -8692,10 +8720,10 @@
         "pattern": "29?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 7.",
+      "solution": "The known digits sum to 11. The digit 7 gives digit sum 18 and number 297. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 11. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 11 and 20, then subtract 11."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -8704,7 +8732,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0018",
@@ -8721,10 +8751,10 @@
         "pattern": "50?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 4.",
+      "solution": "The known digits sum to 5. The digit 4 gives digit sum 9 and number 504. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 5. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 5 and 14, then subtract 5."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -8733,7 +8763,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0019",
@@ -8750,10 +8782,10 @@
         "pattern": "15?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 3.",
+      "solution": "The known digits sum to 6. The digit 3 gives digit sum 9 and number 153. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 6. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 6 and 15, then subtract 6."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -8762,7 +8794,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0021",
@@ -8779,10 +8813,10 @@
         "pattern": "43?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 2.",
+      "solution": "The known digits sum to 7. The digit 2 gives digit sum 9 and number 432. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 7. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 7 and 16, then subtract 7."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -8791,7 +8825,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0022",
@@ -8808,10 +8844,10 @@
         "pattern": "84?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 6.",
+      "solution": "The known digits sum to 12. The digit 6 gives digit sum 18 and number 846. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 12. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 12 and 21, then subtract 12."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -8820,7 +8856,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0023",
@@ -8837,10 +8875,10 @@
         "pattern": "85?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 5.",
+      "solution": "The known digits sum to 13. The digit 5 gives digit sum 18 and number 855. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 13. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 13 and 22, then subtract 13."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -8849,7 +8887,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0024",
@@ -8866,10 +8906,10 @@
         "pattern": "35?",
         "divisor": 6
       },
-      "solution": "Testing the divisibility rule gives the unique digit 4.",
+      "solution": "The known digits sum to 8. The digit 4 gives digit sum 12 and number 354. The completed number is even and its digit sum is divisible by 3; both tests hold.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Divisibility by 6 needs BOTH an even final digit and a digit sum divisible by 3.",
+        "Try 0, 2, 4, 6 and 8. Add each to 8 and check for a multiple of 3."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -8878,7 +8918,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0025",
@@ -8895,10 +8937,10 @@
         "pattern": "55?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 8.",
+      "solution": "The known digits sum to 10. The digit 8 gives digit sum 18 and number 558. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 10. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 10 and 19, then subtract 10."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -8907,7 +8949,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0026",
@@ -8924,10 +8968,10 @@
         "pattern": "86?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 4.",
+      "solution": "The known digits sum to 14. The digit 4 gives digit sum 18 and number 864. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 14. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 14 and 23, then subtract 14."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -8936,7 +8980,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0027",
@@ -8953,10 +8999,10 @@
         "pattern": "65?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 7.",
+      "solution": "The known digits sum to 11. The digit 7 gives digit sum 18 and number 657. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 11. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 11 and 20, then subtract 11."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -8965,7 +9011,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0028",
@@ -8982,10 +9030,10 @@
         "pattern": "42?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 3.",
+      "solution": "The known digits sum to 6. The digit 3 gives digit sum 9 and number 423. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 6. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 6 and 15, then subtract 6."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -8994,7 +9042,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0029",
@@ -9011,10 +9061,10 @@
         "pattern": "12?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 6.",
+      "solution": "The known digits sum to 3. The digit 6 gives digit sum 9 and number 126. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 3. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 3 and 12, then subtract 3."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -9023,7 +9073,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0030",
@@ -9040,10 +9092,10 @@
         "pattern": "32?",
         "divisor": 6
       },
-      "solution": "Testing the divisibility rule gives the unique digit 4.",
+      "solution": "The known digits sum to 5. The digit 4 gives digit sum 9 and number 324. The completed number is even and its digit sum is divisible by 3; both tests hold.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Divisibility by 6 needs BOTH an even final digit and a digit sum divisible by 3.",
+        "Try 0, 2, 4, 6 and 8. Add each to 5 and check for a multiple of 3."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -9052,7 +9104,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0031",
@@ -9069,10 +9123,10 @@
         "pattern": "25?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 2.",
+      "solution": "The known digits sum to 7. The digit 2 gives digit sum 9 and number 252. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 7. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 7 and 16, then subtract 7."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -9081,7 +9135,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0032",
@@ -9098,10 +9154,10 @@
         "pattern": "62?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 1.",
+      "solution": "The known digits sum to 8. The digit 1 gives digit sum 9 and number 621. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 8. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 8 and 17, then subtract 8."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -9110,7 +9166,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0033",
@@ -9127,10 +9185,10 @@
         "pattern": "32?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 4.",
+      "solution": "The known digits sum to 5. The digit 4 gives digit sum 9 and number 324. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 5. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 5 and 14, then subtract 5."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -9139,7 +9197,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0035",
@@ -9156,10 +9216,10 @@
         "pattern": "74?",
         "divisor": 6
       },
-      "solution": "Testing the divisibility rule gives the unique digit 4.",
+      "solution": "The known digits sum to 11. The digit 4 gives digit sum 15 and number 744. The completed number is even and its digit sum is divisible by 3; both tests hold.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Divisibility by 6 needs BOTH an even final digit and a digit sum divisible by 3.",
+        "Try 0, 2, 4, 6 and 8. Add each to 11 and check for a multiple of 3."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -9168,7 +9228,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0036",
@@ -9185,10 +9247,10 @@
         "pattern": "68?",
         "divisor": 6
       },
-      "solution": "Testing the divisibility rule gives the unique digit 4.",
+      "solution": "The known digits sum to 14. The digit 4 gives digit sum 18 and number 684. The completed number is even and its digit sum is divisible by 3; both tests hold.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Divisibility by 6 needs BOTH an even final digit and a digit sum divisible by 3.",
+        "Try 0, 2, 4, 6 and 8. Add each to 14 and check for a multiple of 3."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -9197,7 +9259,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0039",
@@ -9214,10 +9278,10 @@
         "pattern": "28?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 8.",
+      "solution": "The known digits sum to 10. The digit 8 gives digit sum 18 and number 288. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 10. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 10 and 19, then subtract 10."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -9226,7 +9290,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0040",
@@ -9243,10 +9309,10 @@
         "pattern": "20?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 7.",
+      "solution": "The known digits sum to 2. The digit 7 gives digit sum 9 and number 207. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 2. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 2 and 11, then subtract 2."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -9255,7 +9321,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0041",
@@ -9272,10 +9340,10 @@
         "pattern": "56?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 7.",
+      "solution": "The known digits sum to 11. The digit 7 gives digit sum 18 and number 567. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 11. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 11 and 20, then subtract 11."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -9284,7 +9352,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0042",
@@ -9301,10 +9371,10 @@
         "pattern": "71?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 1.",
+      "solution": "The known digits sum to 8. The digit 1 gives digit sum 9 and number 711. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 8. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 8 and 17, then subtract 8."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -9313,7 +9383,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0043",
@@ -9330,10 +9402,10 @@
         "pattern": "57?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 6.",
+      "solution": "The known digits sum to 12. The digit 6 gives digit sum 18 and number 576. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 12. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 12 and 21, then subtract 12."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -9342,7 +9414,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0045",
@@ -9359,10 +9433,10 @@
         "pattern": "26?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 1.",
+      "solution": "The known digits sum to 8. The digit 1 gives digit sum 9 and number 261. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 8. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 8 and 17, then subtract 8."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -9371,7 +9445,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0046",
@@ -9388,10 +9464,10 @@
         "pattern": "69?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 3.",
+      "solution": "The known digits sum to 15. The digit 3 gives digit sum 18 and number 693. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 15. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 15 and 24, then subtract 15."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -9400,7 +9476,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-divisibility-0050",
@@ -9417,10 +9495,10 @@
         "pattern": "96?",
         "divisor": 9
       },
-      "solution": "Testing the divisibility rule gives the unique digit 3.",
+      "solution": "The known digits sum to 15. The digit 3 gives digit sum 18 and number 963. The digit sum is divisible by 9, so the number is too.",
       "hints": [
-        "Use the divisibility rule for the stated divisor.",
-        "Test each possible digit and keep the one that satisfies the rule."
+        "Add the known digits: 15. Make the total a multiple of 9.",
+        "Find a multiple of 9 between 15 and 24, then subtract 15."
       ],
       "reasoning_rubric": {
         "type": "integer_answer",
@@ -9429,7 +9507,9 @@
       "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
       "follow_up": "Draft: reviewer to add a targeted follow-up.",
       "review_status": "draft",
-      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review."
+      "provenance": "Deterministic template unique-missing-digit-v1; seed-controlled generated numbers; requires human content review.",
+      "version": 2,
+      "sub_topic": "unique-missing-digit-v2"
     },
     {
       "id": "gen-primes-factors-0001",
@@ -61447,6 +61527,1372 @@
         }
       ],
       "version": 2
+    },
+    {
+      "id": "gen-divisibility-0051",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0051",
+      "template_id": "sum-multiples-v1",
+      "sub_topic": "sum-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 1",
+      "difficulty_level": 1,
+      "prompt": "What is the sum of the positive multiples of 7 not greater than 200?",
+      "answer": 2842,
+      "validator": {
+        "kind": "expression",
+        "expr": "7*28*(28+1)//2"
+      },
+      "solution": "There are 28 multiples. Their sum is 7 times (1 + ... + 28): 7*28*(28+1)/2 = 2842.",
+      "hints": [
+        "First find how many multiples fit: round 200/7 down.",
+        "If there are k multiples, their sum is d*k*(k+1)/2. The question asks for the sum, not the count."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template sum-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "sum-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0053",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0053",
+      "template_id": "interval-multiples-v1",
+      "sub_topic": "interval-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 3",
+      "difficulty_level": 3,
+      "prompt": "How many multiples of 11 are there from 4 through 63, inclusive?",
+      "answer": 5,
+      "validator": {
+        "kind": "expression",
+        "expr": "63//11-(4-1)//11"
+      },
+      "solution": "Count multiples through 63, then subtract those below 4: 63//11 - 3//11 = 5.",
+      "hints": [
+        "Count multiples up to 63 by dividing by 11 and rounding down.",
+        "Subtract the multiples up to 3, not up to 4; the interval includes 4."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template interval-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "interval-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0054",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0054",
+      "template_id": "union-multiples-v1",
+      "sub_topic": "union-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 4",
+      "difficulty_level": 4,
+      "prompt": "How many integers from 1 through 127 are divisible by 2 or 11 (or both)?",
+      "answer": 69,
+      "validator": {
+        "kind": "expression",
+        "expr": "127//2+127//11-127//22"
+      },
+      "solution": "The least common multiple is 22. Add the two counts and subtract the overlap: 127//2 + 127//11 - 127//22 = 69.",
+      "hints": [
+        "Add each divisor's multiple count, rounding down each division.",
+        "Numbers divisible by both were counted twice. Subtract the count for their least common multiple, 22."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template union-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "union-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0055",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0055",
+      "template_id": "sum-multiples-v1",
+      "sub_topic": "sum-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 5",
+      "difficulty_level": 5,
+      "prompt": "What is the sum of the positive multiples of 9 not greater than 35?",
+      "answer": 54,
+      "validator": {
+        "kind": "expression",
+        "expr": "9*3*(3+1)//2"
+      },
+      "solution": "There are 3 multiples. Their sum is 9 times (1 + ... + 3): 9*3*(3+1)/2 = 54.",
+      "hints": [
+        "First find how many multiples fit: round 35/9 down.",
+        "If there are k multiples, their sum is d*k*(k+1)/2. The question asks for the sum, not the count."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template sum-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "sum-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0057",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0057",
+      "template_id": "interval-multiples-v1",
+      "sub_topic": "interval-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 2",
+      "difficulty_level": 2,
+      "prompt": "How many multiples of 3 are there from 1 through 108, inclusive?",
+      "answer": 36,
+      "validator": {
+        "kind": "expression",
+        "expr": "108//3-(1-1)//3"
+      },
+      "solution": "Count multiples through 108, then subtract those below 1: 108//3 - 0//3 = 36.",
+      "hints": [
+        "Count multiples up to 108 by dividing by 3 and rounding down.",
+        "Subtract the multiples up to 0, not up to 1; the interval includes 1."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template interval-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "interval-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0058",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0058",
+      "template_id": "union-multiples-v1",
+      "sub_topic": "union-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 3",
+      "difficulty_level": 3,
+      "prompt": "How many integers from 1 through 130 are divisible by 5 or 11 (or both)?",
+      "answer": 35,
+      "validator": {
+        "kind": "expression",
+        "expr": "130//5+130//11-130//55"
+      },
+      "solution": "The least common multiple is 55. Add the two counts and subtract the overlap: 130//5 + 130//11 - 130//55 = 35.",
+      "hints": [
+        "Add each divisor's multiple count, rounding down each division.",
+        "Numbers divisible by both were counted twice. Subtract the count for their least common multiple, 55."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template union-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "union-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0059",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0059",
+      "template_id": "sum-multiples-v1",
+      "sub_topic": "sum-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 4",
+      "difficulty_level": 4,
+      "prompt": "What is the sum of the positive multiples of 4 not greater than 169?",
+      "answer": 3612,
+      "validator": {
+        "kind": "expression",
+        "expr": "4*42*(42+1)//2"
+      },
+      "solution": "There are 42 multiples. Their sum is 4 times (1 + ... + 42): 4*42*(42+1)/2 = 3612.",
+      "hints": [
+        "First find how many multiples fit: round 169/4 down.",
+        "If there are k multiples, their sum is d*k*(k+1)/2. The question asks for the sum, not the count."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template sum-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "sum-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0060",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0060",
+      "template_id": "unique-missing-digit-v2",
+      "sub_topic": "unique-missing-digit-v2",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 5",
+      "difficulty_level": 5,
+      "prompt": "What digit replaces ? in 53? so the number is divisible by 9?",
+      "answer": 1,
+      "validator": {
+        "kind": "missing_digit",
+        "pattern": "53?",
+        "divisor": 9
+      },
+      "solution": "The known digits sum to 8. Try digits 0 through 9. With 1, the sum is 9; the completed number is 531. The digit sum is divisible by 9.",
+      "hints": [
+        "Add the known digits: 8. The missing digit must make the total a multiple of 9.",
+        "Find a multiple of 9 between 8 and 17; subtract 8."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template unique-missing-digit-v2; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "unique-missing-digit-v2",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0061",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0061",
+      "template_id": "interval-multiples-v1",
+      "sub_topic": "interval-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 1",
+      "difficulty_level": 1,
+      "prompt": "How many multiples of 11 are there from 78 through 158, inclusive?",
+      "answer": 7,
+      "validator": {
+        "kind": "expression",
+        "expr": "158//11-(78-1)//11"
+      },
+      "solution": "Count multiples through 158, then subtract those below 78: 158//11 - 77//11 = 7.",
+      "hints": [
+        "Count multiples up to 158 by dividing by 11 and rounding down.",
+        "Subtract the multiples up to 77, not up to 78; the interval includes 78."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template interval-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "interval-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0062",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0062",
+      "template_id": "union-multiples-v1",
+      "sub_topic": "union-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 2",
+      "difficulty_level": 2,
+      "prompt": "How many integers from 1 through 187 are divisible by 5 or 7 (or both)?",
+      "answer": 58,
+      "validator": {
+        "kind": "expression",
+        "expr": "187//5+187//7-187//35"
+      },
+      "solution": "The least common multiple is 35. Add the two counts and subtract the overlap: 187//5 + 187//7 - 187//35 = 58.",
+      "hints": [
+        "Add each divisor's multiple count, rounding down each division.",
+        "Numbers divisible by both were counted twice. Subtract the count for their least common multiple, 35."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template union-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "union-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0063",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0063",
+      "template_id": "sum-multiples-v1",
+      "sub_topic": "sum-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 3",
+      "difficulty_level": 3,
+      "prompt": "What is the sum of the positive multiples of 11 not greater than 162?",
+      "answer": 1155,
+      "validator": {
+        "kind": "expression",
+        "expr": "11*14*(14+1)//2"
+      },
+      "solution": "There are 14 multiples. Their sum is 11 times (1 + ... + 14): 11*14*(14+1)/2 = 1155.",
+      "hints": [
+        "First find how many multiples fit: round 162/11 down.",
+        "If there are k multiples, their sum is d*k*(k+1)/2. The question asks for the sum, not the count."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template sum-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "sum-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0065",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0065",
+      "template_id": "interval-multiples-v1",
+      "sub_topic": "interval-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 5",
+      "difficulty_level": 5,
+      "prompt": "How many multiples of 10 are there from 39 through 82, inclusive?",
+      "answer": 5,
+      "validator": {
+        "kind": "expression",
+        "expr": "82//10-(39-1)//10"
+      },
+      "solution": "Count multiples through 82, then subtract those below 39: 82//10 - 38//10 = 5.",
+      "hints": [
+        "Count multiples up to 82 by dividing by 10 and rounding down.",
+        "Subtract the multiples up to 38, not up to 39; the interval includes 39."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template interval-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "interval-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0066",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0066",
+      "template_id": "union-multiples-v1",
+      "sub_topic": "union-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 1",
+      "difficulty_level": 1,
+      "prompt": "How many integers from 1 through 297 are divisible by 5 or 7 (or both)?",
+      "answer": 93,
+      "validator": {
+        "kind": "expression",
+        "expr": "297//5+297//7-297//35"
+      },
+      "solution": "The least common multiple is 35. Add the two counts and subtract the overlap: 297//5 + 297//7 - 297//35 = 93.",
+      "hints": [
+        "Add each divisor's multiple count, rounding down each division.",
+        "Numbers divisible by both were counted twice. Subtract the count for their least common multiple, 35."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template union-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "union-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0067",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0067",
+      "template_id": "sum-multiples-v1",
+      "sub_topic": "sum-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 2",
+      "difficulty_level": 2,
+      "prompt": "What is the sum of the positive multiples of 5 not greater than 31?",
+      "answer": 105,
+      "validator": {
+        "kind": "expression",
+        "expr": "5*6*(6+1)//2"
+      },
+      "solution": "There are 6 multiples. Their sum is 5 times (1 + ... + 6): 5*6*(6+1)/2 = 105.",
+      "hints": [
+        "First find how many multiples fit: round 31/5 down.",
+        "If there are k multiples, their sum is d*k*(k+1)/2. The question asks for the sum, not the count."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template sum-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "sum-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0068",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0068",
+      "template_id": "unique-missing-digit-v2",
+      "sub_topic": "unique-missing-digit-v2",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 3",
+      "difficulty_level": 3,
+      "prompt": "What digit replaces ? in 83? so the number is divisible by 6?",
+      "answer": 4,
+      "validator": {
+        "kind": "missing_digit",
+        "pattern": "83?",
+        "divisor": 6
+      },
+      "solution": "The known digits sum to 11. Try digits 0 through 9. With 4, the sum is 15; the completed number is 834. It is even and its digit sum is divisible by 3, so it is divisible by 6.",
+      "hints": [
+        "Divisibility by 6 requires BOTH an even last digit and a digit sum divisible by 3.",
+        "Try 0, 2, 4, 6 and 8; add each to 11 and keep a sum divisible by 3."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template unique-missing-digit-v2; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "unique-missing-digit-v2",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0069",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0069",
+      "template_id": "interval-multiples-v1",
+      "sub_topic": "interval-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 4",
+      "difficulty_level": 4,
+      "prompt": "How many multiples of 7 are there from 28 through 137, inclusive?",
+      "answer": 16,
+      "validator": {
+        "kind": "expression",
+        "expr": "137//7-(28-1)//7"
+      },
+      "solution": "Count multiples through 137, then subtract those below 28: 137//7 - 27//7 = 16.",
+      "hints": [
+        "Count multiples up to 137 by dividing by 7 and rounding down.",
+        "Subtract the multiples up to 27, not up to 28; the interval includes 28."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template interval-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "interval-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0070",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0070",
+      "template_id": "union-multiples-v1",
+      "sub_topic": "union-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 5",
+      "difficulty_level": 5,
+      "prompt": "How many integers from 1 through 65 are divisible by 6 or 9 (or both)?",
+      "answer": 14,
+      "validator": {
+        "kind": "expression",
+        "expr": "65//6+65//9-65//18"
+      },
+      "solution": "The least common multiple is 18. Add the two counts and subtract the overlap: 65//6 + 65//9 - 65//18 = 14.",
+      "hints": [
+        "Add each divisor's multiple count, rounding down each division.",
+        "Numbers divisible by both were counted twice. Subtract the count for their least common multiple, 18."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template union-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "union-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0071",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0071",
+      "template_id": "sum-multiples-v1",
+      "sub_topic": "sum-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 1",
+      "difficulty_level": 1,
+      "prompt": "What is the sum of the positive multiples of 4 not greater than 101?",
+      "answer": 1300,
+      "validator": {
+        "kind": "expression",
+        "expr": "4*25*(25+1)//2"
+      },
+      "solution": "There are 25 multiples. Their sum is 4 times (1 + ... + 25): 4*25*(25+1)/2 = 1300.",
+      "hints": [
+        "First find how many multiples fit: round 101/4 down.",
+        "If there are k multiples, their sum is d*k*(k+1)/2. The question asks for the sum, not the count."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template sum-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "sum-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0072",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0072",
+      "template_id": "unique-missing-digit-v2",
+      "sub_topic": "unique-missing-digit-v2",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 2",
+      "difficulty_level": 2,
+      "prompt": "What digit replaces ? in 21? so the number is divisible by 9?",
+      "answer": 6,
+      "validator": {
+        "kind": "missing_digit",
+        "pattern": "21?",
+        "divisor": 9
+      },
+      "solution": "The known digits sum to 3. Try digits 0 through 9. With 6, the sum is 9; the completed number is 216. The digit sum is divisible by 9.",
+      "hints": [
+        "Add the known digits: 3. The missing digit must make the total a multiple of 9.",
+        "Find a multiple of 9 between 3 and 12; subtract 3."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template unique-missing-digit-v2; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "unique-missing-digit-v2",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0073",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0073",
+      "template_id": "interval-multiples-v1",
+      "sub_topic": "interval-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 3",
+      "difficulty_level": 3,
+      "prompt": "How many multiples of 6 are there from 42 through 103, inclusive?",
+      "answer": 11,
+      "validator": {
+        "kind": "expression",
+        "expr": "103//6-(42-1)//6"
+      },
+      "solution": "Count multiples through 103, then subtract those below 42: 103//6 - 41//6 = 11.",
+      "hints": [
+        "Count multiples up to 103 by dividing by 6 and rounding down.",
+        "Subtract the multiples up to 41, not up to 42; the interval includes 42."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template interval-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "interval-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0074",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0074",
+      "template_id": "union-multiples-v1",
+      "sub_topic": "union-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 4",
+      "difficulty_level": 4,
+      "prompt": "How many integers from 1 through 191 are divisible by 5 or 11 (or both)?",
+      "answer": 52,
+      "validator": {
+        "kind": "expression",
+        "expr": "191//5+191//11-191//55"
+      },
+      "solution": "The least common multiple is 55. Add the two counts and subtract the overlap: 191//5 + 191//11 - 191//55 = 52.",
+      "hints": [
+        "Add each divisor's multiple count, rounding down each division.",
+        "Numbers divisible by both were counted twice. Subtract the count for their least common multiple, 55."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template union-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "union-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0075",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0075",
+      "template_id": "sum-multiples-v1",
+      "sub_topic": "sum-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 5",
+      "difficulty_level": 5,
+      "prompt": "What is the sum of the positive multiples of 8 not greater than 118?",
+      "answer": 840,
+      "validator": {
+        "kind": "expression",
+        "expr": "8*14*(14+1)//2"
+      },
+      "solution": "There are 14 multiples. Their sum is 8 times (1 + ... + 14): 8*14*(14+1)/2 = 840.",
+      "hints": [
+        "First find how many multiples fit: round 118/8 down.",
+        "If there are k multiples, their sum is d*k*(k+1)/2. The question asks for the sum, not the count."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template sum-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "sum-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0076",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0076",
+      "template_id": "unique-missing-digit-v2",
+      "sub_topic": "unique-missing-digit-v2",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 1",
+      "difficulty_level": 1,
+      "prompt": "What digit replaces ? in 30? so the number is divisible by 9?",
+      "answer": 6,
+      "validator": {
+        "kind": "missing_digit",
+        "pattern": "30?",
+        "divisor": 9
+      },
+      "solution": "The known digits sum to 3. Try digits 0 through 9. With 6, the sum is 9; the completed number is 306. The digit sum is divisible by 9.",
+      "hints": [
+        "Add the known digits: 3. The missing digit must make the total a multiple of 9.",
+        "Find a multiple of 9 between 3 and 12; subtract 3."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template unique-missing-digit-v2; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "unique-missing-digit-v2",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0077",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0077",
+      "template_id": "interval-multiples-v1",
+      "sub_topic": "interval-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 2",
+      "difficulty_level": 2,
+      "prompt": "How many multiples of 6 are there from 1 through 120, inclusive?",
+      "answer": 20,
+      "validator": {
+        "kind": "expression",
+        "expr": "120//6-(1-1)//6"
+      },
+      "solution": "Count multiples through 120, then subtract those below 1: 120//6 - 0//6 = 20.",
+      "hints": [
+        "Count multiples up to 120 by dividing by 6 and rounding down.",
+        "Subtract the multiples up to 0, not up to 1; the interval includes 1."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template interval-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "interval-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0078",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0078",
+      "template_id": "union-multiples-v1",
+      "sub_topic": "union-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 3",
+      "difficulty_level": 3,
+      "prompt": "How many integers from 1 through 208 are divisible by 4 or 11 (or both)?",
+      "answer": 66,
+      "validator": {
+        "kind": "expression",
+        "expr": "208//4+208//11-208//44"
+      },
+      "solution": "The least common multiple is 44. Add the two counts and subtract the overlap: 208//4 + 208//11 - 208//44 = 66.",
+      "hints": [
+        "Add each divisor's multiple count, rounding down each division.",
+        "Numbers divisible by both were counted twice. Subtract the count for their least common multiple, 44."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template union-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "union-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0079",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0079",
+      "template_id": "sum-multiples-v1",
+      "sub_topic": "sum-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 4",
+      "difficulty_level": 4,
+      "prompt": "What is the sum of the positive multiples of 8 not greater than 87?",
+      "answer": 440,
+      "validator": {
+        "kind": "expression",
+        "expr": "8*10*(10+1)//2"
+      },
+      "solution": "There are 10 multiples. Their sum is 8 times (1 + ... + 10): 8*10*(10+1)/2 = 440.",
+      "hints": [
+        "First find how many multiples fit: round 87/8 down.",
+        "If there are k multiples, their sum is d*k*(k+1)/2. The question asks for the sum, not the count."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template sum-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "sum-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0080",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0080",
+      "template_id": "unique-missing-digit-v2",
+      "sub_topic": "unique-missing-digit-v2",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 5",
+      "difficulty_level": 5,
+      "prompt": "What digit replaces ? in 70? so the number is divisible by 9?",
+      "answer": 2,
+      "validator": {
+        "kind": "missing_digit",
+        "pattern": "70?",
+        "divisor": 9
+      },
+      "solution": "The known digits sum to 7. Try digits 0 through 9. With 2, the sum is 9; the completed number is 702. The digit sum is divisible by 9.",
+      "hints": [
+        "Add the known digits: 7. The missing digit must make the total a multiple of 9.",
+        "Find a multiple of 9 between 7 and 16; subtract 7."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template unique-missing-digit-v2; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "unique-missing-digit-v2",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0081",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0081",
+      "template_id": "interval-multiples-v1",
+      "sub_topic": "interval-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 1",
+      "difficulty_level": 1,
+      "prompt": "How many multiples of 11 are there from 44 through 164, inclusive?",
+      "answer": 11,
+      "validator": {
+        "kind": "expression",
+        "expr": "164//11-(44-1)//11"
+      },
+      "solution": "Count multiples through 164, then subtract those below 44: 164//11 - 43//11 = 11.",
+      "hints": [
+        "Count multiples up to 164 by dividing by 11 and rounding down.",
+        "Subtract the multiples up to 43, not up to 44; the interval includes 44."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template interval-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "interval-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0082",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0082",
+      "template_id": "union-multiples-v1",
+      "sub_topic": "union-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 2",
+      "difficulty_level": 2,
+      "prompt": "How many integers from 1 through 61 are divisible by 2 or 11 (or both)?",
+      "answer": 33,
+      "validator": {
+        "kind": "expression",
+        "expr": "61//2+61//11-61//22"
+      },
+      "solution": "The least common multiple is 22. Add the two counts and subtract the overlap: 61//2 + 61//11 - 61//22 = 33.",
+      "hints": [
+        "Add each divisor's multiple count, rounding down each division.",
+        "Numbers divisible by both were counted twice. Subtract the count for their least common multiple, 22."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template union-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "union-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0083",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0083",
+      "template_id": "sum-multiples-v1",
+      "sub_topic": "sum-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 3",
+      "difficulty_level": 3,
+      "prompt": "What is the sum of the positive multiples of 7 not greater than 175?",
+      "answer": 2275,
+      "validator": {
+        "kind": "expression",
+        "expr": "7*25*(25+1)//2"
+      },
+      "solution": "There are 25 multiples. Their sum is 7 times (1 + ... + 25): 7*25*(25+1)/2 = 2275.",
+      "hints": [
+        "First find how many multiples fit: round 175/7 down.",
+        "If there are k multiples, their sum is d*k*(k+1)/2. The question asks for the sum, not the count."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template sum-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "sum-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0085",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0085",
+      "template_id": "interval-multiples-v1",
+      "sub_topic": "interval-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 5",
+      "difficulty_level": 5,
+      "prompt": "How many multiples of 12 are there from 63 through 116, inclusive?",
+      "answer": 4,
+      "validator": {
+        "kind": "expression",
+        "expr": "116//12-(63-1)//12"
+      },
+      "solution": "Count multiples through 116, then subtract those below 63: 116//12 - 62//12 = 4.",
+      "hints": [
+        "Count multiples up to 116 by dividing by 12 and rounding down.",
+        "Subtract the multiples up to 62, not up to 63; the interval includes 63."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template interval-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "interval-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0086",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0086",
+      "template_id": "union-multiples-v1",
+      "sub_topic": "union-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 1",
+      "difficulty_level": 1,
+      "prompt": "How many integers from 1 through 103 are divisible by 6 or 9 (or both)?",
+      "answer": 23,
+      "validator": {
+        "kind": "expression",
+        "expr": "103//6+103//9-103//18"
+      },
+      "solution": "The least common multiple is 18. Add the two counts and subtract the overlap: 103//6 + 103//9 - 103//18 = 23.",
+      "hints": [
+        "Add each divisor's multiple count, rounding down each division.",
+        "Numbers divisible by both were counted twice. Subtract the count for their least common multiple, 18."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template union-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "union-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0087",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0087",
+      "template_id": "sum-multiples-v1",
+      "sub_topic": "sum-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 2",
+      "difficulty_level": 2,
+      "prompt": "What is the sum of the positive multiples of 7 not greater than 73?",
+      "answer": 385,
+      "validator": {
+        "kind": "expression",
+        "expr": "7*10*(10+1)//2"
+      },
+      "solution": "There are 10 multiples. Their sum is 7 times (1 + ... + 10): 7*10*(10+1)/2 = 385.",
+      "hints": [
+        "First find how many multiples fit: round 73/7 down.",
+        "If there are k multiples, their sum is d*k*(k+1)/2. The question asks for the sum, not the count."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template sum-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "sum-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0088",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0088",
+      "template_id": "unique-missing-digit-v2",
+      "sub_topic": "unique-missing-digit-v2",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 3",
+      "difficulty_level": 3,
+      "prompt": "What digit replaces ? in 67? so the number is divisible by 9?",
+      "answer": 5,
+      "validator": {
+        "kind": "missing_digit",
+        "pattern": "67?",
+        "divisor": 9
+      },
+      "solution": "The known digits sum to 13. Try digits 0 through 9. With 5, the sum is 18; the completed number is 675. The digit sum is divisible by 9.",
+      "hints": [
+        "Add the known digits: 13. The missing digit must make the total a multiple of 9.",
+        "Find a multiple of 9 between 13 and 22; subtract 13."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template unique-missing-digit-v2; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "unique-missing-digit-v2",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0089",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0089",
+      "template_id": "interval-multiples-v1",
+      "sub_topic": "interval-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 4",
+      "difficulty_level": 4,
+      "prompt": "How many multiples of 9 are there from 34 through 54, inclusive?",
+      "answer": 3,
+      "validator": {
+        "kind": "expression",
+        "expr": "54//9-(34-1)//9"
+      },
+      "solution": "Count multiples through 54, then subtract those below 34: 54//9 - 33//9 = 3.",
+      "hints": [
+        "Count multiples up to 54 by dividing by 9 and rounding down.",
+        "Subtract the multiples up to 33, not up to 34; the interval includes 34."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template interval-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "interval-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0090",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0090",
+      "template_id": "union-multiples-v1",
+      "sub_topic": "union-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 5",
+      "difficulty_level": 5,
+      "prompt": "How many integers from 1 through 240 are divisible by 2 or 11 (or both)?",
+      "answer": 131,
+      "validator": {
+        "kind": "expression",
+        "expr": "240//2+240//11-240//22"
+      },
+      "solution": "The least common multiple is 22. Add the two counts and subtract the overlap: 240//2 + 240//11 - 240//22 = 131.",
+      "hints": [
+        "Add each divisor's multiple count, rounding down each division.",
+        "Numbers divisible by both were counted twice. Subtract the count for their least common multiple, 22."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template union-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "union-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0091",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0091",
+      "template_id": "sum-multiples-v1",
+      "sub_topic": "sum-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 1",
+      "difficulty_level": 1,
+      "prompt": "What is the sum of the positive multiples of 10 not greater than 131?",
+      "answer": 910,
+      "validator": {
+        "kind": "expression",
+        "expr": "10*13*(13+1)//2"
+      },
+      "solution": "There are 13 multiples. Their sum is 10 times (1 + ... + 13): 10*13*(13+1)/2 = 910.",
+      "hints": [
+        "First find how many multiples fit: round 131/10 down.",
+        "If there are k multiples, their sum is d*k*(k+1)/2. The question asks for the sum, not the count."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template sum-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "sum-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0093",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0093",
+      "template_id": "interval-multiples-v1",
+      "sub_topic": "interval-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 3",
+      "difficulty_level": 3,
+      "prompt": "How many multiples of 10 are there from 63 through 140, inclusive?",
+      "answer": 8,
+      "validator": {
+        "kind": "expression",
+        "expr": "140//10-(63-1)//10"
+      },
+      "solution": "Count multiples through 140, then subtract those below 63: 140//10 - 62//10 = 8.",
+      "hints": [
+        "Count multiples up to 140 by dividing by 10 and rounding down.",
+        "Subtract the multiples up to 62, not up to 63; the interval includes 63."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template interval-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "interval-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0094",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0094",
+      "template_id": "union-multiples-v1",
+      "sub_topic": "union-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 4",
+      "difficulty_level": 4,
+      "prompt": "How many integers from 1 through 132 are divisible by 3 or 11 (or both)?",
+      "answer": 52,
+      "validator": {
+        "kind": "expression",
+        "expr": "132//3+132//11-132//33"
+      },
+      "solution": "The least common multiple is 33. Add the two counts and subtract the overlap: 132//3 + 132//11 - 132//33 = 52.",
+      "hints": [
+        "Add each divisor's multiple count, rounding down each division.",
+        "Numbers divisible by both were counted twice. Subtract the count for their least common multiple, 33."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template union-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "union-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
+    },
+    {
+      "id": "gen-divisibility-0095",
+      "skill_id": "divisibility",
+      "family_id": "gen-divisibility-0095",
+      "template_id": "sum-multiples-v1",
+      "sub_topic": "sum-multiples-v1",
+      "purpose": "practice",
+      "difficulty": "Generated practice level 5",
+      "difficulty_level": 5,
+      "prompt": "What is the sum of the positive multiples of 10 not greater than 43?",
+      "answer": 100,
+      "validator": {
+        "kind": "expression",
+        "expr": "10*4*(4+1)//2"
+      },
+      "solution": "There are 4 multiples. Their sum is 10 times (1 + ... + 4): 10*4*(4+1)/2 = 100.",
+      "hints": [
+        "First find how many multiples fit: round 43/10 down.",
+        "If there are k multiples, their sum is d*k*(k+1)/2. The question asks for the sum, not the count."
+      ],
+      "reasoning_rubric": {
+        "type": "integer_answer",
+        "independent": true
+      },
+      "possible_misconception": "Draft: reviewer to identify the likely error for this item.",
+      "follow_up": "Draft: reviewer to add a targeted follow-up.",
+      "review_status": "draft",
+      "provenance": "Deterministic template sum-multiples-v1; seed-controlled generated numbers; requires human content review. Seed=20261027.",
+      "generation": {
+        "template_id": "sum-multiples-v1",
+        "generator_version": "practice-drafts-v2",
+        "seed": 20261027
+      }
     }
   ],
   "bank_note": "num-101 onward: draft assessment bank (35 per topic, D7 split). Arithmetic is checked by validators; prompts, solutions and difficulty tags await human review."

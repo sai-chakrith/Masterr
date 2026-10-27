@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import LessonText from "@/components/LessonText";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { api, getToken, request } from "@/lib/api";
@@ -85,7 +86,7 @@ export default function TutorPage() {
             {part.cached && " · Saved explanation"}
           </p>
           {checked > 0 && <p className="text-sm text-emerald-700 dark:text-emerald-300">Final answers checked against the question bank. The working may still contain mistakes.</p>}
-          <p className="whitespace-pre-wrap leading-7">{part.text}</p>
+          <LessonText text={part.text} />
         </section>;
       })}
       {result && <div className="space-y-3"><p className="text-sm text-slate-600 dark:text-slate-300">Next: practise a fresh question, then try an independent check.</p>

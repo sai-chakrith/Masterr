@@ -118,6 +118,13 @@ cache rows. This first implementation does not add a distributed job queue.
 
 ## Remaining human/live checks
 
+Update on completion: the isolated Divisibility demo has successful recorded
+Groq calls for both parts, and two fresh visits confirmed both caches with no
+new calls. See [recorded usage](live-demo-evidence-2026-10-27/usage.json) and the
+[completion record](completion-2026-10-27.md). The no-key statements below are
+historical implementation evidence. Five-topic human review and the model
+comparison remain outstanding.
+
 No Groq key was configured during implementation, so live model acceptance,
 latency, quality, usage and the 120b-versus-20b comparison remain unmeasured.
 Run the smoke tool on a configured machine and read real outputs across at least

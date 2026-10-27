@@ -53,6 +53,9 @@ test("diagnosis, tutoring, adaptive practice, retest and scheduled review", asyn
   await expect(page.getByRole("heading", { name: "Retest", exact: true })).toBeVisible();
   result = await answerSession(page);
   expect(result.result).toBe("retest_passed");
+  await page.reload();
+  await expect(page.getByText("Retest passed. The gap is resolved.", { exact: true })).toBeVisible();
+  await expect(page.getByText("10 of 10 correct.", { exact: true })).toBeVisible();
   await page.getByRole("link", { name: "Back to roadmap" }).click();
   await expect(page.getByText("Resolved", { exact: true }).first()).toBeVisible();
   const today = await page.request.get("/api/v1/me/today", { headers: { Authorization: "Bearer e2e-only-token-not-a-real-secret-123456" } });

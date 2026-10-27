@@ -4,11 +4,11 @@ Mastrr now has an integrated **15-topic pilot application**. It is ready for
 service configuration and human content publication, not yet for a public learner
 launch. The original report's 35-topic scope is not claimed as delivered.
 
-The subsequent [application audit](application-audit-2026-10-27.md) reproduced six
-unfixed defects, including a first-goal roadmap race, independent-test feedback
-leaks and a deletion race. These repairs are also required before a learner pilot.
-The latest browser run had six passes, one failure and one intentional skip;
-the earlier seven-pass result below is historical.
+The six defects in the [application audit](application-audit-2026-10-27.md) are
+now repaired and covered by passing regression checks. Completed session results
+also survive reloads, lessons render supported Markdown safely, and Divisibility
+draft notes and practice now cover more methods. See the
+[completion record](completion-2026-10-27.md) for current evidence and limits.
 
 ## Implemented
 
@@ -33,12 +33,12 @@ the earlier seven-pass result below is historical.
   logging, health/readiness endpoints, backup/restore tooling, container packaging
   and CI configuration, including PostgreSQL browser-role isolation checks.
 - Fifteen original notes drafts, a profile-authoring example, and 135 additional
-  draft retention questions. The complete source bank has 1,272 drafts. All remain
+  draft retention questions. The complete source bank now has 1,312 drafts. All remain
   unpublished pending genuine content review; no reviewer was invented.
 
 ## Verified locally
 
-- Full real-pytest suite: **211 passed**, with one existing Starlette/httpx
+- Full real-pytest suite: **217 passed**, with one existing Starlette/httpx
   deprecation warning.
 - Clean locked frontend installation using npm 10: passed.
 - TypeScript and Next.js production build: passed for all application routes.
@@ -46,15 +46,16 @@ the earlier seven-pass result below is historical.
 - PostgreSQL migration SQL generation, including RLS restrictions: passed.
 - SQLite backup and independent restore checks: passed. The existing local
   database was backed up, migrated and imported without approving content.
-- Current local database doctor: connected, migrations current, no approved
+- Earlier local database doctor: connected, migrations current, no approved
   questions or curriculum, no Groq/hosted-auth configuration or reviewer grants.
 - Docker Compose configuration validation: passed with explicitly synthetic
   configuration values. This did not start containers or provision accounts.
-- Playwright: **seven passed, one intentionally skipped**. The full stateful
+- Playwright: **11 passed, three intentionally skipped**. The full stateful
   diagnosis-to-review-scheduling journey ran once on desktop. Reviewer publication,
   timed practice, account export, layout and sign-out ran on desktop and an
   emulated Pixel 7 viewport. The duplicate mobile full-journey case was skipped;
-  this is not a claim of testing on a physical phone or against hosted accounts.
+  two deterministic network regression checks also run only on desktop.
+  This is not a claim of testing on a physical phone or against hosted accounts.
 
 The browser fixture uses a new isolated synthetic database, fake test identities and no paid
 provider calls. Its approvals and scores are never real learner evidence.
@@ -64,8 +65,9 @@ without changing the normal database or approving source drafts. Its browser che
 passed for sign-in, the demo banner, both fallback tutoring panels and continuing
 into practice. Five additional tests cover environment loading, database isolation
 and sanitised provider errors. See [recording instructions](recording-demo.md).
-Live Groq verification remains pending a replacement private key; the exposed key
-was not saved or used.
+The isolated demo now has recorded successful Groq lesson and personal calls.
+The completion check confirmed both cached parts on two visits with no new calls.
+Recorded usage is in [the sanitised evidence](live-demo-evidence-2026-10-27/usage.json).
 
 ## Owner and reviewer actions still required
 
@@ -77,8 +79,9 @@ was not saved or used.
    Mathematical validation and generated labels are not independent review.
 3. Verify actual signup, email confirmation, refresh, recovery, sign-out and
    deletion against the hosted project, using two real test accounts for isolation.
-4. Run the live Groq smoke check, inspect actual reasoning and record real
-   usage/latency. The 120b-versus-20b comparison remains unrun; no model switch
+4. Review real tutoring across at least five topics; the Divisibility smoke check
+   and recorded usage do not establish general tutoring quality.
+   The 120b-versus-20b comparison remains unrun; no model switch
    or model-quality result is claimed.
 5. Start Docker or use the intended hosting platform, execute the PostgreSQL
    runtime/isolation checks and perform a hosted restore drill. Docker's engine

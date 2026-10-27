@@ -75,7 +75,8 @@ def groq_completion(payload, api_key):
     """Use the documented HTTP API directly; no Groq SDK/version dependency."""
     request = Request("https://api.groq.com/openai/v1/chat/completions",
                       data=json.dumps(payload).encode(),
-                      headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"})
+                      headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json",
+                               "User-Agent": "Mastrr/2.0", "Accept": "application/json"})
     with urlopen(request, timeout=30) as response:
         return json.load(response)
 

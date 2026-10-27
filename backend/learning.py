@@ -19,7 +19,8 @@ from backend.models import (Assignment, Attempt, Evidence, Exposure, GapState, L
                             LearningSession, MasteryEstimate, Misconception, Question, QuestionOption, Review, TopicPracticeConfig,
                             TopicScoringConfig)
 from backend.numbers.bank import compute_answer, load_curriculum
-from backend.app_models import TestExposure
+from backend.app_models import TestExposure, DeletedIdentity
+from backend.identity_lock import lock_identity
 from backend.mock_state import active_test
 
 POLICY = "divisibility-check-v1"
@@ -124,7 +125,17 @@ class LearningService:
             due = min(due, latest_review)
         return due.isoformat()
 
+    def check_identity(self, db, learner):
+        lock_identity(db, learner)
+        if db.get(DeletedIdentity, learner):
+            raise LearningError("account_deleted", "This account has been deleted.", 403)
+
+    def score_withheld(self, db, learner, skill):
+        active = self.active_session(db, learner)
+        return bool(active and active.skill_id == skill and active.mode in ("verification", "review"))
+
     def lock_learner(self, db, learner):
+        self.check_identity(db, learner)
         record = db.scalar(select(Learner).where(Learner.id == learner).with_for_update())
         if not record:
             raise LearningError("not_found", "Learner not registered.", 404)
@@ -135,6 +146,7 @@ class LearningService:
         from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 
         with transaction(self.engine) as db:
+            self.check_identity(db, learner)
             insert = sqlite_insert if self.engine.dialect.name == "sqlite" else pg_insert
             db.execute(insert(Learner).values(id=learner).on_conflict_do_nothing(index_elements=["id"]))
 
@@ -453,9 +465,16 @@ class LearningService:
                     question_view["options"] = [{"id": option.option_id, "text": option.text}
                                                  for option in options]
             history = []
+            completion = None
             if session.status == "completed":
-                attempts = db.scalars(select(Attempt).join(Assignment).where(
-                    Assignment.session_id == session.id).order_by(Assignment.position))
+                attempts = list(db.scalars(select(Attempt).join(Assignment).where(
+                    Assignment.session_id == session.id).order_by(Assignment.position)))
+                if attempts:
+                    fields = ("result", "decision", "score", "answers", "outcomes")
+                    if session.policy_version == VALIDATION_POLICY:
+                        fields = ("result",)
+                    completion = {"saved": True, "session_complete": True,
+                                  **{k: v for k, v in (attempts[-1].response or {}).items() if k in fields}}
                 history = [{"attempt_id": a.id, "assignment_id": a.assignment_id,
                     "answer": a.raw_answer, "working": a.working, "correct": a.correct,
                     "assistance": a.assistance, "created_at": a.created_at} for a in attempts]
@@ -465,7 +484,8 @@ class LearningService:
             return {"session_id": session.id, "skill_id": session.skill_id, "mode": session.mode,
                     "status": session.status, "policy_version": session.policy_version,
                     "scoring_version": session.scoring_version, "stage": session.stage,
-                    "question_count": len(assignments), "question": question_view, "attempts": history}
+                    "question_count": len(assignments), "question": question_view, "attempts": history,
+                    "completion": completion}
 
     def submit(self, learner, assignment_id, answer, working, key, duration_ms=None, dont_know=False,
                option_id=None):
@@ -589,7 +609,8 @@ class LearningService:
                 response.update(correct=correct, assistance=assistance)
             if session.mode == "practice" and not correct:
                 response["explanation"] = question.snapshot["solution"]
-            if (misconception_id and not correct and session.policy_version != VALIDATION_POLICY):
+            if (misconception_id and not correct and session.mode not in ("verification", "review")
+                    and session.policy_version != VALIDATION_POLICY):
                 misconception = db.get(Misconception, misconception_id)
                 if misconception:
                     feedback = {"id": misconception.id, "description": misconception.description,

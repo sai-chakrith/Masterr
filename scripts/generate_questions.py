@@ -43,10 +43,43 @@ def _candidate(skill_id: str, serial: int, rng: random.Random, level: int | None
         divisor, pattern = rng.choice(valid)
         validator = {"kind": "missing_digit", "pattern": pattern, "divisor": divisor}
         prompt = f"What digit replaces ? in {pattern} so the number is divisible by {divisor}?"
-        solution = f"Testing the divisibility rule gives the unique digit {compute_answer(validator)}."
-        template = "unique-missing-digit-v1"
-        hints = ["Use the divisibility rule for the stated divisor.",
-                 "Test each possible digit and keep the one that satisfies the rule."]
+        digit = compute_answer(validator)
+        fixed_sum = sum(int(c) for c in pattern if c != "?")
+        solution = f"The known digits sum to {fixed_sum}. Try digits 0 through 9. With {digit}, the sum is {fixed_sum + digit}; the completed number is {pattern.replace('?', str(digit))}."
+        if divisor == 6:
+            solution += " It is even and its digit sum is divisible by 3, so it is divisible by 6."
+            hints = ["Divisibility by 6 requires BOTH an even last digit and a digit sum divisible by 3.",
+                     f"Try 0, 2, 4, 6 and 8; add each to {fixed_sum} and keep a sum divisible by 3."]
+        else:
+            solution += f" The digit sum is divisible by {divisor}."
+            hints = [f"Add the known digits: {fixed_sum}. The missing digit must make the total a multiple of {divisor}.",
+                     f"Find a multiple of {divisor} between {fixed_sum} and {fixed_sum + 9}; subtract {fixed_sum}."]
+        template = "unique-missing-digit-v2"
+        variant = serial % 4
+        if variant == 1:
+            d, low = rng.randrange(3, 13), rng.randrange(1, 80)
+            high = low + rng.randrange(20, 121)
+            validator = {"kind": "expression", "expr": f"{high}//{d}-({low}-1)//{d}"}
+            prompt = f"How many multiples of {d} are there from {low} through {high}, inclusive?"
+            solution = f"Count multiples through {high}, then subtract those below {low}: {high}//{d} - {low-1}//{d} = {compute_answer(validator)}."
+            hints = [f"Count multiples up to {high} by dividing by {d} and rounding down.", f"Subtract the multiples up to {low-1}, not up to {low}; the interval includes {low}."]
+            template = "interval-multiples-v1"
+        elif variant == 2:
+            a, b, n = rng.randrange(2, 7), rng.randrange(7, 13), rng.randrange(50, 301)
+            common = a*b//gcd(a,b)
+            validator = {"kind": "expression", "expr": f"{n}//{a}+{n}//{b}-{n}//{common}"}
+            prompt = f"How many integers from 1 through {n} are divisible by {a} or {b} (or both)?"
+            solution = f"The least common multiple is {common}. Add the two counts and subtract the overlap: {n}//{a} + {n}//{b} - {n}//{common} = {compute_answer(validator)}."
+            hints = ["Add each divisor's multiple count, rounding down each division.", f"Numbers divisible by both were counted twice. Subtract the count for their least common multiple, {common}."]
+            template = "union-multiples-v1"
+        elif variant == 3:
+            d, n = rng.randrange(2, 13), rng.randrange(30, 201)
+            k = n//d
+            validator = {"kind": "expression", "expr": f"{d}*{k}*({k}+1)//2"}
+            prompt = f"What is the sum of the positive multiples of {d} not greater than {n}?"
+            solution = f"There are {k} multiples. Their sum is {d} times (1 + ... + {k}): {d}*{k}*({k}+1)/2 = {compute_answer(validator)}."
+            hints = [f"First find how many multiples fit: round {n}/{d} down.", "If there are k multiples, their sum is d*k*(k+1)/2. The question asks for the sum, not the count."]
+            template = "sum-multiples-v1"
     elif skill_id == "primes-factors":
         n = rng.randrange(12, 181 if level > 2 else 61)
         validator = {"kind": "factor_count", "number": n}
@@ -182,6 +215,7 @@ def _candidate(skill_id: str, serial: int, rng: random.Random, level: int | None
         "skill_id": skill_id,
         "family_id": item_id,
         "template_id": template,
+        "sub_topic": template,
         "purpose": "practice",
         "difficulty": f"Generated practice level {level}",
         "difficulty_level": level,
@@ -216,7 +250,7 @@ def generate_questions(skill_id: str, count: int, seed: int, existing: list[dict
             continue
         item["generation"] = {
             "template_id": item["template_id"],
-            "generator_version": "practice-drafts-v1",
+            "generator_version": "practice-drafts-v2",
             "seed": seed,
         }
         item["provenance"] += f" Seed={seed}."

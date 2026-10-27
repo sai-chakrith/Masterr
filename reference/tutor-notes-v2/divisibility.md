@@ -33,7 +33,46 @@ Also, being divisible by 2 and 4 does not imply divisibility by 8: 12 satisfies
 the first two conditions but not the third. Multiplying divisors is justified
 by the coprime-factor rule, not by an unrestricted general rule.
 
-These notes cover common decimal tests and simple missing-digit problems.
-They do not provide every possible divisibility test, the divisibility rule
-for 11, or a general algorithm for several unknown digits. If a question
-requires those methods, the notes do not cover them.
+## More tests and combined conditions
+
+For 11, subtract the sum of digits in alternating positions from the other
+sum. The number is divisible by 11 exactly when this difference is a multiple
+of 11, including zero. This follows from 10 having remainder -1 modulo 11.
+For 3x52 the difference is (3 + 5) - (x + 2) = 6 - x, so x = 6.
+For 12 use 3 and 4; for 36 use 4 and 9; for 44 use 4 and 11.
+Try digits 0 through 9 and keep every digit satisfying all the conditions;
+only claim a unique answer when exactly one remains.
+
+## Counting multiples
+
+Among integers 1 through N there are floor(N/d) multiples of positive d,
+where floor means round down. Between positive L and U inclusive there are
+floor(U/d) - floor((L-1)/d). For example multiples of 6 from 100 through
+300 number 50 - 16 = 34. For two divisors a and b, common multiples are
+multiples of lcm(a,b), found using prime factors with their maximum powers.
+Thus multiples of both 6 and 8 through 500 number floor(500/24) = 20.
+
+For a or b, add their counts and subtract the common count once. For exactly
+one, subtract the common count twice. Through 100, multiples of 2 or 3 number
+50 + 33 - 16 = 67. For neither, subtract the union count from the total.
+For three divisors add singles, subtract all three pairwise lcm counts, then
+add the triple lcm count. Through 300, multiples of 3, 5 or 7 number
+100 + 60 + 42 - 20 - 14 - 8 + 2 = 162.
+To count numbers coprime to m, exclude multiples of each distinct prime
+factor of m with the same inclusion-exclusion rule. Count each prime once.
+
+## Related sums and products
+
+The positive multiples of d through N sum to d*k*(k+1)/2, with k=floor(N/d).
+Multiples of 5 through 100 sum to 5*20*21/2 = 1050. A digit sum divisible by
+9 is equivalent to the number being divisible by 9; use interval counting
+for two-digit or three-digit restrictions. Three-digit multiples of 11
+number floor(999/11)-floor(99/11)=90-9=81.
+
+A product of three consecutive integers always contains a multiple of 3
+and an even integer, so it is divisible by 6. It need not be divisible by
+a larger fixed integer: 1*2*3=6. A factorial's trailing zeros count factors
+of 10, each made from 2 and 5. There are more factors of 2, so count factors
+of 5: floor(n/5)+floor(n/25)+floor(n/125)+... until the terms are zero.
+For 25!, there are 5+1=6 trailing zeros. Do not confuse a count, a sum,
+a missing digit, and a remainder: first identify what the question requests.

@@ -56,6 +56,14 @@ export function resultText(result: string | undefined, decision: string | undefi
   if (decision === "borderline") return "Diagnostic finished: Borderline. Review your missed questions, then take the retest.";
   if (decision === "gap") return "Diagnostic finished: this topic is a Gap. Practise it, then take the retest.";
   switch (result) {
+    case "independent_check_passed":
+      return "Independent check passed.";
+    case "later_check_passed":
+      return "Review passed.";
+    case "practice_needed":
+      return "More practice is needed before the next independent check.";
+    case "practice_completed":
+      return "Practice complete.";
     case "retest_passed":
       return "Retest passed. The gap is resolved.";
     case "retest_practice_needed":

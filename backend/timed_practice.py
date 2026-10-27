@@ -31,7 +31,23 @@ class TimedPracticeService:
             pools = [[q for q in available_questions(db, s, "practice") if q.family_id not in seen] for s in skills]
             for pool in pools:
                 SystemRandom().shuffle(pool)
-            chosen = []
+            # Match each requested topic to a distinct family before filling
+            # remaining slots. Augmenting paths handle overlapping families.
+            matched = {}
+            def cover(topic, visited):
+                for q in pools[topic]:
+                    if q.family_id in visited:
+                        continue
+                    visited.add(q.family_id)
+                    previous = matched.get(q.family_id)
+                    if previous is None or cover(previous[0], visited):
+                        matched[q.family_id] = (topic, q)
+                        return True
+                return False
+            if not all(cover(i, set()) for i in range(len(pools))):
+                raise LearningError("insufficient_coverage", "Every selected topic needs a fresh reviewed question. Choose other topics.")
+            chosen = [q for _, q in sorted(matched.values(), key=lambda item: item[0])]
+            seen.update(q.family_id for q in chosen)
             # Round-robin topics so one large bank does not dominate a mixed test.
             while len(chosen) < count and any(pools):
                 for pool in pools:

@@ -186,7 +186,8 @@ class PersonalisationService:
             assessment = gaps.get(skill_id)
             state = progress.get(skill_id)
             estimate = estimates.get(skill_id)
-            score = shown_score(estimate.rating) if estimate and estimate.answer_count else None
+            score = (shown_score(estimate.rating) if estimate and estimate.answer_count
+                     and not self.learning.score_withheld(db, learner, skill_id) else None)
             status = assessment.status if assessment else "unassessed"
             stale = bool(assessment and self.learning.assessment_stale(db, assessment.source_session_id))
             if stale:
@@ -316,7 +317,8 @@ class PersonalisationService:
         with transaction(self.engine) as db:
             self.learning.lock_learner(db, learner)
             estimate = db.get(MasteryEstimate, (learner, skill_id))
-            score = shown_score(estimate.rating) if estimate and estimate.answer_count else None
+            score = (shown_score(estimate.rating) if estimate and estimate.answer_count
+                     and not self.learning.score_withheld(db, learner, skill_id) else None)
             return {
                 "skill_id": skill_id,
                 "curriculum_version": str(curriculum.get("schema_version", "1")),

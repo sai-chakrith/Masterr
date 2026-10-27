@@ -1,0 +1,47 @@
+{
+  "source": "Read-only extraction of recorded provider usage from the isolated demo database. No keys, learner identities or question text included.",
+  "provider_calls_recorded": [
+    {
+      "model": "openai/gpt-oss-120b",
+      "prompt_version": "tutor-v2.1",
+      "usage": [
+        {
+          "part": "lesson",
+          "attempt": 1,
+          "model": "openai/gpt-oss-120b",
+          "prompt_tokens": 1421,
+          "cached_prompt_tokens": null,
+          "completion_tokens": 621,
+          "reasoning_tokens": 16,
+          "finish_reason": "stop",
+          "duration_ms": 2109
+        },
+        {
+          "part": "personal",
+          "attempt": 1,
+          "model": "openai/gpt-oss-120b",
+          "prompt_tokens": 1636,
+          "cached_prompt_tokens": null,
+          "completion_tokens": 587,
+          "reasoning_tokens": 269,
+          "finish_reason": "stop",
+          "duration_ms": 1828
+        }
+      ]
+    }
+  ],
+  "completion_check": {
+    "visit_1": {
+      "generated_by": "llm",
+      "lesson_cached": true,
+      "personal_cached": true,
+      "usage": []
+    },
+    "visit_2": {
+      "generated_by": "llm",
+      "lesson_cached": true,
+      "personal_cached": true,
+      "usage": []
+    }
+  }
+}

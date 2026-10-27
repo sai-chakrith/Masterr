@@ -30,12 +30,13 @@ export default function SessionPage() {
   // Browser timing (C3): from when the question is shown until the answer is sent.
   const shownAt = useRef<number>(0);
   // One idempotency key per question, reused if the network makes us retry.
-  const keys = useRef<Record<string, string>>({});
+  const pending = useRef<Record<string, { key: string; body: Parameters<typeof api.submit>[2] }>>({});
 
   const load = useCallback(async () => {
     try {
       const next = await api.session(id);
       setView(next);
+      setFinished(next.completion ?? null);
       setAnswer("");
       setSelectedOptionId("");
       setHint(null);
@@ -55,22 +56,25 @@ export default function SessionPage() {
     if (!question) return;
     setBusy(true);
     setError(null);
-    keys.current[question.assignment_id] ??= newKey();
-    try {
-      const result = await api.submit(question.assignment_id, keys.current[question.assignment_id], {
+    pending.current[question.assignment_id] ??= { key: newKey(), body: {
         answer: dontKnow ? "" : answer.trim(),
         option_id: dontKnow ? null : (question.options?.length ? selectedOptionId : null),
         dont_know: dontKnow,
         working: "",
         duration_ms: Math.max(0, Math.round(performance.now() - shownAt.current)),
-      });
+      }};
+    const attempt = pending.current[question.assignment_id];
+    try {
+      const result = await api.submit(question.assignment_id, attempt.key, attempt.body);
+      delete pending.current[question.assignment_id];
       setFeedback(result.correct ?? null);
       setExplanation(result.explanation ?? null);
       setMisconceptionFeedback(result.misconception_feedback);
       if (result.session_complete) setFinished(result);
       else await load();
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "Your answer was not saved. Try again.");
+      if (e instanceof ApiError && e.status === 422) delete pending.current[question.assignment_id];
+      setError(e instanceof ApiError ? e.message : "Could not confirm your answer. Try again to resend the same answer safely.");
     } finally {
       setBusy(false);
     }

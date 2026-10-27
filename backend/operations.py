@@ -12,6 +12,7 @@ from sqlalchemy.orm import Session
 from backend.app_models import ContentReport, DeletedIdentity, UsageBucket
 from backend.db import Base, transaction
 from backend.learning import LearningError
+from backend.identity_lock import lock_identity
 from backend.models import Assignment, Learner, LearningSession
 
 
@@ -115,6 +116,7 @@ class AccountService:
         if not self.settings.local_development and not os.environ.get("SUPABASE_SERVICE_ROLE_KEY"):
             raise LearningError("deletion_unavailable", "Account deletion needs server configuration. Contact support.", 503)
         with transaction(self.engine) as db:
+            lock_identity(db, owner)
             record = db.get(Learner, owner)
             if record is not None:
                 # Locking the learner serialises deletion with allocation and submission.

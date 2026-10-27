@@ -1,4 +1,4 @@
-"""Confirmed audit defects. Strict xfails preserve the intended behaviour until fixed.
+"""Regression checks for the repaired audit defects.
 
 All content and identities below are synthetic, never real reviewer approvals.
 """
@@ -13,7 +13,7 @@ from backend.app_models import DeletedIdentity, TimedTest
 from backend.auth import Settings
 from backend.content import import_questions
 from backend.db import Base, make_engine, transaction
-from backend.learning import LearningService
+from backend.learning import LearningError, LearningService
 from backend.models import Learner, LearnerGoal, Question
 from backend.operations import AccountService, BudgetService
 from backend.personalisation import PersonalisationService
@@ -22,7 +22,6 @@ from tests.test_scoring_flow import bank
 from tests.test_timed_practice import timed
 
 
-@pytest.mark.xfail(strict=True, raises=AssertionError, reason="QA-1: roadmap/teaching reveal live independent-test scores")
 def test_independent_test_withholds_score_across_all_endpoints(bank):
     learning, engine, _ = bank
     learning.set_scoring_version("ana", "divisibility", "new")
@@ -38,7 +37,6 @@ def test_independent_test_withholds_score_across_all_endpoints(bank):
     assert (roadmap_score, teaching_score) == (None, None)
 
 
-@pytest.mark.xfail(strict=True, raises=AssertionError, reason="QA-2: independent MCQ tests disclose immediate teaching feedback")
 def test_independent_mcq_test_does_not_teach_between_questions(tmp_path):
     engine = make_engine("sqlite:///" + str(tmp_path / "mcq.db"))
     Base.metadata.create_all(engine)
@@ -63,7 +61,6 @@ def test_independent_mcq_test_does_not_teach_between_questions(tmp_path):
         engine.dispose()
 
 
-@pytest.mark.xfail(strict=True, raises=AssertionError, reason="QA-3: deletion can race the separate tombstone check and registration")
 def test_inflight_request_cannot_recreate_data_after_account_deletion(tmp_path, monkeypatch):
     engine = make_engine("sqlite:///" + str(tmp_path / "deletion.db"))
     Base.metadata.create_all(engine)
@@ -89,14 +86,36 @@ def test_inflight_request_cannot_recreate_data_after_account_deletion(tmp_path, 
         engine.dispose()
 
 
-@pytest.mark.xfail(strict=True, raises=AssertionError, reason="QA-4: mixed timed practice silently omits a requested topic")
 def test_mixed_timed_test_requires_coverage_for_every_requested_topic(timed):
     service, _, engine, _ = timed
     with transaction(engine) as db:
         for q in db.scalars(select(Question).where(Question.skill_id == "integer-properties")):
             q.status = "withdrawn"
-    run_id = service.start("alice", ["divisibility", "integer-properties"], 4, 5)["id"]
+    with pytest.raises(LearningError, match="Every selected topic"):
+        service.start("alice", ["divisibility", "integer-properties"], 4, 5)
     with transaction(engine) as db:
-        run = db.get(TimedTest, run_id)
-        covered = {db.get(Question, qid).skill_id for qid in run.question_ids}
-        assert covered == set(run.skill_ids)
+        assert db.scalar(select(TimedTest)) is None
+
+
+def test_completed_retest_keeps_result_after_reload(bank):
+    service, _, _ = bank
+    service.set_scoring_version("ana", "divisibility", "new")
+    run = service.create_session("ana", "divisibility", "verification", retest=True)
+    while True:
+        question = service.get_session("ana", run["session_id"])["question"]
+        reply = service.submit("ana", question["assignment_id"], "3", "", question["assignment_id"])
+        if reply["session_complete"]:
+            break
+    reopened = service.get_session("ana", run["session_id"])
+    assert reopened["completion"]["result"] == reply["result"]
+    assert reopened["completion"]["outcomes"] == reply["outcomes"]
+    assert len(reopened["completion"]["outcomes"]) == 10
+
+
+def test_adaptive_practice_varies_methods_within_target_level():
+    from types import SimpleNamespace
+    from backend.practice import select_adaptive_questions
+    questions = [SimpleNamespace(id=str(i), family_id=str(i), hidden=False,
+                 difficulty_level=1, sub_topic=str(i//4)) for i in range(12)]
+    chosen = select_adaptive_questions(questions, -2, 3)
+    assert len({q.sub_topic for q in chosen}) == 3
