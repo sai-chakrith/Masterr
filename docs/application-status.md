@@ -4,6 +4,12 @@ Mastrr now has an integrated **15-topic pilot application**. It is ready for
 service configuration and human content publication, not yet for a public learner
 launch. The original report's 35-topic scope is not claimed as delivered.
 
+The subsequent [application audit](application-audit-2026-10-27.md) reproduced six
+unfixed defects, including a first-goal roadmap race, independent-test feedback
+leaks and a deletion race. These repairs are also required before a learner pilot.
+The latest browser run had six passes, one failure and one intentional skip;
+the earlier seven-pass result below is historical.
+
 ## Implemented
 
 - Goals and prerequisite roadmap; diagnosis, personal tutoring, adaptive practice,
